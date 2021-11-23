@@ -2,6 +2,46 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import * as React from "react";
+
+
+function littleButton() {
+  const [enableConnection, setEnableConnection] = React.useState(false);
+  // const connectExtension = () => setEnableConnection(true);
+
+  React.useEffect(() => {
+
+    if (enableConnection) {
+    const haveExtension = async () => {
+      // window is accessible here.
+      // console.log("window.innerHeight", window.innerHeight);
+      const { web3Enable } = await import('@polkadot/extension-dapp');
+      const extensions = await web3Enable('Litentry');
+      if (extensions.length === 0) {
+        return (<div>
+          <p>There is no polkadot extension</p>
+        </div>)
+      } else {
+        return (<div>
+          <p>Hellodfjoewoijfijowei  ojiewjfij </p>
+        </div>)
+        console.log("what is happening");
+      }
+
+
+    }
+    haveExtension();
+    return () => {
+      
+    };
+    }
+  }, [enableConnection]);
+  return (
+    <>
+      <button onClick={() => setEnableConnection(true)}>Connect polkadot extention</button>
+    </>
+  )
+}
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +57,9 @@ const Home: NextPage = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
+        <div>
+          {littleButton()}
+        </div>
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
