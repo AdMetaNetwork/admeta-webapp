@@ -15,25 +15,30 @@ function littleButton() {
     const haveExtension = async () => {
       // window is accessible here.
       // console.log("window.innerHeight", window.innerHeight);
-      const { web3Enable } = await import('@polkadot/extension-dapp');
-      const extensions = await web3Enable('Litentry');
-      if (extensions.length === 0) {
-        return (<div>
-          <p>There is no polkadot extension</p>
-        </div>)
-      } else {
-        return (<div>
-          <p>Hellodfjoewoijfijowei  ojiewjfij </p>
-        </div>)
-        console.log("what is happening");
-      }
 
+      const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
+      const extensions = await web3Enable('my-cool-app');
+      if (extensions.length === 0) {
+        console.log("No extension found");
+        return;
+      } 
+      console.log("Checking existig accounts...");
+
+      // we are now informed that the user has at least one extension and that we
+      // will be able to show and use accounts
+      const allAccounts = await web3Accounts();
+
+      // We arbitraily select the first account returned from the above snippet
+      // `account` is of type InjectedAccountWithMeta 
+      const account = allAccounts[0];
+      console.log(account);
+      setEnableConnection(false);
 
     }
     haveExtension();
-    return () => {
+    // return () => {
       
-    };
+    // };
     }
   }, [enableConnection]);
   return (
@@ -43,6 +48,7 @@ function littleButton() {
   )
 }
 
+ 
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -60,6 +66,7 @@ const Home: NextPage = () => {
         <div>
           {littleButton()}
         </div>
+
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
