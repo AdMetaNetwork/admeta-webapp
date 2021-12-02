@@ -48,6 +48,22 @@ function littleButton() {
   )
 }
 
+function showUserImage() {
+  return (
+    <>
+        <Image
+          src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"
+          alt="sample-image"
+          width={1920}
+          height={1080}
+        />
+    </>
+  )
+}
+
+function myLoader() {
+  return `http://localhost:3000/_next/image/my_ad.jpg`
+}
  
 const Home: NextPage = () => {
   return (
@@ -67,12 +83,10 @@ const Home: NextPage = () => {
           {littleButton()}
         </div>
 
-        <Image
-          src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"
-          alt="sample-image"
-          width={1920}
-          height={1080}
-        />
+
+        <div className={styles.user_image}>
+          {showUserImage()}
+        </div>
       </main>
 
       <footer className={styles.footer}>
