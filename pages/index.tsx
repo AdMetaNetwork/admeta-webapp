@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import * as React from "react";
 
 
-function littleButton() {
+function LittleButton() {
   const [enableConnection, setEnableConnection] = React.useState(false);
   // const connectExtension = () => setEnableConnection(true);
 
@@ -80,7 +80,7 @@ const Home: NextPage = () => {
         </h1>
 
         <div>
-          {littleButton()}
+          {LittleButton()}
         </div>
 
 
