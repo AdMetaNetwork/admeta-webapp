@@ -1,8 +1,10 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+// import * as nextImage from 'next/image';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 import * as React from "react";
+import {PolkadotChainConnector} from './api/polkadotApi';
 
 
 function LittleButton() {
@@ -48,7 +50,18 @@ function LittleButton() {
   )
 }
 
+function testMetadataButton() {
+  let p : PolkadotChainConnector = new PolkadotChainConnector;
+  return (
+    <>
+      <button onClick={() => p.getTargetMetadata()}>Test metadata</button>
+    </>
+  )
+}
+
 function showUserImage() {
+  // downloadImage("https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i", "my_picture")
+  // downloadFile("https://storageapi.fleek.co/78cc9f61-d521-4f93-95ae-3409d641ebc4-bucket/sample-image.jpg", "my_picture.jpg")
   return (
     <>
         <Image
@@ -60,6 +73,53 @@ function showUserImage() {
     </>
   )
 }
+
+// function downloadImage(imageSrc :string, name :string) {
+//   let image = new Image();
+
+//   image.setAttribute("crossOrigin", "anonymous");
+//   image.onload = function() {
+//     var canvas = document.createElement("canvas");
+//     canvas.width = image.width;
+//     canvas.height = image.height;
+//     var context = canvas.getContext("2d");
+//     context?.drawImage(image, 0,0, image.width, image.height);
+//     let url = canvas.toDataURL("image/png");
+
+//     let a = document.createElement("a");
+//     let event = new MouseEvent("click");
+//     a.download = name || "picture";
+//     a.href = url;
+//     a.dispatchEvent(event);
+//   };
+//   image.src = imageSrc;
+// }
+
+// function downloadFile(url :string, name :string) {
+//   name = name || url;
+//   fetch(url).then(response => {
+//     if (response.status == 200) 
+//       return response.blob();
+//     throw new Error(`status: ${response.status}.`);
+//   }).then(blob => {
+//     // downloadFile(name, blob);
+//     let a = document.createElement("a");
+//     let event = new MouseEvent("click");
+//     const src = URL.createObjectURL(blob);
+//     a.download = name || "picture.jpg";
+//     a.href = src;
+//     a.dispatchEvent(event);
+//   }).catch(error => {
+//     console.error("Failed. cause: ", error);
+//   })
+// }
+
+// function downloadFile(fileName, blob) {
+//   const anchor = document.createElement("a");
+//   const src = URL.createObjectURL(blob);
+//   anchor.download(fileName);
+
+// }
 
 function myLoader() {
   return `http://localhost:3000/_next/image/my_ad.jpg`
@@ -83,10 +143,16 @@ const Home: NextPage = () => {
           {LittleButton()}
         </div>
 
+        <div>
+          {testMetadataButton()}
+        </div>
 
         <div className={styles.user_image}>
           {showUserImage()}
         </div>
+        {/* <div>
+          <img src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"  />
+        </div> */}
       </main>
 
       <footer className={styles.footer}>
