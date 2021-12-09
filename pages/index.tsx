@@ -105,10 +105,6 @@ const Home: NextPage = () => {
         </div>
 
         <div>
-          {testMetadataButton()}
-        </div>
-
-        <div>
           { changeImageSrcButton() }
         </div>
 
