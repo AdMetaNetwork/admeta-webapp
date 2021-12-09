@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-// import * as nextImage from 'next/image';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import * as React from "react";
@@ -9,15 +8,12 @@ import {PolkadotChainConnector} from './api/polkadotApi';
 
 function LittleButton() {
   const [enableConnection, setEnableConnection] = React.useState(false);
-  // const connectExtension = () => setEnableConnection(true);
-
   React.useEffect(() => {
 
     if (enableConnection) {
     const haveExtension = async () => {
       // window is accessible here.
       // console.log("window.innerHeight", window.innerHeight);
-
       const { web3Enable, web3Accounts } = await import('@polkadot/extension-dapp');
       const extensions = await web3Enable('my-cool-app');
       if (extensions.length === 0) {
@@ -39,7 +35,6 @@ function LittleButton() {
     }
     haveExtension();
     // return () => {
-      
     // };
     }
   }, [enableConnection]);
@@ -71,24 +66,17 @@ function changeImageSrcButton() {
 async function changeImageSrc() {
   let p : PolkadotChainConnector = new PolkadotChainConnector;
   let obj= document.getElementById("randomPic")  as HTMLImageElement;
-  
   let meta : string = await p.getTargetMetadata();
   console.log("mypic obj is: "+ obj);
   console.log("p.getTargetMetadata().toString() is: " + meta);
   obj.src = meta;
-  // let obj2 = document.getElementById('mypic').setAttribute( 'src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==' );
 }
 
 function showUserImage() {
-  // downloadImage("https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i", "my_picture")
-  // downloadFile("https://storageapi.fleek.co/78cc9f61-d521-4f93-95ae-3409d641ebc4-bucket/sample-image.jpg", "my_picture.jpg")
-  // let p : PolkadotChainConnector = new PolkadotChainConnector;
-  // let meta : string = p.getTargetMetadata().toString();
   return (
     <>
         <Image
           src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"
-          // src=""
           id="mypic"
           alt="sample-image"
           width={1920}
@@ -96,57 +84,6 @@ function showUserImage() {
         />
     </>
   )
-}
-
-// function downloadImage(imageSrc :string, name :string) {
-//   let image = new Image();
-
-//   image.setAttribute("crossOrigin", "anonymous");
-//   image.onload = function() {
-//     var canvas = document.createElement("canvas");
-//     canvas.width = image.width;
-//     canvas.height = image.height;
-//     var context = canvas.getContext("2d");
-//     context?.drawImage(image, 0,0, image.width, image.height);
-//     let url = canvas.toDataURL("image/png");
-
-//     let a = document.createElement("a");
-//     let event = new MouseEvent("click");
-//     a.download = name || "picture";
-//     a.href = url;
-//     a.dispatchEvent(event);
-//   };
-//   image.src = imageSrc;
-// }
-
-// function downloadFile(url :string, name :string) {
-//   name = name || url;
-//   fetch(url).then(response => {
-//     if (response.status == 200) 
-//       return response.blob();
-//     throw new Error(`status: ${response.status}.`);
-//   }).then(blob => {
-//     // downloadFile(name, blob);
-//     let a = document.createElement("a");
-//     let event = new MouseEvent("click");
-//     const src = URL.createObjectURL(blob);
-//     a.download = name || "picture.jpg";
-//     a.href = src;
-//     a.dispatchEvent(event);
-//   }).catch(error => {
-//     console.error("Failed. cause: ", error);
-//   })
-// }
-
-// function downloadFile(fileName, blob) {
-//   const anchor = document.createElement("a");
-//   const src = URL.createObjectURL(blob);
-//   anchor.download(fileName);
-
-// }
-
-function myLoader() {
-  return `http://localhost:3000/_next/image/my_ad.jpg`
 }
  
 const Home: NextPage = () => {
