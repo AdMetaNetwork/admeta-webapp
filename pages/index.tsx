@@ -59,13 +59,37 @@ function testMetadataButton() {
   )
 }
 
+function changeImageSrcButton() {
+  let p : PolkadotChainConnector = new PolkadotChainConnector;
+  return (
+    <>
+      <button onClick={() => changeImageSrc()}>Change image src</button>
+    </>
+  )
+}
+
+async function changeImageSrc() {
+  let p : PolkadotChainConnector = new PolkadotChainConnector;
+  let obj= document.getElementById("randomPic")  as HTMLImageElement;
+  
+  let meta : string = await p.getTargetMetadata();
+  console.log("mypic obj is: "+ obj);
+  console.log("p.getTargetMetadata().toString() is: " + meta);
+  obj.src = meta;
+  // let obj2 = document.getElementById('mypic').setAttribute( 'src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==' );
+}
+
 function showUserImage() {
   // downloadImage("https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i", "my_picture")
   // downloadFile("https://storageapi.fleek.co/78cc9f61-d521-4f93-95ae-3409d641ebc4-bucket/sample-image.jpg", "my_picture.jpg")
+  // let p : PolkadotChainConnector = new PolkadotChainConnector;
+  // let meta : string = p.getTargetMetadata().toString();
   return (
     <>
         <Image
           src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"
+          // src=""
+          id="mypic"
           alt="sample-image"
           width={1920}
           height={1080}
@@ -147,12 +171,18 @@ const Home: NextPage = () => {
           {testMetadataButton()}
         </div>
 
-        <div className={styles.user_image}>
-          {showUserImage()}
+        <div>
+          { changeImageSrcButton() }
         </div>
-        {/* <div>
-          <img src="https://ipfs.fleek.co/ipfs/bafybeihb4adk45udjpnymx55msypjuxptcraokavywzxm5ouc5h4phvn2i"  />
-        </div> */}
+
+        <div className={styles.user_image}>
+          {/* {showUserImage()} */}
+        </div>
+
+        <div>
+          <img src="/images/hello-image.PNG" id="randomPic" />
+        </div>
+ 
       </main>
 
       <footer className={styles.footer}>

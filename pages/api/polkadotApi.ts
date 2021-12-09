@@ -1,7 +1,7 @@
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
 export class PolkadotChainConnector {
-  async getTargetMetadata(): Promise<any> {
+  async getTargetMetadata(): Promise<string> {
     const wsProvider = new WsProvider("ws://testnet.admeta.network:9944");
     const api = await ApiPromise.create({ provider: wsProvider });
 
@@ -18,6 +18,6 @@ export class PolkadotChainConnector {
     let parsedMeta = Buffer.from(meta.slice(2), "hex").toString();
     console.log("meta is: " + JSON.stringify(meta));
     console.log("parsed meta is: " + parsedMeta);
-    return meta;
+    return parsedMeta;
   }
 }
