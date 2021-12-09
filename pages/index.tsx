@@ -63,7 +63,7 @@ function changeImageSrcButton() {
   let p : PolkadotChainConnector = new PolkadotChainConnector;
   return (
     <>
-      <button onClick={() => changeImageSrc()}>Change image src</button>
+      <button onClick={() => changeImageSrc()}>Show picture</button>
     </>
   )
 }
