@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import {PolkadotChainConnector} from './api/polkadotApi';
 
-function ImageAd({ img }) {
+function ImageAd( img : any) {
 	
 	return (
 		<Image
