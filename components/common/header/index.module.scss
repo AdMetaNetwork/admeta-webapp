@@ -1,0 +1,63 @@
+@import "../../../styles/variable.scss";
+
+.header {
+  position: absolute;
+  top: 24px;
+  left: 266px;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 24px;
+  .left {
+    display: flex;
+    flex-direction: column;
+    .top {
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 500;
+      color: #808191;
+      margin-bottom: 2px;
+    }
+    .bottom {
+      font-size: 24px;
+      line-height: 31px;
+      font-weight: 700;
+      color: $white1;
+      letter-spacing: -0.02em;
+    }
+  }
+  .right {
+    .accountWrp {
+      display: flex;
+      height: 60px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      box-sizing: border-box;
+      border-radius: 30px;
+      background-color: #191b1f;
+      .account {
+        display: flex;
+        background-color: $black1;
+        align-items: center;
+        justify-content: center;
+        height: 42px;
+        border-radius: 21px;
+        width: 223px;
+        margin-right: 10px;
+        p {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 22px;
+          letter-spacing: -0.02em;
+          color: #e9edf7;
+        }
+      }
+      .img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+      }
+    }
+  }
+}
