@@ -1,0 +1,103 @@
+@import "../../styles/variable.scss";
+.homeBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+  .clude {
+    position: absolute;
+    top: 0;
+    right: -28px;
+    z-index: 0;
+  }
+  .wrp {
+    width: 920px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+    .left {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 24px;
+        div {
+          font-weight: 500;
+          font-size: 32px;
+          line-height: 16px;
+          text-align: center;
+          color: $white0;
+          margin-left: 10px;
+        }
+      }
+      .slogan {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        margin-bottom: 20px;
+        div {
+          font-weight: 700;
+          font-size: 48px;
+          line-height: 45px;
+          letter-spacing: -0.02em;
+          color: #fcfcfd;
+        }
+      }
+      .dec {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #777e91;
+        margin-bottom: 32px;
+      }
+      .btn {
+        display: flex;
+        height: 66px;
+        border-radius: 98px;
+        border: 2px solid #353945;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 27px;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.9;
+        }
+        p {
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 21px;
+          text-align: center;
+          color: $white1;
+          margin-left: 8px;
+        }
+      }
+    }
+    .right {
+      width: 376px;
+      height: 376px;
+    }
+  }
+}
+
+@keyframes cludeMove {
+  0% {
+    top: 0;
+    right: -28px;
+  }
+  50% {
+    top: 20px;
+    right: -18px;
+  }
+  100% {
+    top: 0;
+    right: -28px;
+  }
+}

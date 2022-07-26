@@ -1,0 +1,42 @@
+@import "../../styles/variable.scss";
+
+.signBody {
+  .backNav {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 150%;
+    color: $blue0;
+    margin-top: 98px;
+    margin-bottom: 72px;
+    margin-left: 24px;
+    cursor: pointer;
+  }
+  .wrp {
+    margin-left: 112px;
+    .title {
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 44px;
+      color: $white0;
+      margin-bottom: 12px;
+    }
+    .dec {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 150%;
+      color: $gray0;
+      margin-bottom: 72px;
+      a {
+        text-decoration-line: underline;
+        color: $blue0;
+      }
+    }
+    .select {
+      margin-bottom: 72px;
+      width: 343px;
+    }
+    .startBtn {
+      width: 135px;
+    }
+  }
+}

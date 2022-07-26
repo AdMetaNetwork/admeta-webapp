@@ -2,12 +2,13 @@
 
 .header {
   position: absolute;
-  top: 24px;
-  left: 266px;
+  top: 0;
+  left: 24px;
   right: 0;
   display: flex;
   justify-content: space-between;
-  padding: 8px 24px;
+  height: 90px;
+  align-items: center;
   .left {
     display: flex;
     flex-direction: column;
