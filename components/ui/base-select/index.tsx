@@ -10,7 +10,7 @@ type Options = {
 
 type Prop = {
   opt: Options[],
-  handleChangeSelect: (val: string  ) => void,
+  handleChangeSelect: (val: string) => void,
 }
 
 const BaseSelect: FC<Prop> = ({ opt, handleChangeSelect }) => {
