@@ -1,7 +1,10 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import Head from 'next/head';
 import SideNav from "../side-nav";
 import Header from "../header";
+import BaseModal from "../../ui/base-modal";
+import TabBar from "../tab-bar";
+
 import { SEO } from '../../../config'
 
 import styles from './index.module.scss';
@@ -16,10 +19,15 @@ type Props = {
   tdk: TDK,
   children: ReactNode,
   isShowSide?: boolean,
-  isShowHeader?: boolean
+  isShowHeader?: boolean,
+  isShowTabBar?: boolean,
+  page?: 'display' | 'profile' | 'management'
 };
 
-const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader }) => {
+const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar, page = 'display' }) => {
+
+  const [showModal, setShowModal] = useState<boolean>(false)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -42,6 +50,16 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader }) => {
             isShowHeader
               ?
               <Header />
+              :
+              null
+          }
+          {
+            isShowTabBar
+              ?
+              <TabBar
+                activePage={page}
+                handleOpenLink={() => { }}
+              />
               :
               null
           }

@@ -2,17 +2,16 @@
 .homeBody {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100vh;
   position: relative;
+  padding-left: 160px;
   .clude {
-    position: absolute;
-    top: 0;
-    right: -28px;
-    z-index: 0;
+    position: fixed;
+    top: 6.9vh;
+    left: 19.2vw;
   }
   .wrp {
-    width: 920px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,14 +26,13 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
         div {
-          font-weight: 500;
-          font-size: 32px;
+          font-weight: 700;
+          font-size: 16px;
           line-height: 16px;
-          text-align: center;
-          color: $white0;
-          margin-left: 10px;
+          text-transform: uppercase;
+          color: #777e91;
         }
       }
       .slogan {
@@ -45,8 +43,8 @@
         margin-bottom: 20px;
         div {
           font-weight: 700;
-          font-size: 48px;
-          line-height: 45px;
+          font-size: 64px;
+          line-height: 64px;
           letter-spacing: -0.02em;
           color: #fcfcfd;
         }
@@ -84,6 +82,23 @@
       width: 376px;
       height: 376px;
     }
+  }
+}
+
+.modalBody {
+  .modalBodytitle {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: $white1;
+    margin-bottom: 24px;
+  }
+  .modalBodySelect {
+    width: 343px;
+    margin-bottom: 72px;
   }
 }
 

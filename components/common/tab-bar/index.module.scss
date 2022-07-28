@@ -1,0 +1,38 @@
+@import "../../../styles/variable.scss";
+.tabBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32px;
+  .tabMiddle {
+    margin: 0 24px;
+  }
+  div {
+    display: inline-block;
+    height: 34px;
+    padding: 0 14px;
+    background-color: none;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    &.activeShow {
+      background-color: #23262F;
+      p {
+        color: $white1;
+      }
+    }
+    p {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 22px;
+      display: flex;
+      align-items: center;
+      letter-spacing: -0.02em;
+      color: #777e91;
+    }
+  }
+}
