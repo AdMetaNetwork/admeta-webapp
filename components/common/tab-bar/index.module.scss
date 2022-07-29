@@ -21,11 +21,11 @@
     user-select: none;
     &.activeShow {
       background-color: #23262F;
-      p {
+      a {
         color: $white1;
       }
     }
-    p {
+    a {
       font-weight: 700;
       font-size: 14px;
       line-height: 22px;

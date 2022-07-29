@@ -8,8 +8,12 @@
   padding-left: 160px;
   .clude {
     position: fixed;
-    top: 6.9vh;
-    left: 19.2vw;
+    top: -1.5vw;
+    left: 6.4vw;
+    background: url(../../public/images/bg.png) no-repeat center;
+    background-size: 100% 100%;
+    width: 89.72vw;
+    height: 52vw;
   }
   .wrp {
     display: flex;
@@ -22,6 +26,7 @@
       align-items: flex-start;
       justify-content: flex-start;
       flex-direction: column;
+      margin-top: -260px;
       .logo {
         display: flex;
         align-items: center;
@@ -85,22 +90,6 @@
   }
 }
 
-.modalBody {
-  .modalBodytitle {
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 44px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: $white1;
-    margin-bottom: 24px;
-  }
-  .modalBodySelect {
-    width: 343px;
-    margin-bottom: 72px;
-  }
-}
 
 @keyframes cludeMove {
   0% {

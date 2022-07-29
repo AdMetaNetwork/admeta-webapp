@@ -1,13 +1,14 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, Context } from "react";
 import Head from 'next/head';
 import SideNav from "../side-nav";
 import Header from "../header";
-import BaseModal from "../../ui/base-modal";
 import TabBar from "../tab-bar";
 
 import { SEO } from '../../../config'
 
 import styles from './index.module.scss';
+import HomeCtx from "../../../hooks/use-home-content";
+import AdDisplayCtx from "../../../hooks/use-ad-display-content";
 
 type TDK = {
   title: string,
@@ -21,12 +22,21 @@ type Props = {
   isShowSide?: boolean,
   isShowHeader?: boolean,
   isShowTabBar?: boolean,
-  page?: 'display' | 'profile' | 'management'
+  page?: 'home' | 'display' | 'profile' | 'management'
 };
 
-const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar, page = 'display' }) => {
+const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar, page = 'home' }) => {
 
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const getCtx = (): Context<any> => {
+    if (page === 'home') {
+      return HomeCtx
+    }
+    if (page === 'display') {
+      return AdDisplayCtx
+    }
+
+    return HomeCtx
+  }
 
   return (
     <div className={styles.container}>
@@ -49,7 +59,9 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar
           {
             isShowHeader
               ?
-              <Header />
+              <Header 
+                content={getCtx()}
+              />
               :
               null
           }

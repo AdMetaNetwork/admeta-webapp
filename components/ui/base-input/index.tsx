@@ -5,16 +5,14 @@ import styles from './index.module.scss';
 type Prop = {
   handleChangeInput: (val: string) => void,
   type?: string,
-  placeholder: string,
-  isRequire?: boolean
+  placeholder: string
 }
 
-const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder, isRequire = false }) => {
+const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder }) => {
   const [isFocus, setFocus] = useState<boolean>(false)
-  const [require, setRequire] = useState<boolean>(isRequire)
 
   return (
-    <div className={`${styles.baseInput} ${isFocus ? styles.activeFocus : null} ${isFocus && require ? styles.activeRequire : null}`}>
+    <div className={`${styles.baseInput} ${isFocus ? styles.activeFocus : null}`}>
       <input
         type={type}
         placeholder={placeholder}
@@ -26,24 +24,9 @@ const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder, is
           setFocus(false)
         }}
         onChange={(e) => {
-          if (e.target.value === '' && isRequire) {
-            setRequire(true)
-          } else {
-            setRequire(false)
-            handleChangeInput(e.target.value)
-          }
+          handleChangeInput(e.target.value)
         }}
       />
-      {
-        require && isFocus
-          ?
-          <div className={styles.errTip}>
-            <WarnSvg />
-            <p>This field is required.</p>
-          </div>
-          :
-          null
-      }
     </div>
   )
 }

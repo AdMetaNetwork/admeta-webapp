@@ -1,61 +1,28 @@
-import { FC, useContext } from "react";
+import { FC, useContext, Context } from "react";
 import Image from "next/image";
 import LogoTextSvg from "../../svg/logo-text";
 import BaseButton from "../../ui/base-button";
 import HomeCtx from '../../../hooks/use-home-content';
-import BaseSelect from "../../ui/base-select";
+import AdDisplayCtx from "../../../hooks/use-ad-display-content";
+import ConnectWallet from "../connect-wallet";
+import Link from "next/link";
 
 import styles from './index.module.scss';
 
-const opt = [
-  {
-    value: 'Select',
-    label: 'Select'
-  },
-  {
-    value: '14iyG7YpMKhJPbt4qgY26FM5gig6QNsyoFi1936eoL6E5BoA',
-    label: 'kmy'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  }
-]
+type Prop = {
+  content: Context<any>
+}
 
-const Header: FC = () => {
+const Header: FC<Prop> = ({ content }) => {
 
-  const { setShowModal, setModalTitle, setModalBody } = useContext(HomeCtx)
-
-  const modalBody = () => (
-    <div className={styles.modalBody}>
-      <div className={styles.modalBodytitle}>Select your account in Polkadot.js</div>
-      <div className={styles.modalBodySelect}>
-        <BaseSelect
-          handleChangeSelect={(v) => {
-            console.log(v)
-          }}
-          opt={opt}
-        />
-      </div>
-      <BaseButton
-        btnText="Sign in"
-        btnClick={() => { }}
-      />
-    </div>
-  )
+  const { setShowModal, setModalTitle, setModalBody } = useContext(content)
 
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <LogoTextSvg />
+        <Link href='/'>
+          <a href=""><LogoTextSvg /></a>
+        </Link>
       </div>
       <div className={styles.right}>
         <BaseButton
@@ -63,7 +30,7 @@ const Header: FC = () => {
           btnClick={() => {
             setShowModal(true)
             setModalTitle('Connect with Polkadot.js')
-            setModalBody(modalBody)
+            setModalBody(<ConnectWallet />)
           }}
         />
         {/* <div className={styles.accountWrp}>
