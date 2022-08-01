@@ -1,0 +1,62 @@
+import { useEffect, useState } from 'react'
+import type { ApiOptions } from '@polkadot/api/types'
+import type { ApiRx } from '@polkadot/api';
+import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
+
+import * as C from '../utils'
+
+type OptionsFn = (options?: ApiOptions) => ApiOptions
+
+export default function useApi(
+	network: string,
+	options?: OptionsFn
+): {
+	api?: ApiRx
+	status: C.Status
+	error: null | unknown
+} {
+	const [api, setApi] = useState<ApiRx>()
+	const [status, setStatus] = useState<C.Status>('idle')
+	const [error, setError] = useState<null | unknown>(null)
+
+	useEffect(() => {
+		if (!api) {
+			setStatus('loading')
+
+			// const connect = async () => {
+			// 	const wsProvider = new WsProvider('wss://testnet.admeta.network')
+			// 	const api = await ApiPromise.create({ provider: wsProvider })
+			// 	setApi(api)
+			// }
+
+			try {
+				import('@polkadot/api').then(({ WsProvider, ApiRx }) => {
+					const provider = new WsProvider(network)
+					const apiOptions =
+						typeof options === 'function' ? options({ provider }) : { provider }
+
+            ApiRx.create(apiOptions).subscribe(_api => {
+						setApi(_api)
+
+						console.log(`API ready on ${network}`, {
+							ss58Format: _api.registry.chainSS58,
+							tokenDecimals: _api.registry.chainDecimals,
+							tokenSymbol: _api.registry.chainTokens
+						})
+
+						setStatus('success')
+					})
+				})
+			} catch (e) {
+				setStatus('error')
+				setError(e)
+			}
+		}
+	}, [network, api, options])
+
+	return {
+		api,
+		status,
+		error
+	}
+}

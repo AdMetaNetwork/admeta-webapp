@@ -1,7 +1,12 @@
 
 import { createContext, ReactNode } from 'react'
 
-interface HomeData {
+interface ad {
+  adurl: string,
+  adimg: string
+}
+
+interface BaseData {
   showTip: boolean,
   setShowTip: (v: boolean) => void,
   showModal: boolean,
@@ -9,10 +14,11 @@ interface HomeData {
   modalTitle: string,
   setModalTitle: (v: string) => void,
   modalBody: ReactNode,
-  setModalBody: (v: ReactNode) => void
+  setModalBody: (v: ReactNode) => void,
+  adMap: ad
 }
 
-export const initialState: HomeData = {
+export const initialState: BaseData = {
   showTip: false,
   setShowTip: () => {},
   showModal: false,
@@ -20,7 +26,11 @@ export const initialState: HomeData = {
   modalTitle: '',
   setModalTitle: () => {},
   modalBody: '',
-  setModalBody: () => {}
+  setModalBody: () => {},
+  adMap: {
+    adimg: '',
+    adurl: ''
+  }
 }
 
 const AdDisplayCtx = createContext(initialState);

@@ -1,7 +1,8 @@
-import { FC, useState, useContext } from "react";
+import { FC, useContext } from "react";
 import PoldadotIcon from '../svg/polkadot-icon';
 import HomeCtx from '../../hooks/use-home-content';
 import ConnectWallet from "../common/connect-wallet";
+import * as C from '../../utils'
 
 import styles from './index.module.scss';
 
@@ -27,7 +28,19 @@ const HomeBody: FC = () => {
             onClick={() => {
               setShowModal(true)
               setModalTitle('Connect with Polkadot.js')
-              setModalBody(<ConnectWallet />)
+              setModalBody(<ConnectWallet addressList={[]} />)
+              C.connectWallet(w => {
+                console.log(w)
+                let a: C.AddressMap[] = []
+                w.forEach((item) => {
+                  a.push({
+                    label: item.meta.name,
+                    value: item.address
+                  })
+                })
+                a.unshift({label: 'Select', value: 'Select'})
+                setModalBody(<ConnectWallet addressList={a} />)
+              })
             }}
           >
             <PoldadotIcon />

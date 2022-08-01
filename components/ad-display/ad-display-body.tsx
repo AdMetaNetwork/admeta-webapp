@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useState, useContext } from "react";
 import Image from "next/image";
 import SuccessSvg from "../svg/success";
 import BaseTip from "../ui/base-tip";
+import AdDisplayCtx from "../../hooks/use-ad-display-content";
 
 import styles from './index.module.scss';
 import BaseButton from "../ui/base-button";
@@ -9,25 +10,33 @@ import BaseButton from "../ui/base-button";
 const AdDisplayBody: FC = () => {
 
   const [isShowM, setShowM] = useState(false)
+  const { adMap: {adimg, adurl} } = useContext(AdDisplayCtx)
 
   const normalDom = () => (
     <div className={styles.normal}>
       <div className={styles.normalBody}>
-        {/* <div className={styles.normalImg}>
-          <Image
-            src={'https://fenglin-1256754106.cos.ap-nanjing.myqcloud.com/bike7.2/IMG_8355.JPG'}
-            alt="ss"
-            width={460}
-            height={259}
-            objectFit={'cover'}
-          ></Image>
-        </div> */}
-        <div className={styles.emptyImg}></div>
+        {
+          adimg
+            ?
+            <div className={styles.normalImg}>
+              <Image
+                src={adimg}
+                alt="ss"
+                width={460}
+                height={259}
+                objectFit={'cover'}
+              ></Image>
+            </div>
+            :
+            <div className={styles.emptyImg}></div>
+        }
         <div className={styles.normalTitle}>Web/project name</div>
         <div className={styles.normalDec}>Ad description Lörem ipsum lygisk diar nidobelt vengar, ett treskapet. Vess resade duligt cynpod. Parkera bussen rearad hädolurar för sår. Teraliga pogöska lur trakrobelt syl. </div>
         <div className={styles.normalBtn}>
           <BaseButton
-            btnClick={() => { }}
+            btnClick={() => { 
+              window.open(adurl)
+            }}
             btnText='View ad and claim rewards'
           />
         </div>
@@ -97,7 +106,8 @@ const AdDisplayBody: FC = () => {
       >
         <div>You has finshed the task, click <strong>Claim Reward</strong>to claim your rewards!</div>
       </BaseTip>
-      {claimDom()}
+      {/* {claimDom()} */}
+      {normalDom()}
     </div>
   )
 }
