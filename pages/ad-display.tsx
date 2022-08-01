@@ -1,24 +1,27 @@
 import type { NextPage } from 'next';
 import { ReactNode, useState } from 'react'
 import Base from '../components/common/base';
-import HomeBody from '../components/home/home-body';
-import HomeCtx from '../hooks/use-home-content';
+import AdDisplayCtx from '../hooks/use-ad-display-content';
+import AdDisplayBody from '../components/ad-display/ad-display-body';
 import BaseModal from '../components/ui/base-modal';
 
 
 import { SEO } from '../config';
 
-const Home: NextPage = () => {
+const AdDisplay: NextPage = () => {
+  const [showTip, setShowTip] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>('')
   const [modalBody, setModalBody] = useState<ReactNode>()
   return (
-    <HomeCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody }}>
+    <AdDisplayCtx.Provider value={{ showTip, setShowTip, showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody }}>
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
+        isShowTabBar
+        page='display'
       >
-        <HomeBody />
+        <AdDisplayBody />
       </Base>
       <BaseModal
         title={modalTitle}
@@ -29,8 +32,8 @@ const Home: NextPage = () => {
       >
         {modalBody}
       </BaseModal>
-    </HomeCtx.Provider>
+    </AdDisplayCtx.Provider>
   )
 }
 
-export default Home
+export default AdDisplay

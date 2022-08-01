@@ -1,0 +1,155 @@
+@import "../../styles/variable.scss";
+
+.adDisplay {
+  margin-top: 48px;
+  .normal {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    .normalBody {
+      width: 508px;
+      padding: 24px;
+      background: $black2;
+      border: 1px solid rgba(53, 57, 69, 0.5);
+      border-radius: 20px;
+      .normalImg {
+        width: 100%;
+        height: 259px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 24px;
+      }
+      .emptyImg {
+        width: 100%;
+        height: 259px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        background: url(../../public/images/empty.png) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .normalTitle {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 26px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: $white0;
+        margin-bottom: 16px;
+      }
+      .normalDec {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        color: $gray0;
+        margin-bottom: 24px;
+      }
+      .normalBtn {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+  .claim {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    .claimBody {
+      width: 625px;
+      padding: 24px;
+      background: $black2;
+      border: 1px solid rgba(53, 57, 69, 0.5);
+      border-radius: 20px;
+      .top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #23262f;
+        margin-bottom: 40px;
+        .left {
+          margin-right: 24px;
+          width: 150px;
+          height: 85px;
+          border-radius: 8px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .right {
+          flex: 1;
+          .title {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 21px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: $white0;
+            margin-bottom: 16px;
+          }
+          .dec {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 16px;
+            display: flex;
+            align-items: center;
+            color: $gray0;
+          }
+        }
+      }
+      .bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 160px;
+        .icon {
+          transform: scale(1.8);
+        }
+        .statusText {
+          width: 100%;
+          font-weight: 700;
+          font-size: 28px;
+          line-height: 36px;
+          text-align: center;
+          color: $white0;
+        }
+        .claimItem {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          margin-bottom: 17.5px;
+          &:first-child {
+            margin-top: 40px;
+          }
+          &:last-child {
+            margin-bottom: 80px;
+          }
+          .left {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 18px;
+            display: flex;
+            align-items: center;
+            color: $gray0;
+          }
+          .right {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 21px;
+            display: flex;
+            align-items: center;
+            text-align: right;
+            color: #dcdce6;
+          }
+        }
+      }
+    }
+  }
+}

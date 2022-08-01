@@ -1,0 +1,46 @@
+@import "../../../styles/variable.scss";
+
+.baseSelect {
+  height: 48px;
+  background: #18191d;
+  border: 2px solid #353945;
+  border-radius: 12px;
+  min-width: 100px;
+  width: 100%;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  color: #fcfcfd;
+  cursor: pointer;
+  position: relative;
+  &.activeClick {
+    border: 2px solid $blue0;
+  }
+  .activeSelect {
+    display: flex;
+    padding: 12px 16px;
+    justify-content: space-between;
+  }
+  .optionList {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    border-radius: 12px;
+    background-color: #353945;
+    z-index: 10;
+    max-height: 280px;
+    overflow-y: auto;
+    .optionItem {
+      width: 100%;
+      height: 46px;
+      line-height: 46px;
+      color: $white1;
+      font-size: 16px;
+      padding: 0 16px;
+      &.activityItem {
+        background-color: $black2;
+      }
+    }
+  }
+}

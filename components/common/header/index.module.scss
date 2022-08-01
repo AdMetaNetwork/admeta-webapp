@@ -1,0 +1,48 @@
+@import "../../../styles/variable.scss";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  height: 88px;
+  align-items: center;
+  padding: 0 160px;
+  border-bottom: 1px solid #23262F;
+  z-index: 10;
+  background-color: #141416;
+  .right {
+    .accountWrp {
+      display: flex;
+      height: 60px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-sizing: border-box;
+      border-radius: 30px;
+      background-color: #1D1F26;
+      .account {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 42px;
+        border-radius: 21px;
+        margin-right: 10px;
+        p {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 22px;
+          letter-spacing: -0.02em;
+          color: #e9edf7;
+        }
+      }
+      .img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+      }
+    }
+  }
+}

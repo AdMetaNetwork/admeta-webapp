@@ -1,0 +1,23 @@
+@import "../../../styles/variable.scss";
+
+.baseCheckBox {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  .box {
+    width: 24px;
+    height: 24px;
+    background: #23262f;
+    border: 2px solid #353945;
+    border-radius: 4px;
+  }
+  .label {
+    margin-left: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    color: #fcfcfd;
+    user-select: none;
+  }
+}

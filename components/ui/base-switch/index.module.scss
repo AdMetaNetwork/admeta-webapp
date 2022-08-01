@@ -1,0 +1,125 @@
+@import "../../../styles/variable.scss";
+
+.switchCube {
+  width: 40px;
+  height: 20px;
+  position: relative;
+  background: #353945;
+  border-radius: 32px;
+  cursor: pointer;
+  &.active {
+    background: $blue0;
+    .switchCir {
+      background: $white0;
+    }
+  }
+  &.cubeOpen {
+    -webkit-animation: scale-up-hor-left-cube 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    animation: scale-up-hor-left-cube 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  }
+  &.cubeClose {
+    -webkit-animation: scale-up-hor-right-cube 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    animation: scale-up-hor-right-cube 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  }
+  .switchCir {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: $blue0;
+    left: 4px;
+    top: 4px;
+    &.cirOpen {
+      -webkit-animation: scale-up-hor-left 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+      animation: scale-up-hor-left 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    }
+    &.cirClose {
+      -webkit-animation: scale-up-hor-right 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+      animation: scale-up-hor-right 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    }
+  }
+}
+
+@-webkit-keyframes scale-up-hor-left {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    background-color: $blue0;
+  }
+  100% {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+    background-color: $white0;
+  }
+}
+@keyframes scale-up-hor-left {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    background-color: $blue0;
+  }
+  100% {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+    background-color: $white0;
+  }
+}
+
+@-webkit-keyframes scale-up-hor-right {
+  0% {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+    background-color: $white0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    background-color: $blue0;
+  }
+}
+@keyframes scale-up-hor-right {
+  0% {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+    background-color: $white0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    background-color: $blue0;
+  }
+}
+
+@-webkit-keyframes scale-up-hor-left-cube {
+  0% {
+    background-color: "#353945";
+  }
+  100% {
+    background-color: $blue0;
+  }
+}
+@keyframes scale-up-hor-left-cube {
+  0% {
+    background-color: "#353945";
+  }
+  100% {
+    background-color: $blue0;
+  }
+}
+
+@-webkit-keyframes scale-up-hor-right-cube {
+  0% {
+    background-color: $blue0;
+  }
+  100% {
+    background-color: "#353945";
+  }
+}
+@keyframes scale-up-hor-right-cube {
+  0% {
+    background-color: $blue0;
+  }
+  100% {
+    background-color: "#353945";
+  }
+}

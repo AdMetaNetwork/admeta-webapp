@@ -1,0 +1,19 @@
+.container {
+  background-color: #141416;
+  box-sizing: border-box;
+}
+.main {
+  padding: 24px;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  .left {
+    width: 242px;
+  }
+  .right {
+    flex: 1;
+    position: relative;
+    padding-top: 64px;
+  }
+}
