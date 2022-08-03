@@ -7,11 +7,11 @@ interface p {
 }
 
 interface BaseData {
-	profileMap: p
+	profile: p
 }
 
 export const initialState: BaseData = {
-	profileMap: {
+	profile: {
 		age: '',
 		tag: '',
 		display: false

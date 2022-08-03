@@ -3,6 +3,7 @@ import BaseSelect from "../../ui/base-select";
 import BaseButton from "../../ui/base-button";
 import { useRouter } from 'next/router'
 import * as C from '../../../utils'
+import { message } from 'antd'
 
 import styles from './index.module.scss';
 
@@ -30,6 +31,7 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
         btnText="Sign in"
         btnClick={() => {
           if (!selectAddress || selectAddress === 'Select') {
+            message.info('Please select a address')
             return
           }
           C.selectWallet(selectAddress)

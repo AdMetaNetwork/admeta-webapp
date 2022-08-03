@@ -5,10 +5,11 @@ import styles from './index.module.scss';
 type Prop = {
   handleChangeInput: (val: string) => void,
   type?: string,
-  placeholder: string
+  placeholder: string,
+  value?: string
 }
 
-const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder }) => {
+const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder, value }) => {
   const [isFocus, setFocus] = useState<boolean>(false)
 
   return (
@@ -17,6 +18,7 @@ const BaseInput: FC<Prop> = ({ handleChangeInput, type = 'text', placeholder }) 
         type={type}
         placeholder={placeholder}
         className={styles.mInput}
+        value={value}
         onFocus={() => {
           setFocus(true)
         }}

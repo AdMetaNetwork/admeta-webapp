@@ -4,22 +4,17 @@ import Base from '../components/common/base';
 import ProfileBody from '../components/profile/profile-body';
 import ProfileCtx from '../hooks/use-profile-content';
 import useApi from '../hooks/use-api';
-import * as C from '../utils'
+import { Spin } from 'antd'
 import { polkadot_network } from '../config/constant';
-
+import { LoadingOutlined } from '@ant-design/icons'
 
 import { SEO } from '../config';
+import CallPolkadot from '../utils/call-polkadot';
 
 const Profile: NextPage = () => {
   const [profile, setProfile] = useState<{ age: string, tag: string, display: boolean }>({ age: '', tag: '', display: false })
 
   const { api } = useApi(polkadot_network)
-
-  const tx = useMemo(() => {
-    if (!api) return null;
-
-    return api.query.user;
-  }, [api]);
 
   useEffect(() => {
     if (!api) {
@@ -29,26 +24,37 @@ const Profile: NextPage = () => {
     if (!sender) {
       return
     }
-    tx?.users(sender)
-      .subscribe((c: any) => {
-        try {
-          const d = JSON.parse(c.toString()) as { age: string, tag: string, adDisplay: boolean }
-          setProfile({ age: d.age, tag: d.tag, display: d.adDisplay })
-        } catch {
-          throw('data parse fail')
-        }
-      })
-  }, [api, tx]);
+    const pk = new CallPolkadot(sender, api)
+    pk.getUserProfile().then((d: any) => {
+      if (!d.err) {
+        setProfile({ age: d.info.age, tag: d.info.tag, display: d.info.adDisplay })
+      } else {
+        setProfile({ age: '', tag: '-1', display: false })
+      }
+    })
+  }, [api]);
+
+  const loadingDom = () => (
+    <div
+      style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '60px 0' }}
+    >
+      <Spin
+        size='large'
+        tip="Loading..."
+        indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+      />
+    </div>
+  )
 
   return (
-    <ProfileCtx.Provider value={{ profileMap: profile }}>
+    <ProfileCtx.Provider value={{ profile }}>
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
         isShowTabBar
         page='profile'
       >
-        <ProfileBody />
+        {profile.age || profile.tag === '-1' ? <ProfileBody /> : loadingDom()}
       </Base>
     </ProfileCtx.Provider>
 

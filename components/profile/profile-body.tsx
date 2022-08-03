@@ -1,4 +1,4 @@
-import { FC, useState, useContext, useMemo } from "react";
+import { FC, useState, useContext, useMemo, useEffect } from "react";
 import BaseInput from "../ui/base-input";
 import WarnSvg from "../svg/warn";
 import BaseButton from "../ui/base-button";
@@ -6,8 +6,9 @@ import EditSvg from "../svg/edit";
 import BaseSwitch from "../ui/base-switch";
 import ProfileCtx from "../../hooks/use-profile-content";
 import useApi from '../../hooks/use-api';
-import * as C from '../../utils'
 import { polkadot_network } from '../../config/constant';
+import CallPolkadot from "../../utils/call-polkadot";
+import { message } from 'antd'
 
 import styles from './index.module.scss';
 
@@ -19,22 +20,30 @@ export enum PreferencesEnum {
 
 const ProfileBody: FC = () => {
 
-  const { profileMap: { age, display, tag } } = useContext(ProfileCtx)
-  const [isShowEdit, setShowEdit] = useState<boolean>(!!age)
-  const [profileAge, setProfileAge] = useState<number>()
-  const [profileDisplay, setProfileDisplay] = useState<boolean>(false)
-  const [profileTag, setProfileTag] = useState<number>()
+  const getTag = (tag: string) => {
+    if (PreferencesEnum[1] === tag) {
+      return PreferencesEnum.DeFi
+    }
+    if (PreferencesEnum[2] === tag) {
+      return PreferencesEnum.GameFi
+    }
+    if (PreferencesEnum[3] === tag) {
+      return PreferencesEnum.Metaverse
+    }
+
+    return 0
+  }
+
+  const { profile: { age, display, tag } } = useContext(ProfileCtx)
+  const [isShowEdit, setShowEdit] = useState<boolean>(!!!age)
+  const [profileAge, setProfileAge] = useState<number>(+age)
+  const [profileDisplay, setProfileDisplay] = useState<boolean>(display)
+  const [profileTag, setProfileTag] = useState<number>(getTag(tag))
   const [showAgeTip, setShowAgetip] = useState<boolean>(false)
-  const [showAdDisplayTip, setShowAdDisplayTip] = useState<boolean>(true)
+  const [showAdDisplayTip, setShowAdDisplayTip] = useState<boolean>(!display)
   const [showTagTip, setShowTagtip] = useState<boolean>(false)
 
   const { api } = useApi(polkadot_network)
-
-  const tx = useMemo(() => {
-    if (!api) return null;
-
-    return api.tx.user;
-  }, [api]);
 
   const handerUpdateProfile = async () => {
     if (!profileAge) {
@@ -50,41 +59,39 @@ const ProfileBody: FC = () => {
     if (!sender) {
       return
     }
-    const { web3FromAddress, web3Enable } = await import(
-      '@polkadot/extension-dapp'
-    )
 
-    await web3Enable('admeta-app')
-    const injector = await web3FromAddress(sender);
-    tx?.addProfile(age, PreferencesEnum[profileTag])
-      .signAndSend(sender, { signer: injector.signer })
-      .subscribe((result) => { 
-        console.log(result) 
-      })
+    const pk = new CallPolkadot(sender, api!)
+    const f = await pk.getAddressBanlance() as number
+    if (f <= 0) {
+      message.info('account balance too low')
+      return
+    }
+    pk.updateUserProfile(+profileAge, PreferencesEnum[profileTag]).then(() => {
+      setShowEdit(false)
+    })
 
   }
 
-  const handerOpenAdDisplay = async (d: boolean) => {
+  const handerOpenAdDisplay = async (p: boolean) => {
     const sender = localStorage.getItem('_select_account')
     if (!sender) {
       return
     }
-    const { web3FromAddress, web3Enable } = await import(
-      '@polkadot/extension-dapp'
-    )
 
-    await web3Enable('admeta-app')
-    const injector = await web3FromAddress(sender);
-
-    tx?.setAdDisplay(d)
-      .signAndSend(sender, { signer: injector.signer })
-      .subscribe((result) => { 
-        console.log(result) 
-        if (result.isInBlock) {
-          console.log(999999)
-        }
-      })
-
+    const pk = new CallPolkadot(sender, api!)
+    const f = await pk.getAddressBanlance() as number
+    if (f <= 0) {
+      message.info('account balance too low')
+      return
+    }
+    pk.setAdDisplay(p).then(() => {
+      setProfileDisplay(p)
+      if (!p) {
+        setShowAdDisplayTip(true)
+      } else {
+        setShowAdDisplayTip(false)
+      }
+    })
   }
 
 
@@ -103,6 +110,7 @@ const ProfileBody: FC = () => {
           <div className={styles.label}>AGE</div>
           <BaseInput
             placeholder="AGE"
+            value={profileAge + ''}
             handleChangeInput={(e) => {
               setProfileAge(+e)
             }}
@@ -117,13 +125,13 @@ const ProfileBody: FC = () => {
               onClick={() => {
                 setProfileTag(1)
               }}
-            ><p>GameFi</p></div>
+            ><p>DeFi</p></div>
             <div
               className={`${styles.tag} ${profileTag === 2 && styles.tagActive}`}
               onClick={() => {
                 setProfileTag(2)
               }}
-            ><p>DeFi</p></div>
+            ><p>GameFi</p></div>
             <div
               className={`${styles.tag} ${profileTag === 3 && styles.tagActive}`}
               onClick={() => {
@@ -139,14 +147,8 @@ const ProfileBody: FC = () => {
             <div className={styles.right}>
               <BaseSwitch
                 open={profileDisplay}
-                handleSwitch={(e) => {
-                  setProfileDisplay(e)
-                  if (!e) {
-                    setShowAdDisplayTip(true)
-                  } else {
-                    setShowAdDisplayTip(false)
-                  }
-                  handerOpenAdDisplay(e)
+                handleSwitch={(p) => {
+                  handerOpenAdDisplay(p)
                 }}
               />
             </div>
@@ -169,22 +171,22 @@ const ProfileBody: FC = () => {
     <div className={styles.show}>
       <div className={styles.item}>
         <div className={styles.label}>AGE</div>
-        <div className={styles.age}>{age}</div>
+        <div className={styles.age}>{profileAge}</div>
       </div>
       <div className={styles.item}>
         <div className={styles.label}>PREFERENCE</div>
         <div className={styles.tagList}>
-          <div className={styles.tag}><p>{tag}</p></div>
+          <div className={styles.tag}><p>{PreferencesEnum[profileTag]}</p></div>
         </div>
       </div>
       <div className={styles.item}>
         <div className={styles.label}>ADDISPLAY</div>
-        <div className={styles.swith}>{display ? 'YES' : 'NO'}</div>
+        <div className={styles.swith}>{profileDisplay ? 'YES' : 'NO'}</div>
       </div>
       <div
         className={styles.editPro}
         onClick={() => {
-          setShowEdit(false)
+          setShowEdit(true)
         }}
       >
         <EditSvg />
@@ -195,7 +197,7 @@ const ProfileBody: FC = () => {
 
   return (
     <div className={styles.profileBody}>
-      {isShowEdit ? showDom() : editDom()}
+      {isShowEdit ? editDom() : showDom()}
     </div>
   )
 }

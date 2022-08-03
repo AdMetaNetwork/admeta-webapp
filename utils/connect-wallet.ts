@@ -1,3 +1,4 @@
+import { extension_name } from '../config/constant'
 import type { Wallet } from './type'
 
 export const connectWallet = async (callback: (arg0: Wallet[]) => void) => {
@@ -5,7 +6,7 @@ export const connectWallet = async (callback: (arg0: Wallet[]) => void) => {
 		const { web3Enable, web3Accounts } = await import(
 			'@polkadot/extension-dapp'
 		)
-		const extensions = await web3Enable('admeta-app')
+		const extensions = await web3Enable(extension_name)
 		if (extensions.length === 0) {
 			console.log('No extension found')
 			return

@@ -3,7 +3,11 @@ import { createContext, ReactNode } from 'react'
 
 interface ad {
   adurl: string,
-  adimg: string
+  adimg: string,
+  adIdx: number,
+  adTitle: string,
+  adDec?: string,
+  adDisplay?: boolean
 }
 
 interface BaseData {
@@ -29,7 +33,11 @@ export const initialState: BaseData = {
   setModalBody: () => {},
   adMap: {
     adimg: '',
-    adurl: ''
+    adurl: '',
+    adIdx: 0,
+    adTitle: '',
+    adDec: '',
+    adDisplay: false
   }
 }
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { ApiOptions } from '@polkadot/api/types'
 import type { ApiRx } from '@polkadot/api';
-import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
 
 import * as C from '../utils'
 
@@ -22,12 +21,6 @@ export default function useApi(
 	useEffect(() => {
 		if (!api) {
 			setStatus('loading')
-
-			// const connect = async () => {
-			// 	const wsProvider = new WsProvider('wss://testnet.admeta.network')
-			// 	const api = await ApiPromise.create({ provider: wsProvider })
-			// 	setApi(api)
-			// }
 
 			try {
 				import('@polkadot/api').then(({ WsProvider, ApiRx }) => {

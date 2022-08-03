@@ -1,11 +1,12 @@
 import { FC, useContext, Context, useState, useEffect } from "react";
-import Image from "next/image";
 import LogoTextSvg from "../../svg/logo-text";
 import BaseButton from "../../ui/base-button";
 import ConnectWallet from "../connect-wallet";
 import Link from "next/link";
 import Identicon from '@polkadot/react-identicon';
 import * as C from '../../../utils'
+import { message } from 'antd'
+import { useRouter } from 'next/router'
 
 import styles from './index.module.scss';
 
@@ -17,6 +18,7 @@ const Header: FC<Prop> = ({ content }) => {
 
   const { setShowModal, setModalTitle, setModalBody } = useContext(content)
   const [selectAddress, setSelectAddress] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     const s = localStorage.getItem('_select_account')
@@ -36,7 +38,15 @@ const Header: FC<Prop> = ({ content }) => {
         {
           selectAddress
             ?
-            <div className={styles.accountWrp}>
+            <div 
+              className={styles.accountWrp}
+              onClick={() => {
+                if (router.pathname !== '/') {
+                  window.localStorage.clear()
+                  router.push('/')
+                }
+              }}
+            >
               <div className={styles.account}>
                 <p>{C.formatAddress(selectAddress)}</p>
               </div>
@@ -44,8 +54,8 @@ const Header: FC<Prop> = ({ content }) => {
                 value={selectAddress}
                 size={40}
                 theme={'polkadot'}
-                onCopy={(e) => {
-                  console.log(e)
+                onCopy={() => {
+                  message.info('copied your address')
                 }}
               />
             </div>
