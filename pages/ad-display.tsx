@@ -50,11 +50,11 @@ const AdDisplay: NextPage = () => {
       if (d.info.matchedAds.length) {
         const idx = d.info.matchedAds[0]
         pk.getUserAd(idx).then((v: any) => {
-          console.log(v)
+          console.log(v, '000--->>>>>')
           if (d.info.adDisplay) {
             setAd({
-              adimg: hexToString(v.metadata),
-              adurl: hexToString(v.target),
+              adimg: hexToString(v.info.metadata),
+              adurl: hexToString(v.info.target),
               adIdx: idx,
               adTitle: 'AD Name',
               adDec: 'here is your ad',
@@ -62,8 +62,8 @@ const AdDisplay: NextPage = () => {
             })
           } else {
             setAd({
-              adimg: hexToString(v.metadata),
-              adurl: hexToString(v.target),
+              adimg: hexToString(v.info.metadata),
+              adurl: hexToString(v.info.target),
               adIdx: idx,
               adTitle: 'AD Name',
               adDec: 'set your profile ad display open',
