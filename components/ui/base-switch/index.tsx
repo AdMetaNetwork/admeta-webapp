@@ -8,17 +8,14 @@ type Prop = {
 
 const BaseSwitch: FC<Prop> = ({ open = false, handleSwitch }) => {
 
-  const [o, setO] = useState(open)
-
   return (
     <div
-      className={`${styles.switchCube} ${o ? styles.cubeOpen : styles.cubeClose}`}
+      className={`${styles.switchCube} ${open ? styles.cubeOpen : styles.cubeClose}`}
       onClick={() => {
-        setO(!o)
-        handleSwitch(!o)
+        handleSwitch(!open)
       }}
     >
-      <div className={`${styles.switchCir} ${o ? styles.cirOpen : styles.cirClose}`}></div>
+      <div className={`${styles.switchCir} ${open ? styles.cirOpen : styles.cirClose}`}></div>
     </div>
   )
 }

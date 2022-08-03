@@ -2,34 +2,18 @@ import { FC, useState, useContext } from "react";
 import BaseSelect from "../../ui/base-select";
 import BaseButton from "../../ui/base-button";
 import { useRouter } from 'next/router'
+import * as C from '../../../utils'
+import { message } from 'antd'
 
 import styles from './index.module.scss';
 
-const opt = [
-  {
-    value: 'Select',
-    label: 'Select'
-  },
-  {
-    value: '14iyG7YpMKhJPbt4qgY26FM5gig6QNsyoFi1936eoL6E5BoA',
-    label: 'kmy'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  },
-  {
-    value: '19KvnKoBTgPYLpRYmTG6Bj3CgZAXim7DcAVhTgZnyJES6xm',
-    label: 'kmy2'
-  }
-]
+type Prop = {
+  addressList: C.AddressMap[]
+}
 
-const ConnectWallet: FC = () => {
+const ConnectWallet: FC<Prop> = ({ addressList }) => {
   const router = useRouter()
+  const [selectAddress, setSelectAddress] = useState<string>('')
 
   return (
     <div className={styles.modalBody}>
@@ -38,13 +22,20 @@ const ConnectWallet: FC = () => {
         <BaseSelect
           handleChangeSelect={(v) => {
             console.log(v)
+            setSelectAddress(v)
           }}
-          opt={opt}
+          opt={addressList}
         />
       </div>
       <BaseButton
         btnText="Sign in"
         btnClick={() => {
+          if (!selectAddress || selectAddress === 'Select') {
+            message.info('Please select a address')
+            return
+          }
+          C.selectWallet(selectAddress)
+
           router.push('/ad-display')
         }}
       />
