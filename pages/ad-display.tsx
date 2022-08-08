@@ -23,6 +23,8 @@ const AdDisplay: NextPage = () => {
 
   const { api } = useApi(polkadot_network)
 
+  const _api = useMemo(() => api, [api])
+
   useEffect(() => {
     if (!api) {
       return;
@@ -32,7 +34,7 @@ const AdDisplay: NextPage = () => {
       return
     }
 
-    const pk = new CallPolkadot(sender, api)
+    const pk = new CallPolkadot(sender, _api!)
     pk.getUserProfile().then((d: any) => {
       if (d.err) {
         setSpin(false)
@@ -48,9 +50,9 @@ const AdDisplay: NextPage = () => {
       }
 
       if (d.info.matchedAds.length) {
-        const idx = d.info.matchedAds[0]
-        pk.getUserAd(idx).then((v: any) => {
-          console.log(v, '000--->>>>>')
+        const idx = d.info.matchedAds[0][1]
+        const uper = d.info.matchedAds[0][0]
+        pk.getUserAd(uper, idx).then((v: any) => {
           if (d.info.adDisplay) {
             setAd({
               adimg: hexToString(v.info.metadata),

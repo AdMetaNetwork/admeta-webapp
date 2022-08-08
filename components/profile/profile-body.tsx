@@ -44,6 +44,7 @@ const ProfileBody: FC = () => {
   const [showTagTip, setShowTagtip] = useState<boolean>(false)
 
   const { api } = useApi(polkadot_network)
+  const _api = useMemo(() => api, [api])
 
   const handerUpdateProfile = async () => {
     if (!profileAge) {
@@ -60,7 +61,7 @@ const ProfileBody: FC = () => {
       return
     }
 
-    const pk = new CallPolkadot(sender, api!)
+    const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {
       message.info('account balance too low')
@@ -78,7 +79,7 @@ const ProfileBody: FC = () => {
       return
     }
 
-    const pk = new CallPolkadot(sender, api!)
+    const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {
       message.info('account balance too low')

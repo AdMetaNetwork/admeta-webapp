@@ -5,7 +5,7 @@
 .main {
   padding: 24px;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   justify-content: space-between;
   .left {

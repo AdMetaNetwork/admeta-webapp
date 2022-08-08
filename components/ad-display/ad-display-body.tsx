@@ -1,4 +1,4 @@
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, useMemo } from "react";
 import Image from "next/image";
 import SuccessSvg from "../svg/success";
 import BaseTip from "../ui/base-tip";
@@ -20,6 +20,7 @@ const AdDisplayBody: FC = () => {
   const { rd } = router.query
 
   const { api } = useApi(polkadot_network)
+  const _api = useMemo(() => api, [api])
 
   const handlerClaimReward = async () => {
     const sender = localStorage.getItem('_select_account')
@@ -27,7 +28,7 @@ const AdDisplayBody: FC = () => {
       return
     }
 
-    const pk = new CallPolkadot(sender, api!)
+    const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {
       message.info('account balance too low')

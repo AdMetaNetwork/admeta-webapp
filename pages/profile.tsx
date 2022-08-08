@@ -15,6 +15,7 @@ const Profile: NextPage = () => {
   const [profile, setProfile] = useState<{ age: string, tag: string, display: boolean }>({ age: '', tag: '', display: false })
 
   const { api } = useApi(polkadot_network)
+  const _api = useMemo(() => api, [api])
 
   useEffect(() => {
     if (!api) {
@@ -24,7 +25,7 @@ const Profile: NextPage = () => {
     if (!sender) {
       return
     }
-    const pk = new CallPolkadot(sender, api)
+    const pk = new CallPolkadot(sender, _api!)
     pk.getUserProfile().then((d: any) => {
       if (!d.err) {
         setProfile({ age: d.info.age, tag: d.info.tag, display: d.info.adDisplay })
@@ -32,7 +33,7 @@ const Profile: NextPage = () => {
         setProfile({ age: '', tag: '-1', display: false })
       }
     })
-  }, [api]);
+  }, [_api, api]);
 
   const loadingDom = () => (
     <div
