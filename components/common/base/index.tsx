@@ -44,6 +44,7 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar
         <title>{tdk.title}</title>
         <meta name="keywords" content={tdk.keywords || SEO.seo_default_keywords} />
         <meta name="description" content={tdk.description || SEO.seo_default_description} />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

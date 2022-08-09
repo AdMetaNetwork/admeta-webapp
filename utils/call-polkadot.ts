@@ -22,9 +22,9 @@ class CallPolkadot {
 		return this.api.query
 	}
 
-  // get balance
-  getAddressBanlance() {
-    return new Promise((resolve, reject) => {
+	// get balance
+	getAddressBanlance() {
+		return new Promise((resolve, reject) => {
 			this.qu()
 				?.system.account(this.sender)
 				.subscribe((c: any) => {
@@ -34,7 +34,7 @@ class CallPolkadot {
 					}
 				})
 		})
-  }
+	}
 
 	// get user profile
 	getUserProfile() {
@@ -93,10 +93,10 @@ class CallPolkadot {
 	}
 
 	// get user ad
-	async getUserAd(idx: number) {
+	async getUserAd(uper: string, idx: number) {
 		return new Promise((resolve, reject) => {
 			this.qu()
-				?.ad.impressionAds(this.sender, idx)
+				?.ad.impressionAds(uper, idx)
 				.subscribe((c: any) => {
 					if (c.toString()) {
 						const d = JSON.parse(c.toString())

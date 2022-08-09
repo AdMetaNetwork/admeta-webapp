@@ -1,0 +1,16 @@
+@import "../../../styles/variable.scss";
+
+.badge {
+  height: 26px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  p {
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
+  }
+}

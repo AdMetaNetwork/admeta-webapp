@@ -1,0 +1,51 @@
+@import "../../styles/variable.scss";
+.managementBody {
+  width: 100%;
+  padding: 0 146px;
+  .pushBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  .list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .listWrp {
+      display: flex;
+      flex-wrap: wrap;
+      width: 1140px;
+      max-height: 660px;
+      overflow-y: auto;
+      .imgItem {
+        width: 357px;
+        margin-right: 24px;
+        margin-bottom: 24px;
+        flex-shrink: 0;
+        background: $black2;
+        overflow: hidden;
+        border-radius: 20px 20px 0 0;
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+        font-size: 0;
+        .bottom {
+          padding: 24px;
+          box-sizing: border-box;
+          border-radius: 0 0 20px 20px;
+          border: 1px solid rgba(53, 57, 69, 0.5);
+          font-size: 16px;
+          .title {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 21px;
+            color: $white0;
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+}
