@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Image from "next/image";
+import { Image } from "antd";
 import DeleteSvg from "../svg/delete";
 
 import styles from './index.module.scss';
@@ -17,8 +17,7 @@ const Upload: FC<Prop> = ({ current = 1 }) => {
           src={'https://storageapi.fleek.co/038f3525-c411-4ef9-86e4-bc833d0c2d7f-bucket/IMG_8446.JPG'}
           alt=''
           width={695}
-          height={393}
-          objectFit={'cover'}
+          preview={false}
         />
         <div className={styles.delete}>
           <DeleteSvg />

@@ -39,7 +39,7 @@ const Info: FC<Prop> = ({ current = 1 }) => {
               <div
                 className={styles.tip}
                 ref={tipEl}
-                style={{ left: -(tw / 2) - 9, visibility: tw ? 'visible' : 'hidden' }}
+                style={{ left: -(tw / 2) + 9, visibility: tw ? 'visible' : 'hidden' }}
               >{tip}</div>
             }
           </div>
@@ -108,7 +108,7 @@ const Info: FC<Prop> = ({ current = 1 }) => {
         </div>
       </div><div className={styles.infoItem}>
         {labelDom('DESCRIPTION')}
-        <textarea className={styles.textarea} placeholder="Say something"></textarea>
+        <textarea className={styles.textarea} placeholder="Say something" maxLength={50}></textarea>
       </div>
     </div>
   )

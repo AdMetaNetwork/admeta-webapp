@@ -4,6 +4,13 @@
   justify-content: flex-start;
   position: relative;
   padding-top: 48px;
+  .progress {
+    position: fixed;
+    top: 79px;
+    left: 0;
+    width: 100vw;
+    z-index: 99;
+  }
   .left {
     margin-right: 80px;
     display: flex;
@@ -14,6 +21,22 @@
         display: flex;
         align-items: center;
         margin-bottom: 40px;
+        position: relative;
+        .dashed {
+          position: absolute;
+          width: 20px;
+          height: 40px;
+          left: 0;
+          top: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .line {
+            width: 0px;
+            height: 60%;
+            border: 1px dashed #525461;
+          }
+        }
         .itemLeft {
           width: 20px;
           height: 20px;
@@ -24,6 +47,9 @@
           border-radius: 10px;
           border: 1px solid #e6e7f0;
           box-sizing: border-box;
+          &.act {
+            border: none;
+          }
           p {
             margin-bottom: 0;
             font-size: 12px;
@@ -36,13 +62,16 @@
           line-height: 25px;
           letter-spacing: -0.02em;
           color: #525461;
+          &.light {
+            font-weight: 600;
+            color: #e6e7f0;
+          }
         }
       }
     }
   }
   .content {
     width: 736px;
-    height: 759px;
     background: $black2;
     box-shadow: 0px 64px 64px -48px rgba(15, 15, 15, 0.1);
     border-radius: 16px;
@@ -60,6 +89,7 @@
         line-height: 32px;
         color: #fcfcfd;
         margin-left: 12px;
+        user-select: none;
       }
     }
     .bottomBtn {
@@ -163,11 +193,11 @@
         color: #b1b5c4;
         margin-bottom: 0;
         margin-right: 4px;
+        user-select: none;
       }
       .rightIcon {
         position: relative;
         .tip {
-          display: inline-block;
           padding: 5px 14px;
           border-radius: 6px;
           font-weight: 400;
@@ -176,7 +206,7 @@
           letter-spacing: -0.02em;
           color: #e6e7f0;
           position: relative;
-          bottom: 36px;
+          bottom: 60px;
           left: 0px;
           background: #23262f;
           visibility: hidden;
@@ -245,6 +275,36 @@
       line-height: 24px;
       color: $white1;
       resize: none;
+    }
+  }
+  .propose {
+    width: 100%;
+    padding: 0 74px;
+    .proposeBody {
+      padding: 24px;
+      box-sizing: border-box;
+      background: #18191d;
+      border: 1px solid rgba(53, 57, 69, 0.5);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .coverImg {
+      width: 460px;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 259px;
+    }
+    .title {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 26px;
+      color: $white0;
+      margin-top: 24px;
+      margin-bottom: 16px;
+      width: 100%;
+      text-align: left;
     }
   }
 }
