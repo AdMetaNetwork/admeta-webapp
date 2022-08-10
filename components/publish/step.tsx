@@ -7,7 +7,7 @@ type Prop = {
   current?: 1 | 2 | 3
 }
 
-const Step: FC<Prop> = ({ current = 3 }) => {
+const Step: FC<Prop> = ({ current = 1 }) => {
   return (
     <div className={styles.step}>
       <div className={styles.stepItem}>

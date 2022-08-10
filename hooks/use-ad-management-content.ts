@@ -9,7 +9,9 @@ interface BaseData {
   modalTitle: string,
   setModalTitle: (v: string) => void,
   modalBody: ReactNode,
-  setModalBody: (v: ReactNode) => void
+  setModalBody: (v: ReactNode) => void,
+  isLoading: boolean,
+  setLoading: (v: boolean) => void
 }
 
 export const initialState: BaseData = {
@@ -21,6 +23,8 @@ export const initialState: BaseData = {
   setModalTitle: () => {},
   modalBody: '',
   setModalBody: () => {},
+  isLoading: false,
+  setLoading: () => {}
 }
 
 const AdManagementCtx = createContext(initialState);

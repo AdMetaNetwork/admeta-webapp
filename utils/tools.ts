@@ -16,15 +16,12 @@ export function formatAdData(c: any[]) {
 	})
 
 	let a: any[] = JSON.parse(`[${arr.toString()}]`)
-	console.log(a)
 	a.forEach(item => {
 		item.target = hexToString(item.target)
 		item.metadata = hexToString(item.metadata)
+		item.title = hexToString(item.title)
+		
 	})
-	let obj = {
-		adurl: a[a.length - 1].target,
-		adimg: a[a.length - 1].metadata
-	}
 
-	return obj
+	return a
 }

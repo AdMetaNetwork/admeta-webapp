@@ -22,3 +22,11 @@ p {
 }
 
 @import '~antd/dist/antd.css';
+
+.ant-spin-container::after {
+  background: none;
+}
+
+.ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
+  text-shadow: none;
+}
