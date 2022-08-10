@@ -252,6 +252,13 @@
         justify-content: center;
         margin-right: 16px;
         cursor: pointer;
+        &.ac {
+          border: 2px solid $blue0;
+          background: $blue0;
+          p {
+            color: $white0;
+          }
+        }
         p {
           margin-bottom: 0;
           font-weight: 700;

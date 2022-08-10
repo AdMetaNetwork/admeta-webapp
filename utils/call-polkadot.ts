@@ -1,5 +1,7 @@
 import { extension_name } from '../config/constant'
 import type { ApiRx } from '@polkadot/api'
+import { formatAdData } from './tools'
+import { AdInfo } from './type'
 
 class CallPolkadot {
 	sender: string
@@ -53,7 +55,7 @@ class CallPolkadot {
 	}
 
 	// update user profile
-	async updateUserProfile(age: number, tag: string) {
+	async updateUserProfile(age: number, tag: string, display: boolean) {
 		const { web3FromAddress, web3Enable } = await import(
 			'@polkadot/extension-dapp'
 		)
@@ -62,7 +64,7 @@ class CallPolkadot {
 
 		return new Promise((resolve, reject) => {
 			this.tx()
-				?.user.addProfile(age, tag)
+				?.user.addProfile(age, tag, display)
 				.signAndSend(this.sender, { signer: injector.signer })
 				.subscribe(result => {
 					if (result.isInBlock) {
@@ -108,6 +110,23 @@ class CallPolkadot {
 		})
 	}
 
+	// get user ads
+	async getUserAds(uper: string) {
+		return new Promise((resolve, reject) => {
+			this.qu()
+				?.ad.impressionAds.entries(uper)
+				.subscribe((c: any) => {
+					
+					if (c.toString()) {
+						const d = formatAdData(c)
+						resolve({ info: d })
+					} else {
+						resolve({ info: [] })
+					}
+				})
+		})
+	}
+
 	// claim ad reward
 	async claimReward(idx: number) {
 		const { web3FromAddress, web3Enable } = await import(
@@ -123,6 +142,49 @@ class CallPolkadot {
 				.subscribe(result => {
 					if (result.isInBlock) {
 						resolve({ info: 'ok' })
+					}
+				})
+		})
+	}
+
+	// porpose ad
+	async porposeAd(ad: AdInfo) {
+		const { web3FromAddress, web3Enable } = await import(
+			'@polkadot/extension-dapp'
+		)
+		await web3Enable(extension_name)
+		const injector = await web3FromAddress(this.sender)
+
+		return new Promise((resolve, reject) => {
+			this.tx()
+				?.ad.proposeAd(
+					ad.metadata,
+					ad.target,
+					ad.title,
+					ad.cpi,
+					ad.amount,
+					ad.endBlock,
+					ad.preference
+				)
+				.signAndSend(this.sender, { signer: injector.signer })
+				.subscribe(result => {
+					if (result.isInBlock) {
+						resolve({ info: 'ok' })
+					}
+				})
+		})
+	}
+
+	// get current block
+	async getCurrentBlock(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			this.qu()
+				?.system.number()
+				.subscribe((c: any) => {
+					if (c.toString()) {
+						resolve(parseInt(c.toString()))
+					} else {
+						resolve(0)
 					}
 				})
 		})

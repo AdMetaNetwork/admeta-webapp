@@ -67,32 +67,19 @@ const ProfileBody: FC = () => {
       message.info('account balance too low')
       return
     }
-    pk.updateUserProfile(+profileAge, PreferencesEnum[profileTag]).then(() => {
+    pk.updateUserProfile(+profileAge, PreferencesEnum[profileTag], profileDisplay).then(() => {
       setShowEdit(false)
     })
 
   }
 
   const handerOpenAdDisplay = async (p: boolean) => {
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
+    setProfileDisplay(p)
+    if (!p) {
+      setShowAdDisplayTip(true)
+    } else {
+      setShowAdDisplayTip(false)
     }
-
-    const pk = new CallPolkadot(sender, _api!)
-    const f = await pk.getAddressBanlance() as number
-    if (f <= 0) {
-      message.info('account balance too low')
-      return
-    }
-    pk.setAdDisplay(p).then(() => {
-      setProfileDisplay(p)
-      if (!p) {
-        setShowAdDisplayTip(true)
-      } else {
-        setShowAdDisplayTip(false)
-      }
-    })
   }
 
 

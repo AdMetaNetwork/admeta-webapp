@@ -6,10 +6,11 @@ import styles from './index.module.scss';
 
 type Prop = {
   img: string,
-  badge: 'PENDING' | 'APPROVED' | 'REJECTED'
+  badge: 'PENDING' | 'APPROVED' | 'REJECTED',
+  title: string
 }
 
-const ImgItem: FC<Prop> = ({ img, badge }) => {
+const ImgItem: FC<Prop> = ({ img, badge, title }) => {
 
   return (
     <div className={styles.imgItem}>
@@ -21,7 +22,7 @@ const ImgItem: FC<Prop> = ({ img, badge }) => {
         alt=''
       />
       <div className={styles.bottom}>
-        <div className={styles.title}>Web/project name</div>
+        <div className={styles.title}>{title}</div>
         <BaseBadge
           text={badge}
           color={badge === 'APPROVED' ? '#58BD7D' : badge === 'PENDING' ? '#E38C4D' : '#CA3009'}
