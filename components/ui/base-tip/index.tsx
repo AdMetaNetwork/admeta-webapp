@@ -32,7 +32,7 @@ const BaseTip: FC<Prop> = ({ type, children, isShowTip, handleColose }) => {
       className={`${styles.baseTip} ${isShowTip ? styles.animationShow : ''}`}
       style={{ visibility: isShowTip ? 'visible' : 'hidden', background: getBg() }}
     >
-      <div>
+      <div style={{display: 'flex', alignItems: 'center'}}>
         {
           type === icon[0]
             ?

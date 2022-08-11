@@ -7,7 +7,7 @@ import useApi from '../../hooks/use-api';
 import { polkadot_network } from '../../config/constant';
 import CallPolkadot from "../../utils/call-polkadot";
 import * as C from '../../utils'
-import AdManagementCtx from "../../hooks/use-ad-management-content";
+import BaseCtx from "../../hooks/use-base-content";
 
 import styles from './index.module.scss';
 
@@ -16,12 +16,12 @@ const ManagementBody: FC = () => {
   const [list, setList] = useState<C.AdInfo[]>([])
   const { api } = useApi(polkadot_network)
   const _api = useMemo(() => api, [api])
-  const { setLoading } = useContext(AdManagementCtx)
+  const { setLoading } = useContext(BaseCtx)
 
   const router = useRouter()
 
   useEffect(() => {
-    setLoading(true)
+    setLoading!(true)
     if (!_api) {
       return;
     }
@@ -36,7 +36,7 @@ const ManagementBody: FC = () => {
       const list = d.info as C.AdInfo[];
       setList(list)
       if (list) {
-        setLoading(false)
+        setLoading!(false)
       }
     })
 

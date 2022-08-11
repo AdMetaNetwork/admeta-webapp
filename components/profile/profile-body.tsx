@@ -4,11 +4,10 @@ import WarnSvg from "../svg/warn";
 import BaseButton from "../ui/base-button";
 import EditSvg from "../svg/edit";
 import BaseSwitch from "../ui/base-switch";
-import ProfileCtx from "../../hooks/use-profile-content";
+import BaseCtx from "../../hooks/use-base-content";
 import useApi from '../../hooks/use-api';
 import { polkadot_network } from '../../config/constant';
 import CallPolkadot from "../../utils/call-polkadot";
-import { message } from 'antd'
 
 import styles from './index.module.scss';
 
@@ -34,7 +33,8 @@ const ProfileBody: FC = () => {
     return 0
   }
 
-  const { profile: { age, display, tag } } = useContext(ProfileCtx)
+  const { profile, setTipText, setTipType, setShowTip } = useContext(BaseCtx)
+  const { age, display, tag } = profile!
   const [isShowEdit, setShowEdit] = useState<boolean>(!!!age)
   const [profileAge, setProfileAge] = useState<number>(+age)
   const [profileDisplay, setProfileDisplay] = useState<boolean>(display)
@@ -64,13 +64,22 @@ const ProfileBody: FC = () => {
     const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {
-      message.info('account balance too low')
+      handleShowTip('Account balance too low', 'Error')
       return
     }
     pk.updateUserProfile(+profileAge, PreferencesEnum[profileTag], profileDisplay).then(() => {
       setShowEdit(false)
     })
 
+  }
+
+  const handleShowTip = (tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
+    setTimeout(() => {
+      setShowTip!(false)
+    }, 2000)
   }
 
   const handerOpenAdDisplay = async (p: boolean) => {

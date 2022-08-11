@@ -2,7 +2,7 @@ import { FC, useState, useContext, useMemo } from "react";
 import Image from "next/image";
 import SuccessSvg from "../svg/success";
 import BaseTip from "../ui/base-tip";
-import AdDisplayCtx from "../../hooks/use-ad-display-content";
+import BaseCtx from "../../hooks/use-base-content";
 import { useRouter } from 'next/router'
 import useApi from '../../hooks/use-api';
 import { polkadot_network } from '../../config/constant';
@@ -10,12 +10,12 @@ import { polkadot_network } from '../../config/constant';
 import styles from './index.module.scss';
 import BaseButton from "../ui/base-button";
 import CallPolkadot from "../../utils/call-polkadot";
-import { message } from 'antd'
 
 const AdDisplayBody: FC = () => {
 
   const [isShowM, setShowM] = useState(false)
-  const { adMap: { adimg, adurl, adIdx, adTitle, adDec, adDisplay } } = useContext(AdDisplayCtx)
+  const { adMap, setTipText, setTipType, setShowTip } = useContext(BaseCtx)
+  const { adimg, adurl, adIdx, adTitle, adCpi = 0, adDisplay } = adMap!
   const router = useRouter()
   const { rd } = router.query
 
@@ -31,12 +31,24 @@ const AdDisplayBody: FC = () => {
     const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {
-      message.info('account balance too low')
+      handleShowTip('Account balance too low', 'Error')
       return
     }
     pk.claimReward(adIdx).then(() => {
       setShowM(true)
+      setTimeout(() => {
+        router.replace('/ad-display')
+      }, 500)
     })
+  }
+
+  const handleShowTip = (tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
+    setTimeout(() => {
+      setShowTip!(false)
+    }, 2000)
   }
 
   const normalDom = () => (
@@ -58,7 +70,6 @@ const AdDisplayBody: FC = () => {
             <div className={styles.emptyImg}></div>
         }
         <div className={styles.normalTitle}>{adTitle}</div>
-        <div className={styles.normalDec}>{adDec}</div>
         {
           adDisplay && adimg
             ?
@@ -93,7 +104,6 @@ const AdDisplayBody: FC = () => {
           </div>
           <div className={styles.right}>
             <div className={styles.title}>{adTitle}</div>
-            <div className={styles.dec}>{adDec}</div>
           </div>
         </div>
         <div className={styles.bottom}>
@@ -105,16 +115,16 @@ const AdDisplayBody: FC = () => {
           <div className={styles.statusText}>Task completed</div>
           <div style={{ width: '100%' }}>
             <div className={styles.claimItem}>
-              <div className={styles.left}>Project name1</div>
-              <div className={styles.right}>Web3 projectX</div>
+              <div className={styles.left}>Claim reward for ad</div>
+              <div className={styles.right}>{adIdx}</div>
             </div>
             <div className={styles.claimItem}>
-              <div className={styles.left}>Project name2</div>
-              <div className={styles.right}>Web3 projectX</div>
+              <div className={styles.left}>Reward amount</div>
+              <div className={styles.right}>{(adCpi / Math.pow(10, 12)) + ''}</div>
             </div>
             <div className={styles.claimItem}>
-              <div className={styles.left}>Project name3</div>
-              <div className={styles.right}>Web3 projectX</div>
+              <div className={styles.left}>Estimate transaction fee</div>
+              <div className={styles.right}>0</div>
             </div>
           </div>
           <BaseButton

@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import useApi from "../../hooks/use-api";
 import { polkadot_network } from "../../config/constant";
 import CallPolkadot from "../../utils/call-polkadot";
-import AdPublishCtx from "../../hooks/use-ad-publish-content";
+import BaseCtx from "../../hooks/use-base-content";
 
 
 import styles from './index.module.scss';
@@ -34,7 +34,7 @@ const PublishBody: FC = () => {
   const [ageMin, setAgeMin] = useState(0)
 
 
-  const { setShowTip, setTipType, setTipText, setLoading } = useContext(AdPublishCtx)
+  const { setShowTip, setTipType, setTipText, setLoading } = useContext(BaseCtx)
 
 
   const router = useRouter()
@@ -42,6 +42,7 @@ const PublishBody: FC = () => {
   const _api = useMemo(() => api, [api])
 
   const handleUpLoadImg = (url: string, key: string) => {
+    setLoading!(true)
     axios({
       method: 'post',
       url: '/api/upload',
@@ -54,6 +55,7 @@ const PublishBody: FC = () => {
         setProgress(30)
         setStep(2)
         getFile(key)
+        setLoading!(false)
       }
     })
   }
@@ -61,19 +63,19 @@ const PublishBody: FC = () => {
   const getFile = (key: string) => {
     axios({
       method: 'get',
-      url: window.location.origin + `/api/getIPFS?key=${key}`
+      url: `/api/getIPFS?key=${key}`
     }).then((e) => {
       setImg(e.data.url)
     })
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setLoading(true)
+    setLoading!(true)
     var reader = new FileReader();
     const file = e.target.files![0];
 
     if (file) {
-      setLoading(false)
+      setLoading!(false)
       reader.readAsDataURL(file);
       reader.onloadend = function () {
         //将转换结果赋值给img标签
@@ -87,11 +89,11 @@ const PublishBody: FC = () => {
   };
 
   const handleShowTip = (tipText: string, tipType: 'Success' | 'Error') => {
-    setTipText(tipText)
-    setTipType(tipType)
-    setShowTip(true)
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
     setTimeout(() => {
-      setShowTip(false)
+      setShowTip!(false)
     }, 2000)
   }
 
@@ -116,7 +118,7 @@ const PublishBody: FC = () => {
     if (!sender) {
       return
     }
-    setLoading(true)
+    setLoading!(true)
     const pk = new CallPolkadot(sender, _api!)
     let ad: C.AdInfo = {
       metadata: img,
@@ -135,7 +137,7 @@ const PublishBody: FC = () => {
     }
 
     pk.porposeAd(ad).then(() => {
-      setLoading(false)
+      setLoading!(false)
       handleShowTip('Propose ad ok', 'Success')
       router.back()
     })
@@ -207,6 +209,19 @@ const PublishBody: FC = () => {
     }
   }
 
+  const handleNavBack = () => {
+    if (step === 1) {
+      return
+    }
+    if (step === 2) {
+      setStep(1)
+      setImg('')
+    }
+    if (step === 3) {
+      setStep(2)
+    }
+  }
+
   return (
     <div className={styles.publishBody}>
       <div className={styles.progress}>
@@ -224,7 +239,10 @@ const PublishBody: FC = () => {
         />
       </div>
       <div className={styles.content}>
-        <div className={styles.nav}>
+        <div
+          className={styles.nav}
+          onClick={handleNavBack}
+        >
           <BackSvg />
           <div className={styles.navlabel}>{handleGetStatusLabel().nav}</div>
         </div>
@@ -237,6 +255,9 @@ const PublishBody: FC = () => {
               handleChange(e)
             }}
             img={img}
+            handleDelImage={() => {
+              setImg('')
+            }}
           />
         }
         {/* step two upload ad info */}

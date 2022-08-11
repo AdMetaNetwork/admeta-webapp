@@ -1,10 +1,9 @@
-
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
 }
 
 a {
@@ -21,7 +20,7 @@ p {
   margin-bottom: 0;
 }
 
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .ant-spin-container::after {
   background: none;
@@ -29,4 +28,20 @@ p {
 
 .ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
   text-shadow: none;
+}
+
+.ant-picker {
+  background: #18191d;
+  height: 48px;
+  width: 100%;
+  border: 2px solid #353945;
+  border-radius: 12px;
+}
+
+.ant-picker-input > input {
+  color: #fff;
+}
+
+.ant-picker-focused {
+  border: 2px solid #3772FF;
 }

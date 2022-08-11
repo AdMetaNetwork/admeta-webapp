@@ -2,8 +2,9 @@ import type { NextPage } from 'next';
 import { ReactNode, useState } from 'react'
 import Base from '../components/common/base';
 import HomeBody from '../components/home/home-body';
-import HomeCtx from '../hooks/use-home-content';
+import BaseCtx from '../hooks/use-base-content';
 import BaseModal from '../components/ui/base-modal';
+import BaseTip from '../components/ui/base-tip';
 
 
 import { SEO } from '../config';
@@ -12,8 +13,12 @@ const Home: NextPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>('')
   const [modalBody, setModalBody] = useState<ReactNode>()
+  
+  const [tipType, setTipType] = useState<'Success' | 'Error'>('Success')
+  const [showTip, setShowTip] = useState<boolean>(false)
+  const [tipText, setTipText] = useState<string>('')
   return (
-    <HomeCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody }}>
+    <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, showTip, setShowTip, tipType, setTipType, tipText, setTipText }}>
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
@@ -29,7 +34,16 @@ const Home: NextPage = () => {
       >
         {modalBody}
       </BaseModal>
-    </HomeCtx.Provider>
+      <BaseTip
+        type={tipType}
+        isShowTip={showTip}
+        handleColose={() => {
+          setShowTip(false)
+        }}
+      >
+        <div>{tipText}</div>
+      </BaseTip>
+    </BaseCtx.Provider>
   )
 }
 

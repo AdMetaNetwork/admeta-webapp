@@ -1,12 +1,13 @@
 import type { NextPage } from 'next';
-import { ReactNode, useState, useMemo, useEffect } from 'react'
+import { ReactNode, useState, useMemo, useEffect, useContext } from 'react'
 import Base from '../components/common/base';
-import AdDisplayCtx from '../hooks/use-ad-display-content';
+import BaseCtx from '../hooks/use-base-content';
 import AdDisplayBody from '../components/ad-display/ad-display-body';
 import BaseModal from '../components/ui/base-modal';
 import useApi from '../hooks/use-api';
-import { Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import BaseTip from '../components/ui/base-tip';
+import BaseLoading from '../components/ui/base-loading';
+
 
 import { SEO } from '../config';
 import { polkadot_network } from '../config/constant';
@@ -14,19 +15,23 @@ import { hexToString } from '@polkadot/util'
 import CallPolkadot from '../utils/call-polkadot';
 
 const AdDisplay: NextPage = () => {
-  const [showTip, setShowTip] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>('')
   const [modalBody, setModalBody] = useState<ReactNode>()
-  const [adMap, setAd] = useState<{ adimg: string, adurl: string, adIdx: number, adTitle: string, adDec: string, adDisplay: boolean }>({ adimg: '', adurl: '', adIdx: 0, adTitle: '', adDec: '', adDisplay: false })
-  const [isSpin, setSpin] = useState(true)
+  const [adMap, setAd] = useState<{ adimg: string, adurl: string, adIdx: number, adTitle: string, adDec: string, adDisplay: boolean, adCpi: number }>({ adimg: '', adurl: '', adIdx: 0, adTitle: '', adDec: '', adDisplay: false, adCpi: 0 })
+
+
+  const [tipType, setTipType] = useState<'Success' | 'Error'>('Success')
+  const [showTip, setShowTip] = useState<boolean>(false)
+  const [tipText, setTipText] = useState<string>('')
+  const [isLoading, setLoading] = useState<boolean>(true)
 
   const { api } = useApi(polkadot_network)
 
   const _api = useMemo(() => api, [api])
 
   useEffect(() => {
-    if (!api) {
+    if (!_api) {
       return;
     }
     const sender = localStorage.getItem('_select_account')
@@ -37,14 +42,15 @@ const AdDisplay: NextPage = () => {
     const pk = new CallPolkadot(sender, _api!)
     pk.getUserProfile().then((d: any) => {
       if (d.err) {
-        setSpin(false)
+        setLoading!(false)
         setAd({
           adimg: '',
           adurl: '',
           adIdx: 0,
           adTitle: 'set your profile',
           adDec: 'set your profile and show ad',
-          adDisplay: false
+          adDisplay: false,
+          adCpi: 0,
         })
         return
       }
@@ -58,64 +64,49 @@ const AdDisplay: NextPage = () => {
               adimg: hexToString(v.info.metadata),
               adurl: hexToString(v.info.target),
               adIdx: idx,
-              adTitle: 'AD Name',
+              adTitle: hexToString(v.info.title),
               adDec: 'here is your ad',
-              adDisplay: d.info.adDisplay
+              adDisplay: d.info.adDisplay,
+              adCpi: v.info.cpi
             })
           } else {
             setAd({
               adimg: hexToString(v.info.metadata),
               adurl: hexToString(v.info.target),
               adIdx: idx,
-              adTitle: 'AD Name',
+              adTitle: hexToString(v.info.title),
               adDec: 'set your profile ad display open',
-              adDisplay: d.info.adDisplay
+              adDisplay: d.info.adDisplay,
+              adCpi: v.info.cpi
             })
           }
-          setSpin(false)
+          setLoading!(false)
         })
 
       } else {
-        setSpin(false)
+        setLoading!(false)
         setAd({
           adimg: '',
           adurl: '',
           adIdx: 0,
           adTitle: 'set your profile',
           adDec: 'set your profile and show ad',
-          adDisplay: d.info.adDisplay
+          adDisplay: false,
+          adCpi: 0
         })
       }
     })
-  }, [api]);
-
-  const loadingDom = () => (
-    <div
-      style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '60px 0' }}
-    >
-      <Spin
-        size='large'
-        tip="Loading..."
-        indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-      />
-    </div>
-  )
+  }, [_api, setLoading]);
 
   return (
-    <AdDisplayCtx.Provider value={{ showTip, setShowTip, showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, adMap }}>
+    <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, adMap, showTip, setShowTip, tipType, setTipType, tipText, setTipText, isLoading, setLoading }}>
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
         isShowTabBar
         page='display'
       >
-        {
-          isSpin
-            ?
-            loadingDom()
-            :
-            <AdDisplayBody />
-        }
+        <AdDisplayBody />
       </Base>
       <BaseModal
         title={modalTitle}
@@ -126,7 +117,21 @@ const AdDisplay: NextPage = () => {
       >
         {modalBody}
       </BaseModal>
-    </AdDisplayCtx.Provider>
+      <BaseTip
+        type={tipType}
+        isShowTip={showTip}
+        handleColose={() => {
+          setShowTip(false)
+        }}
+      >
+        <div>{tipText}</div>
+      </BaseTip>
+      {
+        isLoading
+        &&
+        <BaseLoading />
+      }
+    </BaseCtx.Provider>
   )
 }
 
