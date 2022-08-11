@@ -3,7 +3,7 @@ import BaseSelect from "../../ui/base-select";
 import BaseButton from "../../ui/base-button";
 import { useRouter } from 'next/router'
 import * as C from '../../../utils'
-import { message } from 'antd'
+import BaseCtx from "../../../hooks/use-base-content";
 
 import styles from './index.module.scss';
 
@@ -14,6 +14,16 @@ type Prop = {
 const ConnectWallet: FC<Prop> = ({ addressList }) => {
   const router = useRouter()
   const [selectAddress, setSelectAddress] = useState<string>('')
+  const { setShowTip, setTipText, setTipType } = useContext(BaseCtx)
+
+  const handleShowTip = (tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
+    setTimeout(() => {
+      setShowTip!(false)
+    }, 2000)
+  }
 
   return (
     <div className={styles.modalBody}>
@@ -21,7 +31,6 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
       <div className={styles.modalBodySelect}>
         <BaseSelect
           handleChangeSelect={(v) => {
-            console.log(v)
             setSelectAddress(v)
           }}
           opt={addressList}
@@ -31,12 +40,15 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
         btnText="Sign in"
         btnClick={() => {
           if (!selectAddress || selectAddress === 'Select') {
-            message.info('Please select a address')
+            handleShowTip('Please select a address', 'Error')
             return
           }
           C.selectWallet(selectAddress)
-
-          router.push('/ad-display')
+          if (router.pathname === '/') {
+            router.push('/ad-display')
+          } else {
+            router.reload();
+          }
         }}
       />
     </div>

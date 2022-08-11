@@ -7,8 +7,6 @@ import TabBar from "../tab-bar";
 import { SEO } from '../../../config'
 
 import styles from './index.module.scss';
-import HomeCtx from "../../../hooks/use-home-content";
-import AdDisplayCtx from "../../../hooks/use-ad-display-content";
 
 type TDK = {
   title: string,
@@ -26,17 +24,6 @@ type Props = {
 };
 
 const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar, page = 'home' }) => {
-
-  const getCtx = (): Context<any> => {
-    if (page === 'home') {
-      return HomeCtx
-    }
-    if (page === 'display') {
-      return AdDisplayCtx
-    }
-
-    return HomeCtx
-  }
 
   return (
     <div className={styles.container}>
@@ -60,9 +47,7 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar
           {
             isShowHeader
               ?
-              <Header 
-                content={getCtx()}
-              />
+              <Header />
               :
               null
           }

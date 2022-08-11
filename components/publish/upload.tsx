@@ -6,10 +6,11 @@ import styles from './index.module.scss';
 
 type Prop = {
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void,
-  img: string
+  img: string,
+  handleDelImage: () => void
 }
 
-const Upload: FC<Prop> = ({ handleChange, img }) => {
+const Upload: FC<Prop> = ({ handleChange, img, handleDelImage }) => {
   return (
     <div className={styles.upload}>
       <div className={styles.title}>UPLOAD A COVER IMAGE</div>
@@ -37,7 +38,10 @@ const Upload: FC<Prop> = ({ handleChange, img }) => {
               width={695}
               preview={false}
             />
-            <div className={styles.delete}>
+            <div 
+              className={styles.delete}
+              onClick={handleDelImage}
+            >
               <DeleteSvg />
             </div>
           </div>
