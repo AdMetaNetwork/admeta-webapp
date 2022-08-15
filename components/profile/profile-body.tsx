@@ -33,7 +33,7 @@ const ProfileBody: FC = () => {
     return 0
   }
 
-  const { profile, setTipText, setTipType, setShowTip } = useContext(BaseCtx)
+  const { profile, setTipText, setTipType, setShowTip, setLoading } = useContext(BaseCtx)
   const { age, display, tag } = profile!
   const [isShowEdit, setShowEdit] = useState<boolean>(!!!age)
   const [profileAge, setProfileAge] = useState<number>(+age)
@@ -47,6 +47,12 @@ const ProfileBody: FC = () => {
   const _api = useMemo(() => api, [api])
 
   const handerUpdateProfile = async () => {
+    const sender = localStorage.getItem('_select_account')
+    if (!sender) {
+      handleShowTip('You should connect wallet first!', 'Error')
+      return
+    }
+
     if (!profileAge) {
       setShowAgetip(true)
       return
@@ -56,10 +62,7 @@ const ProfileBody: FC = () => {
       return
     }
 
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
-    }
+    
 
     const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
@@ -67,8 +70,11 @@ const ProfileBody: FC = () => {
       handleShowTip('Account balance too low', 'Error')
       return
     }
+    setLoading!(true)
     pk.updateUserProfile(+profileAge, PreferencesEnum[profileTag], profileDisplay).then(() => {
       setShowEdit(false)
+      setLoading!(false)
+      handleShowTip('Update profile ok!')
     })
 
   }

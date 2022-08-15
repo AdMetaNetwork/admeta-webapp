@@ -25,6 +25,7 @@ const AdDisplayBody: FC = () => {
   const handlerClaimReward = async () => {
     const sender = localStorage.getItem('_select_account')
     if (!sender) {
+      handleShowTip('You should connect wallet first!', 'Error')
       return
     }
 
