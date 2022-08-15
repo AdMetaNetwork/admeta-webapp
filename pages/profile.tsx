@@ -4,9 +4,7 @@ import Base from '../components/common/base';
 import ProfileBody from '../components/profile/profile-body';
 import BaseCtx from '../hooks/use-base-content';
 import useApi from '../hooks/use-api';
-import { Spin } from 'antd'
 import { polkadot_network } from '../config/constant';
-import { LoadingOutlined } from '@ant-design/icons'
 import BaseTip from '../components/ui/base-tip';
 import BaseModal from '../components/ui/base-modal';
 import BaseLoading from '../components/ui/base-loading';
