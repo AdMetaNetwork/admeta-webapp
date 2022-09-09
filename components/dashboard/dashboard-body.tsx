@@ -33,7 +33,7 @@ const DashboardBody: FC = () => {
         return
       }
       axios.post(`${HTTP_SERVER}admeta/getUser`, {
-        walletAddress: sender
+        walletAddress: 'abc123'
       }).then((v) => {
         setDashboard(v.data)
         setLoading!(false)

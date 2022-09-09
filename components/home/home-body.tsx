@@ -4,6 +4,7 @@ import BaseCtx from "../../hooks/use-base-content";
 import ConnectWallet from "../common/connect-wallet";
 import * as C from '../../utils'
 import { useRouter } from "next/router";
+import {getConfig} from '../../utils/tools'
 
 import styles from './index.module.scss';
 
@@ -39,7 +40,7 @@ const HomeBody: FC = () => {
             className={styles.btn}
             onClick={() => {
               if (isConnect) {
-                router.push('/ad-display')
+                router.push('/dashboard')
               } else {
                 setShowModal!(true)
                 setModalTitle!('Connect with Polkadot.js')
@@ -59,7 +60,7 @@ const HomeBody: FC = () => {
             }}
           >
             {!isConnect && <PoldadotIcon />}
-            <p>{isConnect ? 'Go Ad display' : 'Connect with Polkadot.js'}</p>
+            <p>{isConnect ? 'Go Dashboard' : 'Connect with Polkadot.js'}</p>
           </div>
         </div>
       </div>

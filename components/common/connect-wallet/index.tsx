@@ -47,7 +47,7 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
           C.selectWallet(selectAddress)
 
           if (router.pathname === '/') {
-            router.push('/ad-display')
+            router.push('/dashboard')
           } else {
             router.reload();
           }
