@@ -5,7 +5,6 @@ import Info from "./info";
 import Propose from "./propose";
 import BackSvg from "../svg/back";
 import BaseButton from "../ui/base-button";
-import { Progress } from 'antd';
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import useApi from "../../hooks/use-api";
@@ -42,6 +41,10 @@ const PublishBody: FC = () => {
   const _api = useMemo(() => api, [api])
 
   const handleUpLoadImg = (url: string, key: string) => {
+    if (!url) {
+      handleShowTip('Please select a img', 'Error')
+      return
+    }
     setLoading!(true)
     axios({
       method: 'post',
@@ -224,20 +227,7 @@ const PublishBody: FC = () => {
 
   return (
     <div className={styles.publishBody}>
-      <div className={styles.progress}>
-        <Progress
-          percent={progress}
-          showInfo={false}
-          strokeColor={'#00875A'}
-          trailColor={'#1D1F26'}
-          strokeWidth={6}
-        />
-      </div>
-      <div className={styles.left}>
-        <Step
-          current={step}
-        />
-      </div>
+      <Step current={step} />
       <div className={styles.content}>
         <div
           className={styles.nav}

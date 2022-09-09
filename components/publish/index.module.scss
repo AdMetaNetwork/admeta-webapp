@@ -1,9 +1,64 @@
 @import "../../styles/variable.scss";
 .publishBody {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   position: relative;
   padding-top: 48px;
+  .step {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 0;
+    height: 374px;
+    background: linear-gradient(135deg, #868cff 0%, #4318ff 100%);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .stepItem {
+      margin-top: -200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      &:nth-child(2) {
+        margin: -200px 195px 0;
+      }
+      .dot {
+        position: relative;
+        z-index: 2;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #868cff 0%, #4318ff 100%);
+        border: 3px solid #8476ff;
+        box-sizing: border-box;
+        margin-bottom: 8px;
+        &.active {
+          background: linear-gradient(135deg, #868cff 0%, #4318ff 100%);
+          border: 3px solid #ffffff;
+        }
+        .line {
+          width: 480px;
+          height: 3px;
+          background: #8476ff;
+          top: 4.5px;
+          position: absolute;
+          left: 18px;
+        }
+      }
+      .label {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 28px;
+        text-align: center;
+        letter-spacing: -0.02em;
+        color: $white0;
+      }
+    }
+  }
   .progress {
     position: fixed;
     top: 79px;
@@ -16,59 +71,6 @@
     display: flex;
     justify-content: flex-start;
     margin-left: 136px;
-    .step {
-      .stepItem {
-        display: flex;
-        align-items: center;
-        margin-bottom: 40px;
-        position: relative;
-        .dashed {
-          position: absolute;
-          width: 20px;
-          height: 40px;
-          left: 0;
-          top: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          .line {
-            width: 0px;
-            height: 60%;
-            border: 1px dashed #525461;
-          }
-        }
-        .itemLeft {
-          width: 20px;
-          height: 20px;
-          margin-right: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 10px;
-          border: 1px solid #e6e7f0;
-          box-sizing: border-box;
-          &.act {
-            border: none;
-          }
-          p {
-            margin-bottom: 0;
-            font-size: 12px;
-            color: #e6e7f0;
-          }
-        }
-        .right {
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 25px;
-          letter-spacing: -0.02em;
-          color: #525461;
-          &.light {
-            font-weight: 600;
-            color: #e6e7f0;
-          }
-        }
-      }
-    }
   }
   .content {
     width: 736px;
@@ -77,6 +79,9 @@
     border-radius: 16px;
     padding: 24px 40px;
     box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    margin-top: 100px;
     .nav {
       display: flex;
       align-items: center;

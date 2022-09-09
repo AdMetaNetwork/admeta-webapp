@@ -71,7 +71,7 @@ const Info: FC<Prop> = ({ currentBlock = 1, handleGetEndBlock, handleGetTarget, 
       </div>
       <div className={styles.infoItemI}>
         <div className={styles.h}>
-          {labelDom('CPI', true, 'this is a tip ppp aaasas')}
+          {labelDom('CPI', true, 'amount')}
           <BaseInput
             handleChangeInput={(e) => {
               handleGetCpi(+e)

@@ -5,10 +5,14 @@ import styles from './index.module.scss';
 type Prop = {
   handleCheck: (val: boolean) => void,
   label: string,
+  scale?: number,
+  labelColor?: string,
+  labelFontSize?: string,
+  check?: boolean
 }
 
-const BaseCheckBox: FC<Prop> = ({ handleCheck, label }) => {
-  const [isCheck, setCheck] = useState<boolean>(false)
+const BaseCheckBox: FC<Prop> = ({ handleCheck, label, scale = 1, labelFontSize, labelColor, check = false }) => {
+  const [isCheck, setCheck] = useState<boolean>(check)
 
   return (
     <div
@@ -21,11 +25,13 @@ const BaseCheckBox: FC<Prop> = ({ handleCheck, label }) => {
       {
         isCheck
           ?
-          <CheckSvg />
+          <CheckSvg 
+            scale={scale}
+          />
           :
-          <div className={styles.box}></div>
+          <div style={{ zoom: scale }} className={styles.box}></div>
       }
-      <div className={styles.label}>{label}</div>
+      <div className={styles.label} style={{ fontSize: labelFontSize, color: labelColor }}>{label}</div>
     </div>
   )
 }

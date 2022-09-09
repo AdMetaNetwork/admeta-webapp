@@ -62,8 +62,6 @@ const ProfileBody: FC = () => {
       return
     }
 
-    
-
     const pk = new CallPolkadot(sender, _api!)
     const f = await pk.getAddressBanlance() as number
     if (f <= 0) {

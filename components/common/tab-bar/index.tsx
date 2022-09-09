@@ -4,7 +4,7 @@ import Link from "next/link";
 import styles from './index.module.scss';
 
 type Prop = {
-  activePage: 'home' | 'display' | 'profile' | 'management',
+  activePage: string,
   handleOpenLink: () => void
 }
 

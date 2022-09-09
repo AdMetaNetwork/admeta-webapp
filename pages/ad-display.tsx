@@ -103,7 +103,7 @@ const AdDisplay: NextPage = () => {
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
-        isShowTabBar
+        isShowSide
         page='display'
       >
         <AdDisplayBody />

@@ -1,9 +1,10 @@
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, useMemo } from "react";
 import BaseSelect from "../../ui/base-select";
 import BaseButton from "../../ui/base-button";
 import { useRouter } from 'next/router'
 import * as C from '../../../utils'
 import BaseCtx from "../../../hooks/use-base-content";
+import useApi from '../../../hooks/use-api';
 
 import styles from './index.module.scss';
 
@@ -38,14 +39,15 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
       </div>
       <BaseButton
         btnText="Sign in"
-        btnClick={() => {
+        btnClick={async () => {
           if (!selectAddress || selectAddress === 'Select') {
             handleShowTip('Please select a address', 'Error')
             return
           }
           C.selectWallet(selectAddress)
+
           if (router.pathname === '/') {
-            router.push('/ad-display')
+            router.push('/dashboard')
           } else {
             router.reload();
           }

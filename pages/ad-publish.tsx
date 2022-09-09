@@ -23,6 +23,8 @@ const AdPublish: NextPage = () => {
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
+        isShowSide
+        page='ad-publish'
       >
         <PublishBody />
       </Base>
