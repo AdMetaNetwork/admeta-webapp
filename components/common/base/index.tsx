@@ -2,7 +2,6 @@ import { FC, ReactNode, Context } from "react";
 import Head from 'next/head';
 import SideNav from "../side-nav";
 import Header from "../header";
-import TabBar from "../tab-bar";
 
 import { SEO } from '../../../config'
 
@@ -20,7 +19,7 @@ type Props = {
   isShowSide?: boolean,
   isShowHeader?: boolean,
   isShowTabBar?: boolean,
-  page?: 'home' | 'display' | 'profile' | 'management'
+  page?: 'home' | 'display' | 'profile' | 'management' | 'dashboard' | 'settings' | 'ad-publish'
 };
 
 const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar, page = 'home' }) => {
@@ -39,7 +38,11 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar
         {
           isShowSide
             ?
-            <div className={styles.left}><SideNav /></div>
+            <div className={styles.left}>
+              <SideNav
+                page={page}
+              />
+            </div>
             :
             null
         }
@@ -47,16 +50,8 @@ const Base: FC<Props> = ({ tdk, children, isShowSide, isShowHeader, isShowTabBar
           {
             isShowHeader
               ?
-              <Header />
-              :
-              null
-          }
-          {
-            isShowTabBar
-              ?
-              <TabBar
-                activePage={page}
-                handleOpenLink={() => { }}
+              <Header
+                page={page}
               />
               :
               null

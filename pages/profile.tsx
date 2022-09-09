@@ -50,7 +50,7 @@ const Profile: NextPage = () => {
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
-        isShowTabBar
+        isShowSide
         page='profile'
       >
         {profile.age || profile.tag === '-1' ? <ProfileBody /> : null}

@@ -10,9 +10,17 @@
   height: 88px;
   align-items: center;
   padding: 0 160px;
-  border-bottom: 1px solid #23262F;
   z-index: 10;
   background-color: #141416;
+  .left {
+    .pageName {
+      padding-left: 140px;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      color: #e6e7f0;
+    }
+  }
   .right {
     .accountWrp {
       display: flex;
@@ -22,7 +30,7 @@
       padding: 0 24px;
       box-sizing: border-box;
       border-radius: 30px;
-      background-color: #1D1F26;
+      background-color: #1d1f26;
       .account {
         display: flex;
         align-items: center;

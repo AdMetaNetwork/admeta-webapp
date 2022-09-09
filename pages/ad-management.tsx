@@ -24,7 +24,7 @@ const AdManagement: NextPage = () => {
       <Base
         tdk={{ title: SEO.seo_default_title }}
         isShowHeader
-        isShowTabBar
+        isShowSide
         page='management'
       >
         <ManagementBody />

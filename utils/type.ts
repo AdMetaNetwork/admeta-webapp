@@ -31,3 +31,20 @@ export type AdInfo = {
   preference: any,
   proposer?: string
 }
+
+export type IMessage<T> = {
+  type: string;
+  data: T;
+};
+
+export type Domain = {
+  name: string,
+  domain: string,
+  category: string[]
+}
+
+export type DataConfig = {
+  searching_engines: string[],
+  categories: string[],
+  products: Domain[]
+}

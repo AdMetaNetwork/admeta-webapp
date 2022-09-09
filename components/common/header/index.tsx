@@ -9,7 +9,11 @@ import BaseCtx from "../../../hooks/use-base-content";
 
 import styles from './index.module.scss';
 
-const Header: FC = () => {
+type Prop = {
+  page?: string
+}
+
+const Header: FC<Prop> = ({ page = 'home' }) => {
 
   const { setShowModal, setModalTitle, setModalBody, setShowTip, setTipText, setTipType } = useContext(BaseCtx)
   const [selectAddress, setSelectAddress] = useState<string>('')
@@ -47,12 +51,47 @@ const Header: FC = () => {
     })
   }
 
+  const getPageShowName = (page: string) => {
+    switch (page) {
+      case 'ad-publish':
+        return 'Ad management'
+        break;
+      case 'dashboard':
+        return 'Dashboard'
+        break;
+      case 'display':
+        return 'Ad display'
+        break;
+      case 'management':
+        return 'Ad management'
+        break;
+      case 'profile':
+        return 'Profile'
+        break;
+      case 'settings':
+        return 'Settings'
+        break;
+
+      default:
+        return ''
+        break;
+    }
+  }
+
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <Link href='/'>
-          <a href=""><LogoTextSvg /></a>
-        </Link>
+        {
+          page === 'home'
+            ?
+            <Link href='/'>
+              <a href=""><LogoTextSvg /></a>
+            </Link>
+            :
+            <div className={styles.pageName}>
+              {getPageShowName(page)}
+            </div>
+        }
       </div>
       <div className={styles.right}>
         {
@@ -82,8 +121,6 @@ const Header: FC = () => {
               btnClick={handleShowWalletModal}
             />
         }
-
-
       </div>
     </div>
   )

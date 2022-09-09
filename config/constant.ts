@@ -5,3 +5,9 @@ export const seo_default_description = `AdMeta is a Metaverse ad platform that f
 
 export const polkadot_network = 'wss://testnet.admeta.network'
 export const extension_name = 'admeta-app'
+
+export const ADMETA_MSG_ACCOUNT = 'ADMETA_MSG_ACCOUNT'
+export const ADMETA_MSG_DOMAIN = 'ADMETA_MSG_DOMAIN'
+export const ADMETA_MSG_SWITCH = 'ADMETA_MSG_SWITCH'
+
+export const HTTP_SERVER = 'https://api.admeta.network/'

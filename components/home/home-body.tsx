@@ -4,7 +4,6 @@ import BaseCtx from "../../hooks/use-base-content";
 import ConnectWallet from "../common/connect-wallet";
 import * as C from '../../utils'
 import { useRouter } from "next/router";
-import browser from 'webextension-polyfill'
 
 import styles from './index.module.scss';
 
@@ -31,15 +30,7 @@ const HomeBody: FC = () => {
             <div>ADMETA ADS</div>
           </div>
           <div className={styles.slogan}>
-            <div
-              onClick={() => {
-                // The ID of the extension we want to talk to.
-                var editorExtensionId = "gldfcokcakpdonomfeimbegiojoledgj";
-                console.log('start')
-                // // Make a simple request:
-                browser.runtime.sendMessage(editorExtensionId, { openUrlInEditor: 'xxssss-msg' })
-              }}
-            >Trustworthy</div>
+            <div>Trustworthy</div>
             <div>Innovative</div>
             <div>Humanistic</div>
           </div>
