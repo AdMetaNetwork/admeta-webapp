@@ -25,7 +25,7 @@ const SettingsBody: FC = () => {
       getConfig().then((v) => {
         let arr: boolean[] = []
         v.products.forEach((item: any, index: number) => {
-          arr[index] = true
+          arr[index] = false
         })
         setChecks(arr)
         setConfig(v)
@@ -44,7 +44,7 @@ const SettingsBody: FC = () => {
   }
 
   const sendDomainMessageToExt = (domain: string[]) => {
-    Messager.sendMessageToContent(ADMETA_MSG_DOMAIN, { domain } )
+    Messager.sendMessageToContent(ADMETA_MSG_DOMAIN, { domain })
   }
 
   return (
@@ -56,33 +56,40 @@ const SettingsBody: FC = () => {
             <LinkSvg />
             <div className={styles.l}>Edit My Web3 Domain List</div>
           </div>
-          <div className={styles.domainsBox}>
-            <div className={styles.list}>
-              {
-                config.products.map((item, index) => (
-                  <div
-                    key={index}
-                    className={styles.item}>
-                    <BaseCheckBox
-                      handleCheck={() => {
-                        let arr = [...checks]
-                        arr[index] = !arr[index]
-                        setChecks(arr)
-                        console.log(arr)
+          {
+            disable
+              ?
+              null
+              :
+              <div className={styles.domainsBox}>
+                <div className={styles.list}>
+                  {
+                    config.products.map((item, index) => (
+                      <div
+                        key={index}
+                        className={styles.item}>
+                        <BaseCheckBox
+                          handleCheck={() => {
+                            let arr = [...checks]
+                            arr[index] = !arr[index]
+                            setChecks(arr)
+                            console.log(arr)
 
-                        getChecksDomains(arr)
-                      }}
-                      label={item.domain}
-                      scale={0.7}
-                      labelColor='#E6E7F0'
-                      labelFontSize="12px"
-                      check={checks[index]}
-                    />
-                  </div>
-                ))
-              }
-            </div>
-          </div>
+                            getChecksDomains(arr)
+                          }}
+                          label={item.domain}
+                          scale={0.7}
+                          labelColor='#E6E7F0'
+                          labelFontSize="12px"
+                          check={checks[index]}
+                        />
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+          }
+
         </div>
         <div
           className={styles.disable}
@@ -91,6 +98,12 @@ const SettingsBody: FC = () => {
           <BaseCheckBox
             handleCheck={() => {
               setDisable(!disable)
+              let arr:boolean[] = []
+              checks.forEach(() => {
+                arr.push(false)
+              })
+              setChecks(arr)
+              getChecksDomains(arr)
             }}
             label='Disable all domain trackings'
             scale={0.7}
@@ -115,12 +128,12 @@ const SettingsBody: FC = () => {
             <div className={styles.leftl}>AdMeta Extension</div>
           </div>
           <div className={styles.right}>
-            <div className={styles.sl}>{openExt ? 'Trun off' : 'Trun on'}</div>
+            <div className={styles.sl}>{openExt ? 'Trun on' : 'Trun off'}</div>
             <BaseSwitch
               open={openExt}
               handleSwitch={(p) => {
                 setOpenExt(p)
-                Messager.sendMessageToContent(ADMETA_MSG_SWITCH, { extStatus: p } )
+                Messager.sendMessageToContent(ADMETA_MSG_SWITCH, { extStatus: p })
               }}
             />
           </div>

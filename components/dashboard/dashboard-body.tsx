@@ -33,7 +33,7 @@ const DashboardBody: FC = () => {
         return
       }
       axios.post(`${HTTP_SERVER}admeta/getUser`, {
-        walletAddress: 'abc123'
+        walletAddress: sender
       }).then((v) => {
         setDashboard(v.data)
         setLoading!(false)
@@ -54,6 +54,18 @@ const DashboardBody: FC = () => {
       getUserDashboard()
     }
   }, [config, dashboard.walletAddress, setLoading, router])
+
+  const getItemScore = (key: string) => {
+    const obj = dashboard.web3UsageData
+    if (!obj) {
+      return 0
+    }
+    if (obj.hasOwnProperty(key)) {
+      return obj[key].score
+    }
+
+    return 0
+  }
 
   return (
     <div className={styles.dashboardBody}>
@@ -124,18 +136,18 @@ const DashboardBody: FC = () => {
       <div className={styles.records}>
         <div className={styles.t}>Current Web3 records:</div>
         {
-          config.categories.map((item, index) => (
+          config.products.map((item, index) => (
             <div
               className={styles.recordItem}
               key={index}
             >
               <div className={styles.icon}></div>
-              <div className={styles.score}>{item} Score</div>
-              <div className={styles.number}>8.25</div>
-              <div className={styles.level}>Lv.{randomRange(0, 10)}</div>
+              <div className={styles.score}>{item.name} Score</div>
+              <div className={styles.number}>{getItemScore(item.name)}</div>
+              <div className={styles.level}>Lv.{2 * getItemScore(item.name) || 0}</div>
               <div className={styles.progress}>
-                <div className={styles.s} style={{ width: `${(index + 1) * 10}%` }}></div>
-                <div className={styles.e} style={{ width: `${100 - (index + 1) * 10}%` }}></div>
+                <div className={styles.s} style={{ width: `${getItemScore(item.name) ? (index + 1) * 10 : 0}%` }}></div>
+                <div className={styles.e} style={{ width: `${getItemScore(item.name) ? 100 - (index + 1) * 10 : 100}%` }}></div>
               </div>
             </div>
           ))

@@ -4,7 +4,8 @@ import BaseButton from "../../ui/base-button";
 import { useRouter } from 'next/router'
 import * as C from '../../../utils'
 import BaseCtx from "../../../hooks/use-base-content";
-import useApi from '../../../hooks/use-api';
+import axios from "axios";
+import { HTTP_SERVER, ADMETA_MSG_ACCOUNT } from "../../../config/constant";
 
 import styles from './index.module.scss';
 
@@ -15,7 +16,7 @@ type Prop = {
 const ConnectWallet: FC<Prop> = ({ addressList }) => {
   const router = useRouter()
   const [selectAddress, setSelectAddress] = useState<string>('')
-  const { setShowTip, setTipText, setTipType } = useContext(BaseCtx)
+  const { setShowTip, setTipText, setTipType, setLoading } = useContext(BaseCtx)
 
   const handleShowTip = (tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
     setTipText!(tipText)
@@ -26,9 +27,44 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
     }, 2000)
   }
 
+  const addUser = (walletAddress: string) => {
+    axios.post(`${HTTP_SERVER}admeta/addUser`, {
+      walletAddress
+    }).then(() => {
+      setLoading!(false)
+      if (router.pathname === '/') {
+        router.push('/dashboard')
+      } else {
+        router.reload();
+      }
+    })
+  }
+
+  const checkUser = (walletAddress: string) => {
+    axios.post(`${HTTP_SERVER}admeta/getUser`, {
+      walletAddress
+    }).then((v) => {
+      if (!v.data) {
+        addUser(walletAddress)
+      } else {
+        setLoading!(false)
+        if (router.pathname === '/') {
+          router.push('/dashboard')
+        } else {
+          router.reload();
+        }
+      }
+    }).catch((err) => {
+      console.error(err)
+
+    })
+  }
+
   return (
     <div className={styles.modalBody}>
-      <div className={styles.modalBodytitle}>Select your account in Polkadot.js</div>
+      <div
+        className={styles.modalBodytitle}
+      >Select your account in Polkadot.js</div>
       <div className={styles.modalBodySelect}>
         <BaseSelect
           handleChangeSelect={(v) => {
@@ -44,13 +80,9 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
             handleShowTip('Please select a address', 'Error')
             return
           }
+          setLoading!(true)
           C.selectWallet(selectAddress)
-
-          if (router.pathname === '/') {
-            router.push('/dashboard')
-          } else {
-            router.reload();
-          }
+          checkUser(selectAddress)
         }}
       />
     </div>
