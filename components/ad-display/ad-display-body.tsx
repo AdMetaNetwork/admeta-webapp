@@ -96,7 +96,7 @@ const AdDisplayBody: FC = () => {
         <div className={styles.top}>
           <div className={styles.left}>
             <Image
-              src={adimg}
+              src={adimg || 'https://storageapi.fleek.co/038f3525-c411-4ef9-86e4-bc833d0c2d7f-bucket/横版海报.png'}
               alt="ss"
               width={150}
               height={85}
