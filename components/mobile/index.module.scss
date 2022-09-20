@@ -1,0 +1,57 @@
+.mobileWrp {
+  background-color: #18191d;
+  width: 100vw;
+  height: 100vh;
+  .img {
+    position: fixed;
+    top: 100px;
+    left: 6.4vw;
+    background: url(../../public/images/bg.png) no-repeat center;
+    background-size: 100% 100%;
+    width: 89.72vw;
+    height: 52vw;
+  }
+  .logo {
+    position: fixed;
+    top: 32px;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
+  .slogan {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding-left: 32px;
+    padding-top: 150px;
+    div {
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 40px;
+      letter-spacing: -0.02em;
+      color: #fcfcfd;
+    }
+  }
+  .pc {
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: #fcfcfd;
+    margin-top: 50px;
+  }
+  .footer {
+    position: fixed;
+    bottom: 100px;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
