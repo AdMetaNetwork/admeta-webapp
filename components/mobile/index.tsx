@@ -56,7 +56,7 @@ const Mobile: FC = () => {
           </div>
           <div
             className="cursor-pointer"
-            onClick={() => handleGoLink('https://www.youtube.com/')}
+            onClick={() => handleGoLink('https://www.youtube.com/channel/UCWzB-7tKPKWtmT0mBYO_tGA')}
           >
             <YoutobeSvg />
           </div>
