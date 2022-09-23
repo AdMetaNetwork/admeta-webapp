@@ -7,7 +7,7 @@ import BaseModal from '../components/ui/base-modal';
 import useApi from '../hooks/use-api';
 import BaseTip from '../components/ui/base-tip';
 import BaseLoading from '../components/ui/base-loading';
-
+import axios from "axios";
 
 import { SEO } from '../config';
 import { polkadot_network } from '../config/constant';
@@ -59,6 +59,7 @@ const AdDisplay: NextPage = () => {
         const idx = d.info.matchedAds[0][1]
         const uper = d.info.matchedAds[0][0]
         pk.getUserAd(uper, idx).then((v: any) => {
+          bindAd(sender, hexToString(v.info.target), hexToString(v.info.metadata))
           if (d.info.adDisplay) {
             setAd({
               adimg: hexToString(v.info.metadata),
@@ -97,6 +98,21 @@ const AdDisplay: NextPage = () => {
       }
     })
   }, [_api, setLoading]);
+
+  const bindAd = (account: any, adurl: any, adimg: any) => {
+    axios({
+      method: 'post',
+      url: '/api/bind',
+      data: {
+        account,
+        adurl,
+        adimg
+      },
+    }).then((e) => {
+      console.log(e.data)
+
+    })
+  }
 
   return (
     <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, adMap, showTip, setShowTip, tipType, setTipType, tipText, setTipText, isLoading, setLoading }}>
