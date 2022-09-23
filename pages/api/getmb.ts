@@ -1,9 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import requestIp from 'request-ip'
-import { ApiPromise, WsProvider } from '@polkadot/api'
 import { hexToString } from '@polkadot/util'
-import { mongo_url } from '../../config/c'
+import { mongo_url } from '../../config/c.example'
 var MongoClient = require('mongodb').MongoClient
 
 function formatData(c: any[]) {
