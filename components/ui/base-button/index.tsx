@@ -9,15 +9,16 @@ type Prop = {
   activeColor?: string,
   leftIcon?: SVGProps<SVGSVGElement>,
   rightIcon?: SVGProps<SVGSVGElement>,
-  isLine?: boolean
+  isLine?: boolean,
+  disable?: boolean
 }
 
-const BaseButton: FC<Prop> = ({ btnText, btnClick, color = '#3772ff', leftIcon, rightIcon, isLine = false }) => {
+const BaseButton: FC<Prop> = ({ btnText, btnClick, color = '#3772ff', leftIcon, rightIcon, isLine = false, disable = false }) => {
   return (
     <div
-      className={`${styles.btn} ${isLine && styles.line}`}
+      className={`${styles.btn} ${isLine && styles.line}}`}
       onClick={btnClick}
-      style={{ backgroundColor: !isLine ? color : 'none' }}
+      style={{ backgroundColor: !isLine ? color : 'none', opacity: disable ? .7 : 1 }}
     >
       {
         leftIcon

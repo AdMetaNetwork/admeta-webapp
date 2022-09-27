@@ -48,3 +48,5 @@ export type DataConfig = {
   categories: string[],
   products: Domain[]
 }
+
+export type ModalType = 'Wallet' | 'Domain'

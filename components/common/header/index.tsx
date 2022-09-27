@@ -6,6 +6,7 @@ import Link from "next/link";
 import Identicon from '@polkadot/react-identicon';
 import * as C from '../../../utils'
 import BaseCtx from "../../../hooks/use-base-content";
+import AuthDomain from "../auth-domain/inde";
 
 import styles from './index.module.scss';
 
@@ -49,6 +50,27 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
       a.unshift({ label: 'Select', value: 'Select' })
       setModalBody!(<ConnectWallet addressList={a} />)
     })
+  }
+
+  const handleShowWallet = () => {
+    setModalBody!(<ConnectWallet addressList={[]} />)
+    C.connectWallet(w => {
+      let a: C.AddressMap[] = []
+      w.forEach((item) => {
+        a.push({
+          label: item.meta.name,
+          value: item.address
+        })
+      })
+      a.unshift({ label: 'Select', value: 'Select' })
+      setModalBody!(<ConnectWallet addressList={a} />)
+    })
+  }
+
+  const handleShowDomainModal = () => {
+    setShowModal!(true)
+    setModalTitle!('Auth domain list')
+    setModalBody!(<AuthDomain handleShowWallet={handleShowWallet} />)
   }
 
   const getPageShowName = (page: string) => {
@@ -102,7 +124,7 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
             >
               <div
                 className={styles.account}
-                onClick={handleShowWalletModal}
+                onClick={() => handleShowWalletModal()}
               >
                 <p>{C.formatAddress(selectAddress)}</p>
               </div>
@@ -118,7 +140,7 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
             :
             <BaseButton
               btnText="Connect with Polkadot.js"
-              btnClick={handleShowWalletModal}
+              btnClick={() => handleShowDomainModal()}
             />
         }
       </div>
