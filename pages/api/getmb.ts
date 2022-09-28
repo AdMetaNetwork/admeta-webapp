@@ -36,7 +36,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 		var dbo = db.db('database0')
 		const ua = req.headers['user-agent']
     console.log(detectedIp, ua, '=============-============')
-		var whereStr = { ip: detectedIp, 'user-agent': ua } // 查询条件
+		var whereStr = { 'user-agent': ua } // 查询条件
 		dbo
 			.collection('userAndAds')
 			.find(whereStr)
