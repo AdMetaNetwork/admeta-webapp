@@ -8,6 +8,7 @@ import BaseCtx from "../../hooks/use-base-content";
 import { DataConfig } from '../../utils/type'
 import { getConfig } from "../../utils/tools";
 import Messager from "../../utils/messager";
+import * as C from '../../utils'
 
 import { useRouter } from 'next/router'
 
@@ -20,14 +21,39 @@ const DashboardBody: FC = () => {
 
   const [dashboard, setDashboard] = useState<Record<string, any>>({})
   const [config, setConfig] = useState<DataConfig>({ categories: [], searching_engines: [], products: [] })
+  const [score, setScore] = useState<C.UserScore>({
+    "defi": 0,
+    "gamefi": 0,
+    "nft": 0,
+    "metaverse": 0,
+    "onchaindata": 0
+  })
 
   const randomRange = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  const [task] = useState<number>(randomRange(1, 50))
+
   useEffect(() => {
+    const sender = localStorage.getItem('_select_account')
+
+    const getUserScore = (sender: string) => {
+      if (!sender) {
+        router.replace('/')
+        return
+      }
+      axios.post(`${HTTP_SERVER}admeta/getUserTagScore`, {
+        walletAddress: sender
+      }).then((v) => {
+        setScore(v.data)
+        console.log(v.data)
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
+
     const getUserDashboard = () => {
-      const sender = localStorage.getItem('_select_account')
       if (!sender) {
         router.replace('/')
         return
@@ -39,6 +65,7 @@ const DashboardBody: FC = () => {
         setLoading!(false)
         // send message to extension
         Messager.sendMessageToContent(ADMETA_MSG_ACCOUNT, { account: sender, balance: v.data.unclaimedRewards || 0 })
+        getUserScore(sender)
       }).catch((err) => {
         console.error(err)
         setLoading!(false)
@@ -55,16 +82,10 @@ const DashboardBody: FC = () => {
     }
   }, [config, dashboard.walletAddress, setLoading, router])
 
-  const getItemScore = (key: string) => {
-    const obj = dashboard.web3UsageData
-    if (!obj) {
-      return 0
-    }
-    if (obj.hasOwnProperty(key)) {
-      return obj[key].score
-    }
-
-    return 0
+  const getItemLevel = (v: number) => {
+    const t = Math.pow(10, v.toString().length - 2)
+    const p = v / t + ''
+    return parseInt(p, 10)
   }
 
   return (
@@ -102,12 +123,12 @@ const DashboardBody: FC = () => {
             <div className={styles.label}>Completed ad tasks</div>
           </div>
           <div className={styles.mid}>
-            <div className={styles.free}>12</div>
+            <div className={styles.free}>{task}</div>
           </div>
           <div className={styles.bot}>
             <div className={styles.line}>
-              <div className={styles.start} style={{ width: '20%' }}></div>
-              <div className={styles.end} style={{ width: '80%' }}></div>
+              <div className={styles.start} style={{ width: `${task}%` }}></div>
+              <div className={styles.end} style={{ width: `${100 - task}%` }}></div>
             </div>
           </div>
         </div>
@@ -134,20 +155,20 @@ const DashboardBody: FC = () => {
         </div>
       </div>
       <div className={styles.records}>
-        <div className={styles.t}>Current Web3 records:</div>
+        <div className={styles.t}>Current Web3 score:</div>
         {
-          config.products.map((item, index) => (
+          Object.keys(score).map((key, index) => (
             <div
               className={styles.recordItem}
               key={index}
             >
               <div className={styles.icon}></div>
-              <div className={styles.score}>{item.name} Score</div>
-              <div className={styles.number}>{getItemScore(item.name)}</div>
-              <div className={styles.level}>Lv.{2 * getItemScore(item.name) || 0}</div>
+              <div className={styles.score}>{key} Score</div>
+              <div className={styles.number}>{score[key]}</div>
+              <div className={styles.level}>Lv.{getItemLevel(score[key]) || 0}</div>
               <div className={styles.progress}>
-                <div className={styles.s} style={{ width: `${getItemScore(item.name) ? (index + 1) * 10 : 0}%` }}></div>
-                <div className={styles.e} style={{ width: `${getItemScore(item.name) ? 100 - (index + 1) * 10 : 100}%` }}></div>
+                <div className={styles.s} style={{ width: `${getItemLevel(score[key])}%` }}></div>
+                <div className={styles.e} style={{ width: `${100 - getItemLevel(score[key])}%` }}></div>
               </div>
             </div>
           ))
