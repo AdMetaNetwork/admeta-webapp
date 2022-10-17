@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { SEO } from '../config';
 
 const Home: NextPage = () => {
+
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>('')
   const [modalBody, setModalBody] = useState<ReactNode>()
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
     if (isMobile) {
       router.replace('/mobile-index')
     }
-  })
+  }, [router])
 
   const baseDom = () => {
     return <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, showTip, setShowTip, tipType, setTipType, tipText, setTipText, setLoading, isLoading }}>

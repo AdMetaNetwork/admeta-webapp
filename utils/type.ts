@@ -53,3 +53,7 @@ export type ModalType = 'Wallet' | 'Domain'
 export interface UserScore {
 	[key: string]: number
 }
+
+export interface ChainType {
+  [key: number]: any
+}

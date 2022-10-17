@@ -1,27 +1,45 @@
-import { FC, useContext, useEffect, useState } from "react";
-import PoldadotIcon from '../svg/polkadot-icon';
+import { FC, useCallback, useContext, useEffect, useMemo } from "react";
 import BaseCtx from "../../hooks/use-base-content";
-import ConnectWallet from "../common/connect-wallet";
-import * as C from '../../utils'
+import SelectWallet from "../common/select-wallet";
 import { useRouter } from "next/router";
-import {getConfig} from '../../utils/tools'
+import { useWeb3, useSwitchNetwork } from '@3rdweb/hooks'
+import AuthDomain from "../common/auth-domain/inde";
+import * as C from '../../config/constant'
 
 import styles from './index.module.scss';
 
 const HomeBody: FC = () => {
 
-  const { setShowModal, setModalTitle, setModalBody } = useContext(BaseCtx)
-  const [isConnect, setConnect] = useState(false)
+  const { setShowModal, setModalTitle, setModalBody, setShowTip, setTipText, setTipType } = useContext(BaseCtx)
   const router = useRouter()
+  const { address, error } = useWeb3();
+  const { switchNetwork } = useSwitchNetwork()
+
+  const handleShowWallet = () => {
+    setModalTitle!('Connect wallet')
+    setModalBody!(<SelectWallet />)
+  }
+
+  const handleShowDomainModal = () => {
+    setShowModal!(true)
+    setModalTitle!('Auth domain list')
+    setModalBody!(<AuthDomain handleShowWallet={handleShowWallet} />)
+  }
+
+  const handleShowTip = useCallback((tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
+    setTimeout(() => {
+      setShowTip!(false)
+    }, 3000)
+  }, [setTipText, setTipType, setShowTip])
 
   useEffect(() => {
-    const sender = localStorage.getItem('_select_account')
-    if (sender) {
-      setConnect(true)
-    } else {
-      setConnect(false)
+    if (error?.message === 'The user rejected the request.') {
+      handleShowTip('You rejected the request', 'Error')
     }
-  }, [])
+  }, [handleShowTip, error?.message])
 
   return (
     <div className={styles.homeBody}>
@@ -39,28 +57,18 @@ const HomeBody: FC = () => {
           <div
             className={styles.btn}
             onClick={() => {
-              if (isConnect) {
+              if (address) {
                 router.push('/dashboard')
               } else {
-                setShowModal!(true)
-                setModalTitle!('Connect with Polkadot.js')
-                setModalBody!(<ConnectWallet addressList={[]} />)
-                C.connectWallet(w => {
-                  let a: C.AddressMap[] = []
-                  w.forEach((item) => {
-                    a.push({
-                      label: item.meta.name,
-                      value: item.address
-                    })
-                  })
-                  a.unshift({ label: 'Select', value: 'Select' })
-                  setModalBody!(<ConnectWallet addressList={a} />)
-                })
+                if (error) {
+                  switchNetwork(C.DEFAULT_CHAIN_ID)
+                } else {
+                  handleShowDomainModal()
+                }
               }
             }}
           >
-            {!isConnect && <PoldadotIcon />}
-            <p>{isConnect ? 'Go Dashboard' : 'Connect with Polkadot.js'}</p>
+            <p>{address ? 'Go Dashboard' : error ? 'Error Network' : 'Connect wallet'}</p>
           </div>
         </div>
       </div>

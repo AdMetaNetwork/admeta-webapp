@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState, useContext } from "react";
 import LinkSvg from "../svg/link";
 import Warn2Svg from "../svg/warn2";
 import ExtSvg from "../svg/ext";
@@ -7,9 +7,12 @@ import RemoveSvg from "../svg/remove";
 import BaseButton from "../ui/base-button";
 import BaseCheckBox from "../ui/base-check-box";
 import { DataConfig } from '../../utils/type'
-import { getConfig } from "../../utils/tools";
 import Messager from "../../utils/messager";
 import { ADMETA_MSG_DOMAIN, ADMETA_MSG_SWITCH } from '../../config/constant'
+import axios from "axios";
+import * as C from '../../config/constant'
+import { useWeb3 } from '@3rdweb/hooks'
+import BaseCtx from "../../hooks/use-base-content";
 
 import styles from './index.module.scss';
 
@@ -19,19 +22,50 @@ const SettingsBody: FC = () => {
   const [checks, setChecks] = useState<boolean[]>([])
   const [disable, setDisable] = useState(false)
   const [openExt, setOpenExt] = useState(false)
+  const [domainList, setDomainLiat] = useState<{ [key: string]: boolean }>({
+    "uniswap.org": false,
+    "sushi.com": false,
+    "decentraland.org": false,
+    "nansen.ai": false,
+    "opensea.io": false
+  })
+  const { setLoading } = useContext(BaseCtx)
+
+  const { address } = useWeb3()
+
+  const getUserSetting = useCallback((address: string) => {
+    setLoading!(true)
+    axios.post(`${C.HTTP_SERVER}admeta/getUserWeb3DomainList`, {
+      walletAddress: address
+    }).then((e) => {
+      setLoading!(false)
+      if (e.data) {
+        setDomainLiat(obj => ({ ...obj, ...e.data }))
+      } else {
+        const o = {
+          "uniswap.org": false,
+          "sushi.com": false,
+          "decentraland.org": false,
+          "nansen.ai": false,
+          "opensea.io": false
+        }
+        setDomainLiat(obj => ({ ...obj, ...o }))
+      }
+    })
+  }, [setLoading])
+
+  const setUserDomain = useCallback((address: string, domainList: { [key: string]: boolean }) => {
+    axios.post(`${C.HTTP_SERVER}admeta/overwriteUserWeb3DomainList`, {
+      walletAddress: address,
+      newWeb3DomainList: domainList
+    })
+  }, [])
 
   useEffect(() => {
-    if (!config.categories.length) {
-      getConfig().then((v) => {
-        let arr: boolean[] = []
-        v.products.forEach((item: any, index: number) => {
-          arr[index] = false
-        })
-        setChecks(arr)
-        setConfig(v)
-      })
+    if (address) {
+      getUserSetting(address)
     }
-  }, [config])
+  }, [address, getUserSetting])
 
   const getChecksDomains = (arr: boolean[]) => {
     let t: string[] = []
@@ -64,24 +98,24 @@ const SettingsBody: FC = () => {
               <div className={styles.domainsBox}>
                 <div className={styles.list}>
                   {
-                    config.products.map((item, index) => (
+                    Object.keys(domainList).map((key, index) => (
                       <div
                         key={index}
-                        className={styles.item}>
+                        className={styles.item}
+                      >
                         <BaseCheckBox
                           handleCheck={() => {
-                            let arr = [...checks]
-                            arr[index] = !arr[index]
-                            setChecks(arr)
-                            console.log(arr)
-
-                            getChecksDomains(arr)
+                            console.log(domainList[key])
+                            const obj = domainList
+                            obj[key] = !obj[key]
+                            setDomainLiat(o => ({ ...o, ...obj }))
+                            setUserDomain(address!, obj)
                           }}
-                          label={item.domain}
+                          label={key}
                           scale={0.7}
                           labelColor='#E6E7F0'
                           labelFontSize="12px"
-                          check={checks[index]}
+                          check={domainList[key]}
                         />
                       </div>
                     ))
@@ -98,7 +132,7 @@ const SettingsBody: FC = () => {
           <BaseCheckBox
             handleCheck={() => {
               setDisable(!disable)
-              let arr:boolean[] = []
+              let arr: boolean[] = []
               checks.forEach(() => {
                 arr.push(false)
               })

@@ -11,6 +11,7 @@ import BaseLoading from '../components/ui/base-loading';
 
 import { SEO } from '../config';
 import CallPolkadot from '../utils/call-polkadot';
+import { useRouter } from "next/router";
 
 const Profile: NextPage = () => {
   const [profile, setProfile] = useState<{ age: string, tag: string, display: boolean }>({ age: '', tag: '', display: false })
@@ -25,6 +26,7 @@ const Profile: NextPage = () => {
 
   const { api } = useApi(polkadot_network)
   const _api = useMemo(() => api, [api])
+  const router = useRouter()
 
   useEffect(() => {
     if (!api) {
@@ -32,6 +34,7 @@ const Profile: NextPage = () => {
     }
     const sender = localStorage.getItem('_select_account')
     if (!sender) {
+      router.back()
       return
     }
     const pk = new CallPolkadot(sender, _api!)
@@ -43,7 +46,7 @@ const Profile: NextPage = () => {
         setProfile({ age: '', tag: '-1', display: false })
       }
     })
-  }, [_api, api]);
+  }, [_api, api, router]);
 
   return (
     <BaseCtx.Provider value={{ profile, showTip, setShowTip, tipType, setTipType, tipText, setTipText, showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, isLoading, setLoading }}>

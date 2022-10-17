@@ -45,7 +45,7 @@ const SideNav: FC<Prop> = ({ page = 'dashboard' }) => {
           <Meun2Svg color={page === 'profile' ? '#E6E7F0' : '#777E90'} />
           <div className={styles.right}>Profile</div>
         </div>
-        <div
+        {/* <div
           className={`${styles.item} ${page === 'display' ? styles.active : null}`}
           onClick={() => {
             router.push('/ad-display')
@@ -53,7 +53,7 @@ const SideNav: FC<Prop> = ({ page = 'dashboard' }) => {
         >
           <Meun3Svg color={page === 'display' ? '#E6E7F0' : '#777E90'} />
           <div className={styles.right}>Ad Display</div>
-        </div>
+        </div> */}
         <div
           className={`${styles.item} ${page === 'settings' ? styles.active : null}`}
           onClick={() => {

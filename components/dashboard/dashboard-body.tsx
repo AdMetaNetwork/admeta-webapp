@@ -1,14 +1,15 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState, useCallback } from "react";
 import DataFileSvg from "../svg/data-file";
 import UnitSvg from "../svg/unit";
 import BadgeEmptySvg from "../svg/badge-empty";
 import axios from "axios";
-import { HTTP_SERVER, ADMETA_MSG_ACCOUNT } from "../../config/constant";
+import * as C from "../../config/constant";
 import BaseCtx from "../../hooks/use-base-content";
 import { DataConfig } from '../../utils/type'
 import { getConfig } from "../../utils/tools";
 import Messager from "../../utils/messager";
-import * as C from '../../utils'
+import * as T from '../../utils'
+import { useWeb3 } from '@3rdweb/hooks'
 
 import { useRouter } from 'next/router'
 
@@ -18,10 +19,11 @@ const DashboardBody: FC = () => {
 
   const { setLoading } = useContext(BaseCtx)
   const router = useRouter()
+  const { address } = useWeb3();
 
   const [dashboard, setDashboard] = useState<Record<string, any>>({})
   const [config, setConfig] = useState<DataConfig>({ categories: [], searching_engines: [], products: [] })
-  const [score, setScore] = useState<C.UserScore>({
+  const [score, setScore] = useState<T.UserScore>({
     "defi": 0,
     "gamefi": 0,
     "nft": 0,
@@ -35,52 +37,74 @@ const DashboardBody: FC = () => {
 
   const [task] = useState<number>(randomRange(1, 50))
 
-  useEffect(() => {
-    const sender = localStorage.getItem('_select_account')
+  const getUserScore = useCallback(() => {
+    axios.post(`${C.HTTP_SERVER}admeta/getUserTagScore`, {
+      walletAddress: address
+    }).then((v) => {
+      setScore(v.data)
+      console.log(v.data)
+    }).catch((err) => {
+      console.error(err)
+    })
+  }, [address])
 
-    const getUserScore = (sender: string) => {
-      if (!sender) {
-        router.replace('/')
-        return
-      }
-      axios.post(`${HTTP_SERVER}admeta/getUserTagScore`, {
-        walletAddress: sender
-      }).then((v) => {
-        setScore(v.data)
-        console.log(v.data)
-      }).catch((err) => {
-        console.error(err)
-      })
-    }
+  const getUserDashboard = useCallback(() => {
+    axios.post(`${C.HTTP_SERVER}admeta/getUser`, {
+      walletAddress: address
+    }).then((v) => {
+      setDashboard(v.data)
+      setLoading!(false)
+      // send message to extension
+      Messager.sendMessageToContent(C.ADMETA_MSG_ACCOUNT, { account: address, balance: v.data.unclaimedRewards || 0 })
+      getUserScore()
+    }).catch((err) => {
+      console.error(err)
+      setLoading!(false)
+    })
+  }, [address, getUserScore, setLoading])
 
-    const getUserDashboard = () => {
-      if (!sender) {
-        router.replace('/')
-        return
-      }
-      axios.post(`${HTTP_SERVER}admeta/getUser`, {
-        walletAddress: sender
-      }).then((v) => {
-        setDashboard(v.data)
-        setLoading!(false)
-        // send message to extension
-        Messager.sendMessageToContent(ADMETA_MSG_ACCOUNT, { account: sender, balance: v.data.unclaimedRewards || 0 })
-        getUserScore(sender)
-      }).catch((err) => {
-        console.error(err)
-        setLoading!(false)
-      })
-    }
-
-    if (!config.categories.length) {
+  const addUser = useCallback((walletAddress: string) => {
+    axios.post(`${C.HTTP_SERVER}admeta/addUser`, {
+      walletAddress
+    }).then(() => {
+      setLoading!(false)
       getConfig().then((v) => {
         setConfig(v)
       })
-    }
-    if (!dashboard.walletAddress) {
       getUserDashboard()
+    })
+  }, [setLoading, getUserDashboard])
+
+  const checkUser = useCallback((walletAddress: string) => {
+    axios.post(`${C.HTTP_SERVER}admeta/getUser`, {
+      walletAddress
+    }).then((v) => {
+      if (!v.data) {
+        addUser(walletAddress)
+      } else {
+        setLoading!(false)
+        getConfig().then((v) => {
+          setConfig(v)
+        })
+        setDashboard(v.data)
+        setLoading!(false)
+        // send message to extension
+        Messager.sendMessageToContent(C.ADMETA_MSG_ACCOUNT, { account: address, balance: v.data.unclaimedRewards || 0 })
+        getUserScore()
+      }
+    }).catch((err) => {
+      console.error(err)
+
+    })
+  }, [setLoading, addUser, address, getUserScore])
+
+  useEffect(() => {
+    if (address) {
+      checkUser(address)
+    } else {
+      router.replace('/')
     }
-  }, [config, dashboard.walletAddress, setLoading, router])
+  }, [address, checkUser, router])
 
   const getItemLevel = (v: number) => {
     const t = Math.pow(10, v.toString().length - 2)
