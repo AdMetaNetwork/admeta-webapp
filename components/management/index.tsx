@@ -1,4 +1,4 @@
-import { FC, useMemo, useEffect, useState, useContext } from "react";
+import { FC, useMemo, useEffect, useState, useContext, useCallback } from "react";
 import BaseButton from "../ui/base-button";
 import ImgItem from "./img-item";
 import PlusSvg from "../svg/plus";
@@ -6,22 +6,30 @@ import { useRouter } from 'next/router'
 import useApi from '../../hooks/use-api';
 import { polkadot_network } from '../../config/constant';
 import CallPolkadot from "../../utils/call-polkadot";
-import * as C from '../../utils'
+import * as T from '../../utils'
+import * as C from '../../config/constant'
 import BaseCtx from "../../hooks/use-base-content";
+import axios from "axios";
 
 import styles from './index.module.scss';
 
 const ManagementBody: FC = () => {
 
-  const [list, setList] = useState<C.AdInfo[]>([])
+  const [list, setList] = useState<T.AdInfo[]>([])
   const { api } = useApi(polkadot_network)
   const _api = useMemo(() => api, [api])
   const { setLoading } = useContext(BaseCtx)
 
   const router = useRouter()
 
+  const getUserPublishAd = () => {
+    axios.post(`${C.HTTP_SERVER}admeta/getAdvertisements`).then(() => {
+      
+    })
+  }
+
   useEffect(() => {
-    setLoading!(true)
+    // setLoading!(true)
     if (!_api) {
       return;
     }
@@ -33,7 +41,7 @@ const ManagementBody: FC = () => {
     const pk = new CallPolkadot(sender, _api!)
     pk.getUserAds(sender).then((d: any) => {
       
-      const list = d.info as C.AdInfo[];
+      const list = d.info as T.AdInfo[];
       setList(list)
       if (list) {
         setLoading!(false)

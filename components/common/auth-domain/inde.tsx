@@ -1,8 +1,4 @@
-import { FC, useState, useContext, useMemo } from "react";
-import { useRouter } from 'next/router'
-import * as C from '../../../utils'
-import BaseCtx from "../../../hooks/use-base-content";
-import axios from "axios";
+import { FC, useState } from "react";
 import TipSvg from "../../svg/tip";
 import BaseCheckBox from "../../ui/base-check-box";
 import BaseButton from "../../ui/base-button";
@@ -53,6 +49,7 @@ const AuthDomain: FC<Prop> = ({ handleShowWallet }) => {
           handleCheck={() => {
             setAgree(!isAgree)
           }}
+          check={isAgree}
           label=''
         />
         <div className={styles.checkLabel}>I agree to allow AdMeta to anonymously store my usage data of above websites for AdMeta advertising matching purpose only. </div>

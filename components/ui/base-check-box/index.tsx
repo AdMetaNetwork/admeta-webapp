@@ -3,7 +3,7 @@ import CheckSvg from "../../svg/check";
 import styles from './index.module.scss';
 
 type Prop = {
-  handleCheck: (val: boolean) => void,
+  handleCheck: (val?: boolean) => void,
   label: string,
   scale?: number,
   labelColor?: string,
@@ -12,20 +12,15 @@ type Prop = {
 }
 
 const BaseCheckBox: FC<Prop> = ({ handleCheck, label, scale = 1, labelFontSize, labelColor, check = false }) => {
-  const [isCheck, setCheck] = useState<boolean>(check)
-
   return (
     <div
       className={`${styles.baseCheckBox}`}
-      onClick={() => {
-        setCheck(!isCheck)
-        handleCheck(!isCheck)
-      }}
+      onClick={() => handleCheck()}
     >
       {
-        isCheck
+        check
           ?
-          <CheckSvg 
+          <CheckSvg
             scale={scale}
           />
           :

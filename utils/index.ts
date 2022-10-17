@@ -1,6 +1,6 @@
 import { connectWallet, selectWallet } from './connect-wallet'
 import { formatAddress, formatAdData } from './tools'
-import type { Wallet, AddressMap, Status, AdInfo, ModalType, UserScore } from './type'
+import type { Wallet, AddressMap, Status, AdInfo, ModalType, UserScore, ChainType } from './type'
 
 export {
 	connectWallet,
@@ -12,5 +12,6 @@ export {
 	type Status,
 	type AdInfo,
 	type ModalType,
-	type UserScore
+	type UserScore,
+	type ChainType
 }

@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
     "@ant-design/icons": "^4.7.0",
     "@fleekhq/fleek-storage-js": "^1.0.22",
     "@polkadot/api": "^9.0.1",
@@ -17,12 +18,14 @@
     "@polkadot/util-crypto": "^10.1.2",
     "antd": "^4.22.3",
     "axios": "^0.27.2",
+    "events": "^3.3.0",
     "mongodb": "^4.10.0",
     "next": "12.1.0",
     "next-transpile-modules": "^9.0.0",
     "react": "17.0.2",
     "react-device-detect": "^2.2.2",
     "react-dom": "17.0.2",
+    "react-jazzicon": "^1.0.4",
     "react-player": "^2.10.1",
     "request-ip": "^3.3.0",
     "sass": "^1.54.0"
@@ -31,9 +34,12 @@
     "@types/node": "16.11.9",
     "@types/react": "17.0.36",
     "@types/request-ip": "^0.0.37",
+    "autoprefixer": "^10.4.12",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
+    "postcss": "^8.4.17",
     "prettier": "^2.7.1",
+    "tailwindcss": "^3.1.8",
     "typescript": "4.5.2"
   }
 }

@@ -22,6 +22,9 @@
     }
   }
   .right {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     .accountWrp {
       display: flex;
       height: 60px;
@@ -31,6 +34,9 @@
       box-sizing: border-box;
       border-radius: 30px;
       background-color: #1d1f26;
+      &:first-child {
+        margin-right: 10px;
+      }
       .account {
         display: flex;
         align-items: center;

@@ -45,3 +45,7 @@ p {
 .ant-picker-focused {
   border: 2px solid #3772FF;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
