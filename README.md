@@ -1,7 +1,14 @@
 [![Node.js CI](https://github.com/AdMetaNetwork/admeta-webapp/actions/workflows/nodejs-actions.yml/badge.svg?branch=main)](https://github.com/AdMetaNetwork/admeta-webapp/actions/workflows/nodejs-actions.yml)
 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Introduce
+AdMeta is a Privacy-Preserving Advertising Platform for Web3 and Metaverse.
+
+## Preparation
+Our pictures are stored through Fleek, you need to register on [Fleef](https://fleek.co/) and generate a key, and replace the corresponding key in the config/c.example.ts file, don’t have to change the file name, /pages/api/upload.ts is the upload img api file.
+
+## Polkadot network
+AdMeta blockchain network `wss://testnet.admeta.network`
 
 ## Getting Started
 
