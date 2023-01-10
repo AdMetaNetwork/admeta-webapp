@@ -5,7 +5,7 @@
 AdMeta WebApp is built for users to better interact with AdMeta Blockchains. Now it supports AdMeta Testnet by default. Below are a few steps to introduce the basic functionalities.
 
 ## Getting Started
----
+
 #### Testnet
 Go to https://app.testnet.admeta.network/ to launch the WebApp.
 #### Local Deployment
@@ -22,10 +22,10 @@ yarn dev
 Open http://localhost:3000 with your browser to see the result.
 
 ## Detailed Guide
----
+
 For detailed guide documents, please view here,
 [Admeta Webapp Guide](https://docs.admeta.network/guides/how-to-use-admeta-webapp).
 ## License
----
+
 GPLv3
 
