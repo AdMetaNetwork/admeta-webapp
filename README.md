@@ -22,21 +22,34 @@ yarn dev
 Open http://localhost:3000 with your browser to see the result.
 
 
+## Publish Ad
+#### Connect Wallet
+Click the button "Connect to Polkadot.js" on the top right to authorize this web app with your Polkadot.js wallet extension and select the account you want to sign in to AdMeta.
+
+#### Create Ad Proposals
+1. Switch to the tab "Ad Management" on the left sidebar, and you will see the ad proposals created by you if you have already done any. If not you can simply click "Publish new ad" to create one.
+
+2. Follow the steps of ad proposal creation. First, you need to upload an image of your ad design. This image will be uploaded to IPFS. Also, you need to specify the related parameters of your proposal, for an explanation of these parameters please refer to https://admetanetwork.github.io/admeta/pallet_ad/pallet/enum.Call.html#variant.propose_ad. After this, you can preview this ad, and submit it if everything is correct.
+
+3. A sign request is prompted at this time to send an ad proposal transaction, and after signing and sending this transaction, you will see the ad proposal appear on your ad lists with the status "Pending". This means it is not approved yet.  You have done it successfully now! 
+
 ## Ad Approval
+Ad Approval can be only done by AdMeta council, with a manual review of ad contents. 
 
-Ad Approval can be only done by AdMeta council, with a manual review of ad contents. You can ask for the approval of your ad in our Telegram and we will help you to approve your ads. After approval, the "Pending" status will become "Approved", and your ad will be published for everyone on AdMeta Network!
+If you are building the project locally then use Polkadot.js app and use ALICE with sudo command call ad > approveAd interface.
+![Claim](./public/images/claim5.png)
 
-## Check Matched Ads and Claim Rewards
-Ad matching happens during the idle and less busy time of AdMeta Blockchain, and it's done automatically without any inputs from either users or advertisers. Switch to the tab "Ad Display" to check if you have any matched ads now. 
-If you have matched ads, you will see it like this:
-![Claim](./public/images/claim1.png)
+## Claim Rewards
+#### Create User Profile
+Creating AdMeta user profile allows you to match ads that suit your preferences and earn rewards. Switch to the tab "Profile" to create your own user profile.
 
-Click the button under the ad display, and you will be navigated to an advertiser-customized page, to complete a series of challenges.
-![Claim](./public/images/claim2.png)
+#### Claim
+At present, the testnet is that the completion of the advertising task is verified by the centralized interface. 
 
-The challenges can be defined and built by advertisers with AdMeta SDK. Possible challenges are wallet connecting of new products, product intro video watching, joining the project telegram group, buying an NFT of certain collections on OpenSea, etc.
-After completing all required tasks, you are eligible to claim your reward. Click "Claim rewards" and you will be navigated back to your AdMeta WebApp page. And now your rewards have been claimed to your own wallet.
-![Claim](./public/images/claim3.webp)
+If you are building the project locally then use Polkadot.js app to call the user > claimReward interface.
+![Claim](./public/images/claim4.png)
+
+
 ## Detailed Guide
 
 For detailed guide documents, please view here,
