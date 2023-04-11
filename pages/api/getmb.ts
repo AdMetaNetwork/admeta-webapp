@@ -3,7 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import requestIp from 'request-ip'
 import { hexToString } from '@polkadot/util'
 import { mongo_url } from '../../config/c.example'
-var MongoClient = require('mongodb').MongoClient
+
+const MongoClient = require('mongodb').MongoClient;
 
 function formatData(c: any[]) {
 	let arr: any[] = []
@@ -33,10 +34,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	MongoClient.connect(mongo_url, function (err: any, db: any) {
 		if (err) throw err
-		var dbo = db.db('database0')
+		const dbo = db.db('database0');
 		const ua = req.headers['user-agent']
-    console.log(detectedIp, ua, '=============-============')
-		var whereStr = { 'user-agent': ua } // 查询条件
+		const whereStr = {'user-agent': ua}; // 查询条件
 		dbo
 			.collection('userAndAds')
 			.find(whereStr)

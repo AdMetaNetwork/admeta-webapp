@@ -4,6 +4,6 @@ const withTM = require('next-transpile-modules')(['@polkadot/react-identicon'])
 module.exports = withTM({
   reactStrictMode: true,
   images: {
-    domains: ['storageapi.fleek.co', 'ipfs.fleek.co', 'fenglin-1256754106.cos.ap-nanjing.myqcloud.com'],
+    domains: ['storageapi.fleek.co', 'ipfs.fleek.co', 'storage.fleek.zone'],
   },
 })

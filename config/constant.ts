@@ -14,7 +14,28 @@ export const ADMETA_MSG_SWITCH = 'ADMETA_MSG_SWITCH'
 
 export const HTTP_SERVER = 'https://api.admeta.network/'
 
-export const DEFAULT_CHAIN_ID = 1
+export const CONTRACT_ADDRESS = '0x6975914A922b165D3E9cb248d1c861FcD88Aa92a'
+
+export const DEFAULT_CHAIN_ID = 11155111
+
+export const AD_CATEGORY = [
+  {
+    name: 'GameFi',
+    state: true
+  },
+  {
+    name: 'DeFi',
+    state: true
+  },
+  {
+    name: 'Metaverse',
+    state: true
+  },
+  {
+    name: 'NFT',
+    state: true
+  }
+]
 
 export const DEFAULT_CHAIN: T.ChainType = {
   1: {
@@ -83,5 +104,18 @@ export const DEFAULT_CHAIN: T.ChainType = {
       "https://rpc-mumbai.matic.today",
     ],
     blockExplorerUrls: ["https://mumbai.polygonscan.com"],
+  },
+  11155111: {
+    chainId: `0x${Number(11155111).toString(16)}`,
+    chainName: "Sepolia",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "SepoliaETH",
+      decimals: 18,
+    },
+    rpcUrls: [
+      "https://rpc.sepolia.org",
+    ],
+    blockExplorerUrls: ["https://sepolia.etherscan.io/"],
   },
 };

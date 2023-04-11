@@ -56,26 +56,19 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
     switch (page) {
       case 'ad-publish':
         return 'Ad management'
-        break;
       case 'dashboard':
         return 'Dashboard'
-        break;
       case 'display':
         return 'Ad display'
-        break;
       case 'management':
         return 'Ad management'
-        break;
       case 'profile':
         return 'Profile'
-        break;
       case 'settings':
         return 'Settings'
-        break;
 
       default:
         return ''
-        break;
     }
   }
 

@@ -17,6 +17,7 @@ const Propose: FC<Prop> = ({ img, title }) => {
             src={img}
             alt=''
             width={'100%'}
+            preview={false}
           />
         </div>
         <div className={styles.title}>{title}</div>

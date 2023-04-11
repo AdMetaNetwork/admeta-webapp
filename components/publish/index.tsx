@@ -7,14 +7,12 @@ import BackSvg from "../svg/back";
 import BaseButton from "../ui/base-button";
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import useApi from "../../hooks/use-api";
-import { polkadot_network } from "../../config/constant";
-import CallPolkadot from "../../utils/call-polkadot";
 import BaseCtx from "../../hooks/use-base-content";
-
+import { BigNumber } from "ethers";
+import { useWeb3 } from '@3rdweb/hooks'
 
 import styles from './index.module.scss';
-import * as C from "../../utils";
+import CallContract from "../../utils/call-contract";
 
 const PublishBody: FC = () => {
 
@@ -22,23 +20,20 @@ const PublishBody: FC = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [img, setImg] = useState('')
   const [imgKey, setImgKey] = useState('')
-  const [currentBlock, setCurrentBlock] = useState(0)
-  const [endBlock, setEndBlock] = useState(0)
   const [target, setTarget] = useState('')
   const [title, setTitle] = useState('')
   const [cpi, setCpi] = useState(0)
   const [amount, setAmount] = useState(0)
-  const [tag, setTag] = useState('')
-  const [ageMax, setAgeMax] = useState(0)
-  const [ageMin, setAgeMin] = useState(0)
+  const [tag, setTag] = useState(0)
+  const [adIpfs, setAdIpfs] = useState('')
+  const [imgIpfs, setImgIpfs] = useState('')
+
+  const {address} = useWeb3()
 
 
-  const { setShowTip, setTipType, setTipText, setLoading } = useContext(BaseCtx)
-
+  const {setShowTip, setTipType, setTipText, setLoading} = useContext(BaseCtx)
 
   const router = useRouter()
-  const { api } = useApi(polkadot_network)
-  const _api = useMemo(() => api, [api])
 
   const handleUpLoadImg = (url: string, key: string) => {
     if (!url) {
@@ -68,7 +63,7 @@ const PublishBody: FC = () => {
       method: 'get',
       url: `/api/getIPFS?key=${key}`
     }).then((e) => {
-      setImg(e.data.url)
+      setImgIpfs(e.data.url)
     })
   }
 
@@ -101,53 +96,46 @@ const PublishBody: FC = () => {
   }
 
   useEffect(() => {
-    if (!_api) {
-      return;
-    }
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
-    }
 
-    const pk = new CallPolkadot(sender, _api!)
-    pk.getCurrentBlock().then((v) => {
-      setCurrentBlock(v)
-    })
+  }, [])
 
-  }, [_api])
-
-  const handerProposeAd = () => {
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
-    }
+  const handleProposeAd = async () => {
     setLoading!(true)
-    const pk = new CallPolkadot(sender, _api!)
-    let ad: C.AdInfo = {
-      metadata: img,
-      target: target,
-      title: title,
-      cpi: cpi,
-      amount: amount,
-      endBlock: endBlock,
-      preference: {
-        age: {
-          max: ageMax,
-          min: ageMin
-        },
-        tags: [tag]
-      }
+    // upload ad info to IPFS
+    // const {data: {ipfsHash}} = await axios.post('/api/upload-json-to-ipfs', {
+    //   key: `ad-${title}.json`,
+    //   jsonContent: {
+    //     "address": address,
+    //     "adUrl": imgIpfs,
+    //     "targetUrl": target,
+    //     "title": title,
+    //     "cpi": cpi,
+    //     "amount": amount,
+    //     "tag": tag
+    //   }
+    // })
+    // setAdIpfs(ipfsHash)
+    // call contract publish ad
+    const c = new CallContract()
+    try {
+      await c.init()
+    } catch (err: any) {
+      handleShowTip(err.message, 'Error')
     }
 
-    pk.porposeAd(ad).then(() => {
+    const inventory = BigNumber.from(amount)
+    const reward = BigNumber.from(cpi)
+    const category = BigNumber.from(tag)
+    await c.createAd({inventory, reward, category, title, metadata: imgIpfs, target})
+    c.contract?.once('CreateAd', (a, b) => {
+      console.log(a, b, 'complete publish')
       setLoading!(false)
       handleShowTip('Propose ad ok', 'Success')
       router.back()
     })
-
   }
 
-  const handleSaveAdInfo = () => {
+  const handleSaveAdInfo = async () => {
     if (!target) {
       handleShowTip('Url cannot be empty!', 'Error')
       return
@@ -158,22 +146,6 @@ const PublishBody: FC = () => {
     }
     if (!amount) {
       handleShowTip('Amount cannot be empty!', 'Error')
-      return
-    }
-    if (!ageMax) {
-      handleShowTip('Age max cannot be empty!', 'Error')
-      return
-    }
-    if (!ageMin) {
-      handleShowTip('Age min cannot be empty!', 'Error')
-      return
-    }
-    if (!tag) {
-      handleShowTip('Tag cannot be empty!', 'Error')
-      return
-    }
-    if (!endBlock) {
-      handleShowTip('Takedown cannot be empty!', 'Error')
       return
     }
     if (!title) {
@@ -227,13 +199,13 @@ const PublishBody: FC = () => {
 
   return (
     <div className={styles.publishBody}>
-      <Step current={step} />
+      <Step current={step}/>
       <div className={styles.content}>
         <div
           className={styles.nav}
           onClick={handleNavBack}
         >
-          <BackSvg />
+          <BackSvg/>
           <div className={styles.navlabel}>{handleGetStatusLabel().nav}</div>
         </div>
         {/* step one upload img */}
@@ -255,16 +227,6 @@ const PublishBody: FC = () => {
           step === 2
           &&
           <Info
-            currentBlock={currentBlock}
-            handleGetEndBlock={(v) => {
-              setEndBlock(v)
-            }}
-            handleGetAgeMax={(v) => [
-              setAgeMax(v)
-            ]}
-            handleGetAgeMin={(v) => {
-              setAgeMin(v)
-            }}
             handleGetAmount={(v) => {
               setAmount(v)
             }}
@@ -311,7 +273,7 @@ const PublishBody: FC = () => {
                   break;
 
                 case 3:
-                  handerProposeAd()
+                  handleProposeAd()
                   break;
 
                 default:
