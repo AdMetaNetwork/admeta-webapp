@@ -1,37 +1,42 @@
 [![Node.js CI](https://github.com/AdMetaNetwork/admeta-webapp/actions/workflows/nodejs-actions.yml/badge.svg?branch=main)](https://github.com/AdMetaNetwork/admeta-webapp/actions/workflows/nodejs-actions.yml)
 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Introduce
+AdMeta WebApp is built for users to better interact with AdMeta Blockchains. Now it supports AdMeta Testnet by default. Below are a few steps to introduce the basic functionalities.
 
 ## Getting Started
 
-First, run the development server:
+#### Testnet
+Go to https://app.admeta.network/ to launch the WebApp.
+#### Local Deployment
+1. Generater Fleek a key and a secret (you can see the document [Fleek Doc](https://docs.fleek.co/storage/fleek-storage-js/)), and replace the corresponding key in the [c.example.ts](./config/c.example.ts) file, don’t have to change the file name, [upload.ts](./pages/api/upload.ts) is the upload img api file.
 
+2. AdMeta default node is `Sepolia test net`.
+
+3. Run start
 ```bash
 npm run dev
 # or
 yarn dev
 ```
+Open http://localhost:3000 with your browser to see the result.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Publish Ad
+#### Connect Wallet
+Click the button "Connect wallet" on the top right to authorize this web app with your Metamask wallet extension and select the account you want to sign in to AdMeta.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Create Ad Proposals
+1. Switch to the tab "Ad Management" on the left sidebar, and you will see the ad proposals created by you if you have already done any. If not you can simply click "Publish new ad" to create one.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+2. Follow the steps of ad proposal creation. First, you need to upload an image of your ad design. This image will be uploaded to IPFS. Also, you need to specify the related parameters of your proposal. After this, you can preview this ad, and submit it if everything is correct.
 
-## Learn More
+3. A sign request is prompted at this time to send an ad proposal transaction, and after signing and sending this transaction, you will see the ad proposal appear on your ad lists with the status "Pending". This means it is not approved yet.  You have done it successfully now!
 
-To learn more about Next.js, take a look at the following resources:
+## Ad Approval
+Ad Approval can be only done by AdMeta council, with a manual review of ad contents.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+GPLv3
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
