@@ -4,7 +4,7 @@ import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
 import 'events'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const supportedChainIds = [1, 4, 137, 250, 43114, 80001];
+  const supportedChainIds = [11155111];
 
   const connectors = {
     injected: {},

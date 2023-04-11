@@ -21,16 +21,13 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 
-	// 写入文件
-	var data = req.body.url.replace(/^data:image\/\w+;base64,/, '')
-	var buf = Buffer.from(data, 'base64')
+	const data = req.body.url.replace(/^data:image\/\w+;base64,/, '');
+	const buf = Buffer.from(data, 'base64');
 	fs.writeFile(req.body.key, buf, err => {
 		if (err) {
 			console.error(err)
 			return
 		}
-		console.log('写入成功')
-		// 读取文件
 		fs.readFile(req.body.key, async (err, data) => {
 			if (err) {
 				console.error(err)
@@ -43,7 +40,6 @@ export default async function handler(
 				data,
 				httpUploadProgressCallback: event => {
 					console.log(Math.round((event.loaded / event.total) * 100) + '% done')
-					// 删除本地读取文件
 					fs.unlinkSync(req.body.key)
 					res.status(200).json({ name: 'ok' })
 				}

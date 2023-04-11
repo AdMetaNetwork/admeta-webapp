@@ -1,5 +1,6 @@
 import { hexToString } from '@polkadot/util'
 import axios from 'axios'
+import { message } from "antd";
 
 export const formatAddress = (address: string): string => {
 	const str_1 = address.substring(0, 4)
@@ -40,4 +41,18 @@ export const getConfig = async () => {
 	}
 
 	return JSON.parse(config || '{}')
+}
+
+class UserException {
+	message: string
+	name: string
+
+	constructor(message: string, name: string) {
+		this.message = message
+		this.name = name
+	}
+}
+
+export const throwException = (message: string, name: string) => {
+	throw new UserException(message, name);
 }

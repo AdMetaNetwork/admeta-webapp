@@ -36,15 +36,15 @@ const SideNav: FC<Prop> = ({ page = 'dashboard' }) => {
           <Menu1Svg color={page === 'dashboard' ? '#E6E7F0' : '#777E90'} />
           <div className={styles.right}>Dashboard</div>
         </div>
-        <div
-          className={`${styles.item} ${page === 'profile' ? styles.active : null}`}
-          onClick={() => {
-            router.push('/profile')
-          }}
-        >
-          <Meun2Svg color={page === 'profile' ? '#E6E7F0' : '#777E90'} />
-          <div className={styles.right}>Profile</div>
-        </div>
+        {/*<div*/}
+        {/*  className={`${styles.item} ${page === 'profile' ? styles.active : null}`}*/}
+        {/*  onClick={() => {*/}
+        {/*    router.push('/profile')*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Meun2Svg color={page === 'profile' ? '#E6E7F0' : '#777E90'} />*/}
+        {/*  <div className={styles.right}>Profile</div>*/}
+        {/*</div>*/}
         {/* <div
           className={`${styles.item} ${page === 'display' ? styles.active : null}`}
           onClick={() => {
