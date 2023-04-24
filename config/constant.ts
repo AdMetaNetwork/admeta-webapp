@@ -14,7 +14,7 @@ export const ADMETA_MSG_SWITCH = 'ADMETA_MSG_SWITCH'
 
 export const HTTP_SERVER = 'https://api.admeta.network/'
 
-export const CONTRACT_ADDRESS = '0x6975914A922b165D3E9cb248d1c861FcD88Aa92a'
+export const CONTRACT_ADDRESS = '0xd112476CA74aAa81D4B4cB1921423260dff57aF2'
 
 export const DEFAULT_CHAIN_ID = 11155111
 
