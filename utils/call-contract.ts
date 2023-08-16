@@ -63,8 +63,13 @@ class CallContract {
     return await this.contract?.getSigner()
   }
 
-  async findAdsByPublisher(address: string) {
+  async findAdsByPublisher(address: string | undefined) {
+    if (!address) return
     return await this.contract?.findAdsByPublisher(address)
+  }
+
+  async adLength() {
+    return await this.contract?.adLength()
   }
 }
 

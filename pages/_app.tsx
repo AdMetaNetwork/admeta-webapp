@@ -1,22 +1,27 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
-import 'events'
+import { WagmiConfig, createConfig } from 'wagmi';
+import { sepolia } from 'wagmi/chains';
+import { ConnectKitProvider, getDefaultConfig } from 'connectkit';
+
+const config = createConfig(
+  getDefaultConfig({
+    appName: 'AdMeta App',
+    chains: [sepolia],
+    walletConnectProjectId: process.env.PUBLIC_WALLETCONNECT_PROJECT_ID || '',
+  })
+);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const supportedChainIds = [11155111];
-
-  const connectors = {
-    injected: {},
-  };
 
   return (
-    <ThirdwebWeb3Provider
-      supportedChainIds={supportedChainIds}
-      connectors={connectors}
-    >
-      <Component {...pageProps} />
-    </ThirdwebWeb3Provider>
+    <WagmiConfig config={config}>
+      <ConnectKitProvider
+        debugMode
+      >
+        <Component {...pageProps} />
+      </ConnectKitProvider>
+    </WagmiConfig>
   );
 }
 

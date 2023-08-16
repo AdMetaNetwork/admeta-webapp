@@ -1,17 +1,15 @@
-import { connectWallet, selectWallet } from './connect-wallet'
-import { formatAddress, formatAdData } from './tools'
+import { formatAddress } from './tools'
 import type { Wallet, AddressMap, Status, AdInfo, ModalType, UserScore, ChainType } from './type'
+import WHITE_LIST from './white-list'
 
 export {
-	connectWallet,
-	selectWallet,
 	formatAddress,
-	formatAdData,
 	type Wallet,
 	type AddressMap,
 	type Status,
 	type AdInfo,
 	type ModalType,
 	type UserScore,
-	type ChainType
+	type ChainType,
+	WHITE_LIST
 }

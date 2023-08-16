@@ -9,8 +9,7 @@ import { DataConfig } from '../../utils/type'
 import { getConfig } from "../../utils/tools";
 import Messager from "../../utils/messager";
 import * as T from '../../utils'
-import { useWeb3 } from '@3rdweb/hooks'
-
+import { useAccount } from "wagmi";
 import { useRouter } from 'next/router'
 
 import styles from './index.module.scss';
@@ -19,7 +18,7 @@ const DashboardBody: FC = () => {
 
   const { setLoading } = useContext(BaseCtx)
   const router = useRouter()
-  const { address } = useWeb3();
+  const { address, isConnected } = useAccount()
 
   const [dashboard, setDashboard] = useState<Record<string, any>>({})
   const [config, setConfig] = useState<DataConfig>({ categories: [], searching_engines: [], products: [] })
@@ -75,7 +74,8 @@ const DashboardBody: FC = () => {
     })
   }, [setLoading, getUserDashboard])
 
-  const checkUser = useCallback((walletAddress: string) => {
+  const checkUser = useCallback((walletAddress: string | undefined) => {
+    if (!walletAddress) return
     axios.post(`${C.HTTP_SERVER}admeta/getUser`, {
       walletAddress
     }).then((v) => {
@@ -99,12 +99,12 @@ const DashboardBody: FC = () => {
   }, [setLoading, addUser, address, getUserScore])
 
   useEffect(() => {
-    if (address) {
+    if (isConnected) {
       checkUser(address)
     } else {
       router.replace('/')
     }
-  }, [address, checkUser, router])
+  }, [address, isConnected, checkUser, router])
 
   const getItemLevel = (v: number) => {
     const t = Math.pow(10, v.toString().length - 2)

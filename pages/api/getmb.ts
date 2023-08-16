@@ -1,33 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import requestIp from 'request-ip'
-import { hexToString } from '@polkadot/util'
 import { mongo_url } from '../../config/c.example'
 
 const MongoClient = require('mongodb').MongoClient;
-
-function formatData(c: any[]) {
-	let arr: any[] = []
-	c.forEach(item => {
-		arr.push(item[1])
-	})
-	arr.forEach(item => {
-		item = item.toString()
-	})
-
-	let a: any[] = JSON.parse(`[${arr.toString()}]`)
-	console.log(a)
-	a.forEach(item => {
-		item.target = hexToString(item.target)
-		item.metadata = hexToString(item.metadata)
-	})
-	let obj = {
-		adurl: a[a.length - 1].target,
-		adimg: a[a.length - 1].metadata
-	}
-
-	return obj
-}
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 	const detectedIp = requestIp.getClientIp(req)

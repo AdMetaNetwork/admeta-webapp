@@ -4,7 +4,7 @@ import ImgItem from "./img-item";
 import PlusSvg from "../svg/plus";
 import { useRouter } from 'next/router'
 import CallContract from "../../utils/call-contract";
-import { useWeb3 } from "@3rdweb/hooks";
+import { useAccount, useNetwork } from "wagmi";
 import BaseCtx from "../../hooks/use-base-content";
 
 import styles from './index.module.scss';
@@ -13,7 +13,7 @@ const ManagementBody: FC = () => {
 
   const [list, setList] = useState<any[]>([])
   const {setLoading, setTipText, setShowTip, setTipType} = useContext(BaseCtx)
-  const {address} = useWeb3()
+  const {address} = useAccount()
 
   const router = useRouter()
 

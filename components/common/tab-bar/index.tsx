@@ -24,7 +24,7 @@ const TabBar: FC<Prop> = ({ activePage, handleOpenLink }) => {
         onClick={handleOpenLink}
       >
         <Link href='/ad-display'>
-          <a>Ad Display</a>
+          Ad Display
         </Link>
       </div>
       <div
@@ -32,7 +32,7 @@ const TabBar: FC<Prop> = ({ activePage, handleOpenLink }) => {
         onClick={handleOpenLink}
       >
         <Link href='/profile'>
-          <a>Profile</a>
+          Profile 
         </Link>
       </div>
       <div
@@ -40,7 +40,7 @@ const TabBar: FC<Prop> = ({ activePage, handleOpenLink }) => {
         onClick={handleOpenLink}
       >
         <Link href='/ad-management'>
-          <a>Ad Management</a>
+          Ad Management
         </Link>
       </div>
     </div>

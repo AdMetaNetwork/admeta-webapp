@@ -22,7 +22,7 @@ const SideNav: FC<Prop> = ({ page = 'dashboard' }) => {
     <div className={styles.sideNav}>
       <div className={styles.logo}>
         <Link href='/'>
-          <a href=""><LogoTextSvg /></a>
+          <LogoTextSvg />
         </Link>
       </div>
       <div className={styles.list}>
