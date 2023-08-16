@@ -7,8 +7,8 @@ type Prop = {
   btnType?: string,
   color?: string,
   activeColor?: string,
-  leftIcon?: SVGProps<SVGSVGElement>,
-  rightIcon?: SVGProps<SVGSVGElement>,
+  leftIcon?: any,
+  rightIcon?: any,
   isLine?: boolean,
   disable?: boolean
 }

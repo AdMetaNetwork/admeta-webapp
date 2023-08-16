@@ -1,9 +1,10 @@
-const withTM = require('next-transpile-modules')(['@polkadot/react-identicon'])
-
 /** @type {import('next').NextConfig} */
-module.exports = withTM({
+
+const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['storageapi.fleek.co', 'ipfs.fleek.co', 'storage.fleek.zone'],
+    domains: ['storageapi.fleek.co', 'ipfs.fleek.co', 'storage.fleek.zone', 'ipfs.io', 'ipfs.admeta.network'],
   },
-})
+}
+
+module.exports = nextConfig

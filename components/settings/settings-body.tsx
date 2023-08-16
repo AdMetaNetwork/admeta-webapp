@@ -11,10 +11,10 @@ import Messager from "../../utils/messager";
 import { ADMETA_MSG_DOMAIN, ADMETA_MSG_SWITCH } from '../../config/constant'
 import axios from "axios";
 import * as C from '../../config/constant'
-import { useWeb3 } from '@3rdweb/hooks'
 import BaseCtx from "../../hooks/use-base-content";
-
+import { useAccount, useNetwork } from "wagmi";
 import styles from './index.module.scss';
+
 
 const SettingsBody: FC = () => {
 
@@ -31,9 +31,15 @@ const SettingsBody: FC = () => {
   })
   const { setLoading } = useContext(BaseCtx)
 
-  const { address } = useWeb3()
+  const { address, isConnected } = useAccount()
+  const [connected, setConnected] = useState(false)
 
-  const getUserSetting = useCallback((address: string) => {
+  useEffect(() => {
+    setConnected(isConnected)
+  }, [isConnected])
+
+  const getUserSetting = useCallback((address: string | undefined) => {
+    if (!address) return
     setLoading!(true)
     axios.post(`${C.HTTP_SERVER}admeta/getUserWeb3DomainList`, {
       walletAddress: address
@@ -62,10 +68,10 @@ const SettingsBody: FC = () => {
   }, [])
 
   useEffect(() => {
-    if (address) {
+    if (connected) {
       getUserSetting(address)
     }
-  }, [address, getUserSetting])
+  }, [connected, address, getUserSetting])
 
   const getChecksDomains = (arr: boolean[]) => {
     let t: string[] = []
