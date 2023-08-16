@@ -1,11 +1,8 @@
 import { FC, useContext, useEffect, useCallback, useMemo, useState } from "react";
 import LogoTextSvg from "../../svg/logo-text";
 import BaseButton from "../../ui/base-button";
-import Link from "next/link";
 import * as T from '../../../utils'
 import BaseCtx from "../../../hooks/use-base-content";
-import AuthDomain from "../auth-domain/inde";
-import SelectWallet from '../select-wallet'
 import { ChainIcon, ConnectKitButton, useModal } from 'connectkit';
 import { useAccount, useNetwork } from "wagmi";
 import Jazzicon from 'react-jazzicon'
@@ -76,9 +73,7 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
         {
           page === 'home'
             ?
-            <Link href='/'>
-              <LogoTextSvg />
-            </Link>
+            <LogoTextSvg />
             :
             <div className={styles.pageName}>
               {getPageShowName(page)}
