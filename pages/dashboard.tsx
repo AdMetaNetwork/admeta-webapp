@@ -18,7 +18,7 @@ const Dashboard: NextPage = () => {
   const [tipType, setTipType] = useState<'Success' | 'Error'>('Success')
   const [showTip, setShowTip] = useState<boolean>(false)
   const [tipText, setTipText] = useState<string>('')
-  const [isLoading, setLoading] = useState<boolean>(true)
+  const [isLoading, setLoading] = useState<boolean>(false)
 
   return (
     <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, showTip, setShowTip, tipType, setTipType, tipText, setTipText, isLoading, setLoading }}>

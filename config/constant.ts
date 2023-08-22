@@ -19,7 +19,7 @@ export const HTTP_SERVER = 'https://api.admeta.network/'
 // export const CASE_NETWORK = 'http://localhost:3001'
 export const CASE_NETWORK = 'https://click.admeta.network'
 
-export const CONTRACT_ADDRESS = '0xd112476CA74aAa81D4B4cB1921423260dff57aF2'
+export const CONTRACT_ADDRESS = '0x34Efa1dEDd98afC37A2C5674Cfb73994058Ec20F'
 
 export const IPFS_HTTPS = 'https://storageapi.fleek.co/038f3525-c411-4ef9-86e4-bc833d0c2d7f-bucket/'
 
@@ -43,5 +43,11 @@ export const AD_CATEGORY = [
   {
     name: 'DID',
     state: true
+  },
+  {
+    name: 'AI',
+    state: true
   }
 ]
+
+export const SCORE_LEVEL = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 30000]

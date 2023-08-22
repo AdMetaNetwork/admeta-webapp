@@ -18,9 +18,6 @@ const ImgItem: FC<Prop> = ({ img, badge, title }) => {
   return (
     <div
       className={styles.imgItem}
-      onClick={() => {
-        window.open(`${CASE_NETWORK}?address=${address}`)
-      }}
     >
       <Image
         src={img}

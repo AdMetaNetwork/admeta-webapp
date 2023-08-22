@@ -71,6 +71,14 @@ class CallContract {
   async adLength() {
     return await this.contract?.adLength()
   }
+
+  async setUserLevel(level: BigNumber, score: BigNumber, categoryScore: string, address: string) {
+    return await this.contract?.setUserLevel(level, score, categoryScore, address)
+  }
+
+  async getUserLevel(address: string) {
+    return await this.contract?.getUserLevel(address)
+  }
 }
 
 export default CallContract
