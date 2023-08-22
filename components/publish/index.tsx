@@ -14,7 +14,7 @@ import { useAccount } from 'wagmi'
 
 import styles from './index.module.scss';
 import CallContract from "../../utils/call-contract";
-import { HTTP_SERVER, IPFS_HTTPS } from "../../config/constant";
+import { CASE_NETWORK, HTTP_SERVER, IPFS_HTTPS } from "../../config/constant";
 
 type Task = {
   logo: string,
@@ -22,7 +22,8 @@ type Task = {
   verify: string,
   platform: string,
   description: string,
-  link: string
+  link: string,
+  ad_index: string
 }
 
 const PublishBody: FC = () => {
@@ -44,6 +45,7 @@ const PublishBody: FC = () => {
   const [verify, setVerify] = useState('')
   const [platform, setPlatform] = useState('')
   const [description, setDescription] = useState('')
+  const [adIdx, setAdIdx] = useState('')
 
 
   const { setShowTip, setTipType, setTipText, setLoading } = useContext(BaseCtx)
@@ -120,27 +122,17 @@ const PublishBody: FC = () => {
     const reward = BigNumber.from(cpi)
     const category = BigNumber.from(tag)
     await c.createAd({ inventory, reward, category, title, metadata: imgIpfs, target })
-    c.contract?.once('CreateAd', (a, b) => {
-      console.log(a, b, 'complete publish')
+    c.contract?.once('CreateAd', (index, address) => {
+      console.log(index, address, 'complete publish', index.toString())
       setLoading!(false)
       handleShowTip('Propose ad ok', 'Success')
       setStep(4)
+      setAdIdx(index.toString())
+      
     })
   }
 
   const handleSubmitTask = async () => {
-    const c = new CallContract()
-    try {
-      await c.init()
-    } catch (err: any) {
-      handleShowTip(err.message, 'Error')
-    }
-
-    c.adLength().then((v) => {
-      console.log(v)
-      const a = Number(v.toString())
-      console.log(a)
-    })
 
     if (!address) {
       handleShowTip('Address cannot be empty!', 'Error')
@@ -165,7 +157,8 @@ const PublishBody: FC = () => {
       platform,
       verify,
       description,
-      link: target
+      link: target,
+      ad_index: adIdx
     }
 
     axios.post(`${HTTP_SERVER}admeta/overwriteUserPlatformCase`, obj).then(() => {

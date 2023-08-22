@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { SCORE_LEVEL } from '../config/constant';
 
 export const formatAddress = (address: string | undefined): string => {
 	if (!address) return '';
@@ -21,6 +22,13 @@ export const getConfig = async () => {
 	}
 
 	return JSON.parse(config || '{}')
+}
+
+export const calculationSingleLevel = (score: number) => {
+	if (score === 0) {
+		return 0
+	}
+	return SCORE_LEVEL.findIndex(v => score < v) + 1
 }
 
 class UserException {

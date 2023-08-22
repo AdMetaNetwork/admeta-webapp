@@ -100,13 +100,13 @@ const Task: FC<Prop> = ({ handleSetLogo, handleSetVerify, handleSetPlatform, han
         }
       </div>
       <div className="mb-[24px]">
-        <div className="text-[12px] font-bold text-[#B1B5C3] mb-[12px]">THIRD PARTY VERIFY (GALXE)</div>
+        <div className="text-[12px] font-bold text-[#B1B5C3] mb-[12px]">CAMPAIGN URL (GALXE)</div>
         <BaseInput
           handleChangeInput={(v) => {
             setVerify(v)
             handleSetVerify(v)
           }}
-          placeholder="third verify link such as galex"
+          placeholder="campaign url also support third verify link such as galex"
           value={verify}
         />
       </div>

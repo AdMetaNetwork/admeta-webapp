@@ -203,6 +203,11 @@ const abi = [
 				"internalType": "string",
 				"name": "categoryScore",
 				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			}
 		],
 		"name": "setUserLevel",
@@ -449,7 +454,13 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
 		"name": "getUserLevel",
 		"outputs": [
 			{

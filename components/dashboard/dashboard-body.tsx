@@ -6,13 +6,16 @@ import axios from "axios";
 import * as C from "../../config/constant";
 import BaseCtx from "../../hooks/use-base-content";
 import { DataConfig } from '../../utils/type'
-import { getConfig } from "../../utils/tools";
+import { calculationSingleLevel, getConfig } from "../../utils/tools";
 import Messager from "../../utils/messager";
 import * as T from '../../utils'
 import { useAccount } from "wagmi";
 import { useRouter } from 'next/router'
+import { BigNumber } from "ethers";
 
 import styles from './index.module.scss';
+import BaseButton from "../ui/base-button";
+import CallContract from "../../utils/call-contract";
 
 const DashboardBody: FC = () => {
 
@@ -22,13 +25,7 @@ const DashboardBody: FC = () => {
 
   const [dashboard, setDashboard] = useState<Record<string, any>>({})
   const [config, setConfig] = useState<DataConfig>({ categories: [], searching_engines: [], products: [] })
-  const [score, setScore] = useState<T.UserScore>({
-    "defi": 0,
-    "gamefi": 0,
-    "nft": 0,
-    "metaverse": 0,
-    "onchaindata": 0
-  })
+  const [score, setScore] = useState<any>()
 
   const randomRange = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -98,13 +95,93 @@ const DashboardBody: FC = () => {
     })
   }, [setLoading, addUser, address, getUserScore])
 
-  useEffect(() => {
-    if (isConnected) {
-      checkUser(address)
-    } else {
-      router.replace('/')
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     checkUser(address)
+  //   } else {
+  //     router.replace('/')
+  //   }
+  // }, [address, isConnected, checkUser, router])
+
+  const syncData = async () => {
+    let score = localStorage.getItem('sync_data')
+    if (!score) {
+      score = JSON.stringify({
+        DeFi: 0,
+        GameFi: 0,
+        NFT: 0,
+        Metaverse: 0,
+        OnChainData: 0,
+        DID: 0,
+        AI: 0
+      })
     }
-  }, [address, isConnected, checkUser, router])
+    console.log(JSON.parse(score))
+    const c = new CallContract()
+    setScore(JSON.parse(score))
+    try {
+      await c.init()
+    } catch (err: any) {
+      console.log(err.message, 'Error')
+    }
+    try {
+      const r = await c.getUserLevel(address!)
+      console.log(r, '00099')
+      const o = JSON.parse(r[3])
+      if (!score) return
+      const s = JSON.parse(score)
+      Object.keys(o).map((key) => {
+        o[key] += s[key]
+      })
+
+      setScore(o)
+
+      const level = BigNumber.from(0)
+      const allScore = BigNumber.from(0)
+      const categoryScore = JSON.stringify(o)
+      console.log(level, allScore, categoryScore)
+      c.setUserLevel(level, allScore, categoryScore, address!).then()
+      localStorage.removeItem('sync_data')
+    } catch (error) {
+      const level = BigNumber.from(0)
+      const allScore = BigNumber.from(0)
+      const categoryScore = score
+      console.log(level, allScore, categoryScore)
+      c.setUserLevel(level, allScore, categoryScore, address!).then()
+    }
+
+  }
+
+  const clearData = async () => {
+    const c = new CallContract()
+    try {
+      await c.init()
+      const level = BigNumber.from(0)
+      const allScore = BigNumber.from(0)
+      const categoryScore = JSON.stringify({
+        DeFi: 0,
+        GameFi: 0,
+        NFT: 0,
+        Metaverse: 0,
+        OnChainData: 0,
+        DID: 0,
+        AI: 0
+      })
+      console.log(level, allScore, categoryScore)
+      c.setUserLevel(level, allScore, categoryScore, address!).then()
+    } catch (err: any) {
+      console.log(err.message, 'Error')
+    }
+  }
+
+  const step = (index: number, arr: number[]) => {
+    if (index === 0) {
+      return [0, 100]
+    }
+    let s = parseInt(((arr[index] - arr[index - 1]) / arr[index] * 100) + '')
+    let e = 100 - s
+    return [s, e]
+  }
 
   const getItemLevel = (v: number) => {
     const t = Math.pow(10, v.toString().length - 2)
@@ -179,9 +256,24 @@ const DashboardBody: FC = () => {
         </div>
       </div>
       <div className={styles.records}>
-        <div className={styles.t}>Current Web3 score:</div>
+        <div className="flex">
+          <div className={styles.t}>Current Web3 score:</div>
+          <div className="w-2"></div>
+          <BaseButton
+            btnClick={syncData}
+            btnText="Sync On Chain Data"
+          />
+          <div className="w-2"></div>
+          <BaseButton
+            btnClick={clearData}
+            btnText="Clear On Chain Data"
+            color="red"
+          />
+        </div>
         {
-          Object.keys(score).map((key, index) => (
+          score
+          &&
+          Object.keys(score)?.map((key, index) => (
             <div
               className={styles.recordItem}
               key={index}
@@ -189,10 +281,10 @@ const DashboardBody: FC = () => {
               <div className={styles.icon}></div>
               <div className={styles.score}>{key} Score</div>
               <div className={styles.number}>{score[key]}</div>
-              <div className={styles.level}>Lv.{getItemLevel(score[key]) || 0}</div>
+              <div className={styles.level}>Lv.{calculationSingleLevel(score[key])}</div>
               <div className={styles.progress}>
-                <div className={styles.s} style={{ width: `${getItemLevel(score[key])}%` }}></div>
-                <div className={styles.e} style={{ width: `${100 - getItemLevel(score[key])}%` }}></div>
+                <div className={styles.s} style={{ width: `${step(calculationSingleLevel(score[key]), C.SCORE_LEVEL)[0]}%` }}></div>
+                <div className={styles.e} style={{ width: `${step(calculationSingleLevel(score[key]), C.SCORE_LEVEL)[1]}%` }}></div>
               </div>
             </div>
           ))
