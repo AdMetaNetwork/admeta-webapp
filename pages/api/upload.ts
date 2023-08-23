@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import fleekStorage from '@fleekhq/fleek-storage-js'
 import fs from 'fs'
-import { f_api_key, f_api_secret } from '../../config/c'
+import { f_api_key, f_api_secret } from '../../config/c.example'
 
 type Data = {
 	name: string
