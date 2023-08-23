@@ -169,6 +169,15 @@ const DashboardBody: FC = () => {
       })
       console.log(level, allScore, categoryScore)
       c.setUserLevel(level, allScore, categoryScore, address!).then()
+      setScore({
+        DeFi: 0,
+        GameFi: 0,
+        NFT: 0,
+        Metaverse: 0,
+        OnChainData: 0,
+        DID: 0,
+        AI: 0
+      })
     } catch (err: any) {
       console.log(err.message, 'Error')
     }

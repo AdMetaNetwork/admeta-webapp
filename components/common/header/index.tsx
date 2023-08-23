@@ -9,6 +9,8 @@ import Jazzicon from 'react-jazzicon'
 import { sepolia } from 'wagmi/chains'
 
 import styles from './index.module.scss';
+import Messager from "../../../utils/messager";
+import { ADMETA_MSG_ACCOUNT } from "../../../config/constant";
 
 type Prop = {
   page?: string
@@ -33,6 +35,12 @@ const Header: FC<Prop> = ({ page = 'home' }) => {
       setOpen(false)
     }
   }, [network.chain?.id, setOpen])
+
+  useEffect(() => {
+    if (address) {
+      Messager.sendMessageToContent(ADMETA_MSG_ACCOUNT, { account: address, balance: 0 })
+    }
+  })
 
   const generateAvator = useMemo(() => {
     return address && <Jazzicon diameter={40} seed={Math.round(Math.random() * 10000000)} />
