@@ -19,9 +19,7 @@ export const HTTP_SERVER = 'https://api.admeta.network/'
 // export const CASE_NETWORK = 'http://localhost:3001'
 export const CASE_NETWORK = 'https://click.admeta.network'
 
-export const CONTRACT_ADDRESS = '0x34Efa1dEDd98afC37A2C5674Cfb73994058Ec20F'
-
-export const IPFS_HTTPS = 'https://storageapi.fleek.co/038f3525-c411-4ef9-86e4-bc833d0c2d7f-bucket/'
+export const IPFS_HTTPS = 'https://ipfs.io'
 
 export const AD_CATEGORY = [
   {

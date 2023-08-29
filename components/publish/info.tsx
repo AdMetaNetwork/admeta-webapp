@@ -56,7 +56,7 @@ const Info: FC<Prop> = ({handleGetTarget, handleGetCpi, handleGetAmount, handleG
 
   return (
     <div className={styles.info}>
-      <div className={styles.infoItem}>
+      {/* <div className={styles.infoItem}>
         {labelDom('WHAT IS YOUR AD URL?')}
         <BaseInput
           handleChangeInput={(e) => {
@@ -64,7 +64,7 @@ const Info: FC<Prop> = ({handleGetTarget, handleGetCpi, handleGetAmount, handleG
           }}
           placeholder='URL'
         />
-      </div>
+      </div> */}
       <div className={styles.infoItemI}>
         <div className={styles.h}>
           {labelDom('CPI', true, 'amount')}

@@ -25,6 +25,7 @@ const ImgItem: FC<Prop> = ({ img, badge, title }) => {
         height={215}
         objectFit={'cover'}
         alt=''
+        unoptimized={true}
       />
       <div className={styles.bottom}>
         <div className={styles.title}>{title}</div>
