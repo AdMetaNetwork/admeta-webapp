@@ -43,6 +43,7 @@ const PublishBody: FC = () => {
   const [logo, setLogo] = useState('')
   const [logoName, setLogoName] = useState('')
   const [verify, setVerify] = useState('')
+  const [link, setLink] = useState('')
   const [platform, setPlatform] = useState('')
   const [description, setDescription] = useState('')
   const [adIdx, setAdIdx] = useState('')
@@ -62,18 +63,16 @@ const PublishBody: FC = () => {
     setLoading!(true)
     axios({
       method: 'post',
-      url: '/api/upload',
+      url: HTTP_SERVER + 'admeta/uploadIpfs',
       data: {
         url,
         key,
       },
     }).then((e) => {
-      if (e.data.name === 'ok') {
-        setProgress(30)
-        setStep(2)
-        setImgIpfs(IPFS_HTTPS + key)
-        setLoading!(false)
-      }
+      setProgress(30)
+      setStep(2)
+      setImgIpfs(IPFS_HTTPS + e.data)
+      setLoading!(false)
     })
   }
 
@@ -106,8 +105,17 @@ const PublishBody: FC = () => {
   }
 
   useEffect(() => {
+    if (step === 2) {
+      const c = new CallContract()
+      c.init().then(() => {
+        c.adLength().then((v) => {
+          setTarget(`${CASE_NETWORK}?announcer=${address}&ad_index=${v.toString()}`)
+        })
 
-  }, [])
+      })
+
+    }
+  }, [address, step])
 
   const handleProposeAd = async () => {
     setLoading!(true)
@@ -128,12 +136,11 @@ const PublishBody: FC = () => {
       handleShowTip('Propose ad ok', 'Success')
       setStep(4)
       setAdIdx(index.toString())
-      
+
     })
   }
 
   const handleSubmitTask = async () => {
-
     if (!address) {
       handleShowTip('Address cannot be empty!', 'Error')
       return
@@ -157,7 +164,7 @@ const PublishBody: FC = () => {
       platform,
       verify,
       description,
-      link: target,
+      link,
       ad_index: adIdx
     }
 
@@ -267,23 +274,27 @@ const PublishBody: FC = () => {
         {
           step === 2
           &&
-          <Info
-            handleGetAmount={(v) => {
-              setAmount(v)
-            }}
-            handleGetCpi={(v) => {
-              setCpi(v)
-            }}
-            handleGetTag={(v) => {
-              setTag(v)
-            }}
-            handleGetTarget={(v) => {
-              setTarget(v)
-            }}
-            handleGetTitle={(v) => {
-              setTitle(v)
-            }}
-          />
+          <>
+            <div className='text-white text-[#777e90] mb-8 font-bold'>YOUR TARGET: {target}</div>
+            <Info
+              handleGetAmount={(v) => {
+                setAmount(v)
+              }}
+              handleGetCpi={(v) => {
+                setCpi(v)
+              }}
+              handleGetTag={(v) => {
+                setTag(v)
+              }}
+              handleGetTarget={(v) => {
+                setTarget(v)
+              }}
+              handleGetTitle={(v) => {
+                setTitle(v)
+              }}
+            />
+          </>
+
         }
         {/* step three publish ad */}
         {
@@ -303,6 +314,7 @@ const PublishBody: FC = () => {
             handleSetLogo={setLogo}
             handleSetPlatform={setPlatform}
             handleSetVerify={setVerify}
+            handleSetLink={setLink}
           />
         }
 

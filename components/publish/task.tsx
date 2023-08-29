@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useAccount } from 'wagmi'
 import BaseCtx from "../../hooks/use-base-content";
 import axios from "axios";
-import { IPFS_HTTPS } from "../../config/constant";
+import { HTTP_SERVER, IPFS_HTTPS } from "../../config/constant";
 import BaseSwitch from "../ui/base-switch";
 
 type Prop = {
@@ -12,14 +12,16 @@ type Prop = {
   handleSetVerify: (v: string) => void
   handleSetPlatform: (v: string) => void
   handleSetDescription: (v: string) => void
+  handleSetLink: (v: string) => void
 }
 
-const Task: FC<Prop> = ({ handleSetLogo, handleSetVerify, handleSetPlatform, handleSetDescription }) => {
+const Task: FC<Prop> = ({ handleSetLogo, handleSetVerify, handleSetPlatform, handleSetDescription, handleSetLink }) => {
   const { address } = useAccount()
   const [logoBase64, setLogoBase64] = useState('')
   const [logo, setLogo] = useState('')
   const [logoName, setLogoName] = useState('')
   const [verify, setVerify] = useState('')
+  const [link, setLink] = useState('')
   const [platform, setPlatform] = useState('')
   const [description, setDescription] = useState('')
   const { setLoading } = useContext(BaseCtx)
@@ -37,15 +39,15 @@ const Task: FC<Prop> = ({ handleSetLogo, handleSetVerify, handleSetPlatform, han
     }
     axios({
       method: 'post',
-      url: '/api/upload',
+      url: HTTP_SERVER + 'admeta/uploadIpfs',
       data: {
         url,
         key,
       },
     }).then((e) => {
       setLoading!(false)
-      setLogo(IPFS_HTTPS + key)
-      handleSetLogo(IPFS_HTTPS + key)
+      setLogo(IPFS_HTTPS + e.data)
+      handleSetLogo(IPFS_HTTPS + e.data)
     })
   }
 
@@ -100,14 +102,26 @@ const Task: FC<Prop> = ({ handleSetLogo, handleSetVerify, handleSetPlatform, han
         }
       </div>
       <div className="mb-[24px]">
-        <div className="text-[12px] font-bold text-[#B1B5C3] mb-[12px]">CAMPAIGN URL (GALXE)</div>
+        <div className="text-[12px] font-bold text-[#B1B5C3] mb-[12px]">CAMPAIGN ID</div>
         <BaseInput
           handleChangeInput={(v) => {
             setVerify(v)
             handleSetVerify(v)
           }}
-          placeholder="campaign url also support third verify link such as galex"
+          placeholder="campaign id such as galex"
           value={verify}
+        />
+      </div>
+
+      <div className="mb-[24px]">
+        <div className="text-[12px] font-bold text-[#B1B5C3] mb-[12px]">AD LINK</div>
+        <BaseInput
+          handleChangeInput={(v) => {
+            setLink(v)
+            handleSetLink(v)
+          }}
+          placeholder="ad link"
+          value={link}
         />
       </div>
 

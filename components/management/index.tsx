@@ -26,6 +26,7 @@ const ManagementBody: FC = () => {
     const c = new CallContract()
     c.init().then(() => {
       c.findAdsByPublisher(address).then((v) => {
+        console.log(v)
         const ads = [];
         for (const ad of v) {
           const adStruct = {
@@ -73,7 +74,7 @@ const ManagementBody: FC = () => {
             list?.map((item, index) => (
               <ImgItem
                 key={index}
-                img={item.adUrl || "https://storage.fleek.zone/038f3525-c411-4ef9-86e4-bc833d0c2d7f-bucket/AdMeta_Poster.png"}
+                img={item.adUrl}
                 badge={item.approve ? 'APPROVED' : 'PENDING'}
                 title={item.title}
               />
