@@ -1,16 +1,25 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { WagmiConfig, createConfig } from 'wagmi';
+import { WagmiConfig, createConfig, configureChains } from 'wagmi';
+import { publicProvider } from 'wagmi/providers/public'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { sepolia } from 'wagmi/chains';
-import { ConnectKitProvider, getDefaultConfig } from 'connectkit';
+import { ConnectKitProvider } from 'connectkit';
 
-const config = createConfig(
-  getDefaultConfig({
-    appName: 'AdMeta App',
-    chains: [sepolia],
-    walletConnectProjectId: process.env.PUBLIC_WALLETCONNECT_PROJECT_ID || '',
-  })
-);
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [sepolia],
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || 'yourAlchemyApiKey' }), publicProvider()],
+)
+
+const config = createConfig({
+  autoConnect: false,
+  connectors: [
+    new MetaMaskConnector({ chains })
+  ],
+  publicClient,
+  webSocketPublicClient, 
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
 
