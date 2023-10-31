@@ -33,7 +33,7 @@ const AuthDomain: FC<Props> = ({ handleClick }) => {
             <ul className={styles.list}>
               {
                 U.WHITE_LIST.products.map((item, index) => (
-                  <li key={index}>{item.name}(item.domain) </li>
+                  <li key={index}>{item.name} ({item.domain}) </li>
                 ))
               }
             </ul>
