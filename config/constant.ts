@@ -19,15 +19,19 @@ export const HTTP_SERVER = 'https://api.admeta.network/'
 // export const CASE_NETWORK = 'http://localhost:3001'
 export const CASE_NETWORK = 'https://click.admeta.network'
 
-export const IPFS_HTTPS = 'https://ipfs.io'
+export const IPFS_HTTPS = 'https://ipfs.io/'
 
 export const AD_CATEGORY = [
+  {
+    name: 'DeFi',
+    state: true
+  },
   {
     name: 'GameFi',
     state: true
   },
   {
-    name: 'DeFi',
+    name: 'NFT',
     state: true
   },
   {
@@ -35,7 +39,7 @@ export const AD_CATEGORY = [
     state: true
   },
   {
-    name: 'NFT',
+    name: 'OnChainData',
     state: true
   },
   {
