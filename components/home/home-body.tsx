@@ -1,9 +1,10 @@
-import { FC, useCallback, useContext, useEffect, useMemo } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import BaseCtx from "../../hooks/use-base-content";
 import SelectWallet from "../common/select-wallet";
 import { useRouter } from "next/router";
-import { useWeb3, useSwitchNetwork } from '@3rdweb/hooks'
+import { useAccount, useNetwork } from "wagmi";
 import AuthDomain from "../common/auth-domain/inde";
+import { useModal } from "connectkit";
 import * as C from '../../config/constant'
 
 import styles from './index.module.scss';
@@ -12,8 +13,16 @@ const HomeBody: FC = () => {
 
   const { setShowModal, setModalTitle, setModalBody, setShowTip, setTipText, setTipType } = useContext(BaseCtx)
   const router = useRouter()
-  const { address, error } = useWeb3();
-  const { switchNetwork } = useSwitchNetwork()
+
+  const { setOpen } = useModal()
+
+  const { address, isConnected } = useAccount()
+  const network = useNetwork()
+  const [connected, setConnected] = useState(false)
+
+  useEffect(() => {
+    setConnected(isConnected)
+  }, [isConnected])
 
   const handleShowWallet = () => {
     setModalTitle!('Connect wallet')
@@ -23,7 +32,10 @@ const HomeBody: FC = () => {
   const handleShowDomainModal = () => {
     setShowModal!(true)
     setModalTitle!('Auth domain list')
-    setModalBody!(<AuthDomain handleShowWallet={handleShowWallet} />)
+    setModalBody!(<AuthDomain handleClick={() => {
+      setOpen(true)
+      setShowModal!(false)
+    }}/>)
   }
 
   const handleShowTip = useCallback((tipText: string, tipType: 'Success' | 'Error' = 'Success') => {
@@ -34,12 +46,6 @@ const HomeBody: FC = () => {
       setShowTip!(false)
     }, 3000)
   }, [setTipText, setTipType, setShowTip])
-
-  useEffect(() => {
-    if (error?.message === 'The user rejected the request.') {
-      handleShowTip('You rejected the request', 'Error')
-    }
-  }, [handleShowTip, error?.message])
 
   return (
     <div className={styles.homeBody}>
@@ -57,18 +63,14 @@ const HomeBody: FC = () => {
           <div
             className={styles.btn}
             onClick={() => {
-              if (address) {
+              if (connected) {
                 router.push('/dashboard')
               } else {
-                if (error) {
-                  switchNetwork(C.DEFAULT_CHAIN_ID)
-                } else {
-                  handleShowDomainModal()
-                }
+                handleShowDomainModal()
               }
             }}
           >
-            <p>{address ? 'Go Dashboard' : error ? 'Error Network' : 'Connect wallet'}</p>
+            <p>{connected ? 'Go Dashboard' : 'Connect wallet'}</p>
           </div>
         </div>
       </div>

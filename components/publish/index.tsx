@@ -9,15 +9,27 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import BaseCtx from "../../hooks/use-base-content";
 import { BigNumber } from "ethers";
-import { useWeb3 } from '@3rdweb/hooks'
+import Task from "./task";
+import { useAccount } from 'wagmi'
 
 import styles from './index.module.scss';
 import CallContract from "../../utils/call-contract";
+import { CASE_NETWORK, HTTP_SERVER, IPFS_HTTPS } from "../../config/constant";
+
+type Task = {
+  logo: string,
+  address: string | undefined,
+  verify: string,
+  platform: string,
+  description: string,
+  link: string,
+  ad_index: string
+}
 
 const PublishBody: FC = () => {
 
   const [progress, setProgress] = useState<0 | 30 | 60 | 100>(0)
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [img, setImg] = useState('')
   const [imgKey, setImgKey] = useState('')
   const [target, setTarget] = useState('')
@@ -28,12 +40,20 @@ const PublishBody: FC = () => {
   const [adIpfs, setAdIpfs] = useState('')
   const [imgIpfs, setImgIpfs] = useState('')
 
-  const {address} = useWeb3()
+  const [logo, setLogo] = useState('')
+  const [logoName, setLogoName] = useState('')
+  const [verify, setVerify] = useState('')
+  const [link, setLink] = useState('')
+  const [platform, setPlatform] = useState('')
+  const [description, setDescription] = useState('')
+  const [adIdx, setAdIdx] = useState('')
 
 
-  const {setShowTip, setTipType, setTipText, setLoading} = useContext(BaseCtx)
+  const { setShowTip, setTipType, setTipText, setLoading } = useContext(BaseCtx)
 
   const router = useRouter()
+
+  const { address } = useAccount()
 
   const handleUpLoadImg = (url: string, key: string) => {
     if (!url) {
@@ -43,27 +63,16 @@ const PublishBody: FC = () => {
     setLoading!(true)
     axios({
       method: 'post',
-      url: '/api/upload',
+      url: HTTP_SERVER + 'admeta/uploadIpfs',
       data: {
         url,
         key,
       },
     }).then((e) => {
-      if (e.data.name === 'ok') {
-        setProgress(30)
-        setStep(2)
-        getFile(key)
-        setLoading!(false)
-      }
-    })
-  }
-
-  const getFile = (key: string) => {
-    axios({
-      method: 'get',
-      url: `/api/getIPFS?key=${key}`
-    }).then((e) => {
-      setImgIpfs(e.data.url)
+      setProgress(30)
+      setStep(2)
+      setImgIpfs(IPFS_HTTPS + e.data)
+      setLoading!(false)
     })
   }
 
@@ -96,26 +105,20 @@ const PublishBody: FC = () => {
   }
 
   useEffect(() => {
+    if (step === 2) {
+      const c = new CallContract()
+      c.init().then(() => {
+        c.adLength().then((v) => {
+          setTarget(`${CASE_NETWORK}?announcer=${address}&ad_index=${v.toString()}`)
+        })
 
-  }, [])
+      })
+
+    }
+  }, [address, step])
 
   const handleProposeAd = async () => {
     setLoading!(true)
-    // upload ad info to IPFS
-    // const {data: {ipfsHash}} = await axios.post('/api/upload-json-to-ipfs', {
-    //   key: `ad-${title}.json`,
-    //   jsonContent: {
-    //     "address": address,
-    //     "adUrl": imgIpfs,
-    //     "targetUrl": target,
-    //     "title": title,
-    //     "cpi": cpi,
-    //     "amount": amount,
-    //     "tag": tag
-    //   }
-    // })
-    // setAdIpfs(ipfsHash)
-    // call contract publish ad
     const c = new CallContract()
     try {
       await c.init()
@@ -126,11 +129,46 @@ const PublishBody: FC = () => {
     const inventory = BigNumber.from(amount)
     const reward = BigNumber.from(cpi)
     const category = BigNumber.from(tag)
-    await c.createAd({inventory, reward, category, title, metadata: imgIpfs, target})
-    c.contract?.once('CreateAd', (a, b) => {
-      console.log(a, b, 'complete publish')
+    await c.createAd({ inventory, reward, category, title, metadata: imgIpfs, target })
+    c.contract?.once('CreateAd', (index, address) => {
+      console.log(index, address, 'complete publish', index.toString())
       setLoading!(false)
       handleShowTip('Propose ad ok', 'Success')
+      setStep(4)
+      setAdIdx(index.toString())
+
+    })
+  }
+
+  const handleSubmitTask = async () => {
+    if (!address) {
+      handleShowTip('Address cannot be empty!', 'Error')
+      return
+    }
+    if (!logo) {
+      handleShowTip('Logo cannot be empty!', 'Error')
+      return
+    }
+    if (!platform) {
+      handleShowTip('Platform cannot be empty!', 'Error')
+      return
+    }
+    if (!description) {
+      handleShowTip('Description cannot be empty!', 'Error')
+      return
+    }
+
+    const obj: Task = {
+      address,
+      logo,
+      platform,
+      verify,
+      description,
+      link,
+      ad_index: adIdx
+    }
+
+    axios.post(`${HTTP_SERVER}admeta/overwriteUserPlatformCase`, obj).then(() => {
       router.back()
     })
   }
@@ -178,6 +216,13 @@ const PublishBody: FC = () => {
       }
     }
 
+    if (step === 4) {
+      return {
+        nav: 'Ad Task',
+        btn: 'Submit'
+      }
+    }
+
     return {
       nav: 'Upload',
       btn: 'Upload and continue'
@@ -195,17 +240,20 @@ const PublishBody: FC = () => {
     if (step === 3) {
       setStep(2)
     }
+    if (step === 4) {
+      setStep(3)
+    }
   }
 
   return (
     <div className={styles.publishBody}>
-      <Step current={step}/>
+      <Step current={step} />
       <div className={styles.content}>
         <div
           className={styles.nav}
           onClick={handleNavBack}
         >
-          <BackSvg/>
+          <BackSvg />
           <div className={styles.navlabel}>{handleGetStatusLabel().nav}</div>
         </div>
         {/* step one upload img */}
@@ -226,23 +274,27 @@ const PublishBody: FC = () => {
         {
           step === 2
           &&
-          <Info
-            handleGetAmount={(v) => {
-              setAmount(v)
-            }}
-            handleGetCpi={(v) => {
-              setCpi(v)
-            }}
-            handleGetTag={(v) => {
-              setTag(v)
-            }}
-            handleGetTarget={(v) => {
-              setTarget(v)
-            }}
-            handleGetTitle={(v) => {
-              setTitle(v)
-            }}
-          />
+          <>
+            <div className='text-white text-[#777e90] mb-8 font-bold'>YOUR TARGET: {target}</div>
+            <Info
+              handleGetAmount={(v) => {
+                setAmount(v)
+              }}
+              handleGetCpi={(v) => {
+                setCpi(v)
+              }}
+              handleGetTag={(v) => {
+                setTag(v)
+              }}
+              handleGetTarget={(v) => {
+                setTarget(v)
+              }}
+              handleGetTitle={(v) => {
+                setTitle(v)
+              }}
+            />
+          </>
+
         }
         {/* step three publish ad */}
         {
@@ -253,6 +305,19 @@ const PublishBody: FC = () => {
             title={title}
           />
         }
+        {/* step four config ad rewards */}
+        {
+          step === 4
+          &&
+          <Task
+            handleSetDescription={setDescription}
+            handleSetLogo={setLogo}
+            handleSetPlatform={setPlatform}
+            handleSetVerify={setVerify}
+            handleSetLink={setLink}
+          />
+        }
+
         <div className={styles.bottomBtn}>
           <BaseButton
             btnClick={() => {
@@ -274,6 +339,10 @@ const PublishBody: FC = () => {
 
                 case 3:
                   handleProposeAd()
+                  break;
+
+                case 4:
+                  handleSubmitTask()
                   break;
 
                 default:

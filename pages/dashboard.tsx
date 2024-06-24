@@ -5,13 +5,9 @@ import BaseCtx from '../hooks/use-base-content';
 import DashboardBody from '../components/dashboard/dashboard-body'
 
 import BaseModal from '../components/ui/base-modal';
-import useApi from '../hooks/use-api';
 import BaseTip from '../components/ui/base-tip';
 import BaseLoading from '../components/ui/base-loading';
-
-
 import { SEO } from '../config';
-import { polkadot_network } from '../config/constant';
 
 const Dashboard: NextPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -22,9 +18,7 @@ const Dashboard: NextPage = () => {
   const [tipType, setTipType] = useState<'Success' | 'Error'>('Success')
   const [showTip, setShowTip] = useState<boolean>(false)
   const [tipText, setTipText] = useState<string>('')
-  const [isLoading, setLoading] = useState<boolean>(true)
-
-  const { api } = useApi(polkadot_network)
+  const [isLoading, setLoading] = useState<boolean>(false)
 
   return (
     <BaseCtx.Provider value={{ showModal, setShowModal, modalTitle, setModalTitle, modalBody, setModalBody, showTip, setShowTip, tipType, setTipType, tipText, setTipText, isLoading, setLoading }}>

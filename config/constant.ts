@@ -13,18 +13,25 @@ export const ADMETA_MSG_DOMAIN = 'ADMETA_MSG_DOMAIN'
 export const ADMETA_MSG_SWITCH = 'ADMETA_MSG_SWITCH'
 
 export const HTTP_SERVER = 'https://api.admeta.network/'
+// export const HTTP_SERVER = 'http://localhost:5000/'
 
-export const CONTRACT_ADDRESS = '0x6975914A922b165D3E9cb248d1c861FcD88Aa92a'
 
-export const DEFAULT_CHAIN_ID = 11155111
+// export const CASE_NETWORK = 'http://localhost:3001'
+export const CASE_NETWORK = 'https://click.admeta.network'
+
+export const IPFS_HTTPS = 'https://ipfs.io/'
 
 export const AD_CATEGORY = [
+  {
+    name: 'DeFi',
+    state: true
+  },
   {
     name: 'GameFi',
     state: true
   },
   {
-    name: 'DeFi',
+    name: 'NFT',
     state: true
   },
   {
@@ -32,90 +39,17 @@ export const AD_CATEGORY = [
     state: true
   },
   {
-    name: 'NFT',
+    name: 'OnChainData',
+    state: true
+  },
+  {
+    name: 'DID',
+    state: true
+  },
+  {
+    name: 'AI',
     state: true
   }
 ]
 
-export const DEFAULT_CHAIN: T.ChainType = {
-  1: {
-    chainId: `0x${Number(1).toString(16)}`,
-    chainName: "Ethereum Mainnet",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
-      decimals: 18,
-    },
-    rpcUrls: ["https://main-light.eth.linkpool.io/"],
-  },
-  4: {
-    chainId: `0x${Number(4).toString(16)}`,
-    chainName: "Rinkeby (ETH Testnet)",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
-      decimals: 18,
-    },
-    rpcUrls: ["https://rinkeby-light.eth.linkpool.io/"],
-  },
-  137: {
-    chainId: `0x${Number(137).toString(16)}`,
-    chainName: "Polygon Mainnet (Matic)",
-    nativeCurrency: {
-      name: "Matic",
-      symbol: "MATIC",
-      decimals: 18,
-    },
-    rpcUrls: ["https://polygon-rpc.com"],
-    blockExplorerUrls: ["https://polygonscan.com"],
-  },
-  250: {
-    chainId: `0x${Number(250).toString(16)}`,
-    chainName: "Fantom Opera",
-    nativeCurrency: {
-      name: "Fantom",
-      symbol: "FTM",
-      decimals: 18,
-    },
-    rpcUrls: ["https://rpc.ftm.tools"],
-    blockExplorerUrls: ["https://ftmscan.com"],
-  },
-  43114: {
-    chainId: `0x${Number(43114).toString(16)}`,
-    chainName: "Avalanche Mainnet C-Chain",
-    nativeCurrency: {
-      name: "Avalanche",
-      symbol: "AVAX",
-      decimals: 18,
-    },
-    rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
-    blockExplorerUrls: ["https://cchain.explorer.avax.network"],
-  },
-  80001: {
-    chainId: `0x${Number(80001).toString(16)}`,
-    chainName: "Polygon Mumbai Testnet",
-    nativeCurrency: {
-      name: "Matic",
-      symbol: "MATIC",
-      decimals: 18,
-    },
-    rpcUrls: [
-      "https://rpc-mumbai.maticvigil.com",
-      "https://rpc-mumbai.matic.today",
-    ],
-    blockExplorerUrls: ["https://mumbai.polygonscan.com"],
-  },
-  11155111: {
-    chainId: `0x${Number(11155111).toString(16)}`,
-    chainName: "Sepolia",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "SepoliaETH",
-      decimals: 18,
-    },
-    rpcUrls: [
-      "https://rpc.sepolia.org",
-    ],
-    blockExplorerUrls: ["https://sepolia.etherscan.io/"],
-  },
-};
+export const SCORE_LEVEL = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 30000]
