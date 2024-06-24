@@ -49,3 +49,11 @@ p {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+._prompt_loadding {
+  display: none;
+}
+
+nextjs-portal {
+  display: none;
+}

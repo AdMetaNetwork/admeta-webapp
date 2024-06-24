@@ -3,6 +3,8 @@ import Image from "next/image";
 import BaseBadge from "../ui/base-badge";
 
 import styles from './index.module.scss';
+import { CASE_NETWORK } from "../../config/constant";
+import { useAccount } from "wagmi";
 
 type Prop = {
   img: string,
@@ -11,15 +13,19 @@ type Prop = {
 }
 
 const ImgItem: FC<Prop> = ({ img, badge, title }) => {
+  const { address } = useAccount()
 
   return (
-    <div className={styles.imgItem}>
+    <div
+      className={styles.imgItem}
+    >
       <Image
         src={img}
         width={357}
         height={215}
         objectFit={'cover'}
         alt=''
+        unoptimized={true}
       />
       <div className={styles.bottom}>
         <div className={styles.title}>{title}</div>

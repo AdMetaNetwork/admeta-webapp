@@ -2,14 +2,14 @@ import { FC, useState } from "react";
 import TipSvg from "../../svg/tip";
 import BaseCheckBox from "../../ui/base-check-box";
 import BaseButton from "../../ui/base-button";
-
+import * as U from '../../../utils'
 import styles from './index.module.scss';
 
-type Prop = {
-  handleShowWallet: () => void
+type Props = {
+  handleClick: () => void
 }
 
-const AuthDomain: FC<Prop> = ({ handleShowWallet }) => {
+const AuthDomain: FC<Props> = ({ handleClick }) => {
 
   const [isAgree, setAgree] = useState<boolean>(false)
 
@@ -31,15 +31,11 @@ const AuthDomain: FC<Prop> = ({ handleShowWallet }) => {
               Source of AdMeta Web3 domain list can be found here <i>here</i>
             </div>
             <ul className={styles.list}>
-              <li>uniswip</li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
-              <li>Sushiswap(sushi.com) </li>
+              {
+                U.WHITE_LIST.products.map((item, index) => (
+                  <li key={index}>{item.name} ({item.domain}) </li>
+                ))
+              }
             </ul>
           </div>
         </div>
@@ -54,16 +50,9 @@ const AuthDomain: FC<Prop> = ({ handleShowWallet }) => {
         />
         <div className={styles.checkLabel}>I agree to allow AdMeta to anonymously store my usage data of above websites for AdMeta advertising matching purpose only. </div>
       </div>
-
       <BaseButton
-        btnClick={() => {
-          if (!isAgree) {
-            return
-          }
-          handleShowWallet()
-        }}
-        btnText='Agree'
-        disable={!isAgree}
+        btnText='Connect wallet'
+        btnClick={handleClick}
       />
     </div>
   )

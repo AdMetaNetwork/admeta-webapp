@@ -3,52 +3,59 @@ import BaseButton from "../ui/base-button";
 import ImgItem from "./img-item";
 import PlusSvg from "../svg/plus";
 import { useRouter } from 'next/router'
-import useApi from '../../hooks/use-api';
-import { polkadot_network } from '../../config/constant';
-import CallPolkadot from "../../utils/call-polkadot";
-import * as T from '../../utils'
-import * as C from '../../config/constant'
+import CallContract from "../../utils/call-contract";
+import { useAccount, useNetwork } from "wagmi";
 import BaseCtx from "../../hooks/use-base-content";
-import axios from "axios";
 
 import styles from './index.module.scss';
 
 const ManagementBody: FC = () => {
 
-  const [list, setList] = useState<T.AdInfo[]>([])
-  const { api } = useApi(polkadot_network)
-  const _api = useMemo(() => api, [api])
-  const { setLoading } = useContext(BaseCtx)
+  const [list, setList] = useState<any[]>([])
+  const {setLoading, setTipText, setShowTip, setTipType} = useContext(BaseCtx)
+  const {address} = useAccount()
 
   const router = useRouter()
 
-  const getUserPublishAd = () => {
-    axios.post(`${C.HTTP_SERVER}admeta/getAdvertisements`).then(() => {
-      
-    })
-  }
-
   useEffect(() => {
-    // setLoading!(true)
-    if (!_api) {
-      return;
-    }
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
+    setLoading!(true)
+    if (!address) {
       return
     }
 
-    const pk = new CallPolkadot(sender, _api!)
-    pk.getUserAds(sender).then((d: any) => {
-      
-      const list = d.info as T.AdInfo[];
-      setList(list)
-      if (list) {
+    const c = new CallContract()
+    c.init().then(() => {
+      c.findAdsByPublisher(address).then((v) => {
+        console.log(v)
+        const ads = [];
+        for (const ad of v) {
+          const adStruct = {
+            adUrl: ad[4],
+            approve: ad[7],
+            title: ad[6]
+          };
+          ads.push(adStruct);
+        }
+        setList([...ads])
+        if (!ads.length) {
+          setList([])
+          setLoading!(false)
+          return
+        }
         setLoading!(false)
-      }
+      })
     })
 
-  }, [_api, setLoading])
+  }, [setLoading, address])
+
+  const handleShowTip = (tipText: string, tipType: 'Success' | 'Error') => {
+    setTipText!(tipText)
+    setTipType!(tipType)
+    setShowTip!(true)
+    setTimeout(() => {
+      setShowTip!(false)
+    }, 2000)
+  }
 
   return (
     <div className={styles.managementBody}>
@@ -58,7 +65,7 @@ const ManagementBody: FC = () => {
             router.push('/ad-publish')
           }}
           btnText='Publish new ad'
-          leftIcon={<PlusSvg />}
+          leftIcon={<PlusSvg/>}
         />
       </div>
       <div className={styles.list}>
@@ -67,8 +74,8 @@ const ManagementBody: FC = () => {
             list?.map((item, index) => (
               <ImgItem
                 key={index}
-                img={item.metadata}
-                badge={item.approved ? 'APPROVED' : 'PENDING'}
+                img={item.adUrl}
+                badge={item.approve ? 'APPROVED' : 'PENDING'}
                 title={item.title}
               />
             ))

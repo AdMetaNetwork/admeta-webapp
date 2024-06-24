@@ -13,75 +13,43 @@ export const ADMETA_MSG_DOMAIN = 'ADMETA_MSG_DOMAIN'
 export const ADMETA_MSG_SWITCH = 'ADMETA_MSG_SWITCH'
 
 export const HTTP_SERVER = 'https://api.admeta.network/'
+// export const HTTP_SERVER = 'http://localhost:5000/'
 
-export const DEFAULT_CHAIN_ID = 1
 
-export const DEFAULT_CHAIN: T.ChainType = {
-  1: {
-    chainId: `0x${Number(1).toString(16)}`,
-    chainName: "Ethereum Mainnet",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
-      decimals: 18,
-    },
-    rpcUrls: ["https://main-light.eth.linkpool.io/"],
+// export const CASE_NETWORK = 'http://localhost:3001'
+export const CASE_NETWORK = 'https://click.admeta.network'
+
+export const IPFS_HTTPS = 'https://ipfs.io/'
+
+export const AD_CATEGORY = [
+  {
+    name: 'DeFi',
+    state: true
   },
-  4: {
-    chainId: `0x${Number(4).toString(16)}`,
-    chainName: "Rinkeby (ETH Testnet)",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
-      decimals: 18,
-    },
-    rpcUrls: ["https://rinkeby-light.eth.linkpool.io/"],
+  {
+    name: 'GameFi',
+    state: true
   },
-  137: {
-    chainId: `0x${Number(137).toString(16)}`,
-    chainName: "Polygon Mainnet (Matic)",
-    nativeCurrency: {
-      name: "Matic",
-      symbol: "MATIC",
-      decimals: 18,
-    },
-    rpcUrls: ["https://polygon-rpc.com"],
-    blockExplorerUrls: ["https://polygonscan.com"],
+  {
+    name: 'NFT',
+    state: true
   },
-  250: {
-    chainId: `0x${Number(250).toString(16)}`,
-    chainName: "Fantom Opera",
-    nativeCurrency: {
-      name: "Fantom",
-      symbol: "FTM",
-      decimals: 18,
-    },
-    rpcUrls: ["https://rpc.ftm.tools"],
-    blockExplorerUrls: ["https://ftmscan.com"],
+  {
+    name: 'Metaverse',
+    state: true
   },
-  43114: {
-    chainId: `0x${Number(43114).toString(16)}`,
-    chainName: "Avalanche Mainnet C-Chain",
-    nativeCurrency: {
-      name: "Avalanche",
-      symbol: "AVAX",
-      decimals: 18,
-    },
-    rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
-    blockExplorerUrls: ["https://cchain.explorer.avax.network"],
+  {
+    name: 'OnChainData',
+    state: true
   },
-  80001: {
-    chainId: `0x${Number(80001).toString(16)}`,
-    chainName: "Polygon Mumbai Testnet",
-    nativeCurrency: {
-      name: "Matic",
-      symbol: "MATIC",
-      decimals: 18,
-    },
-    rpcUrls: [
-      "https://rpc-mumbai.maticvigil.com",
-      "https://rpc-mumbai.matic.today",
-    ],
-    blockExplorerUrls: ["https://mumbai.polygonscan.com"],
+  {
+    name: 'DID',
+    state: true
   },
-};
+  {
+    name: 'AI',
+    state: true
+  }
+]
+
+export const SCORE_LEVEL = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 30000]

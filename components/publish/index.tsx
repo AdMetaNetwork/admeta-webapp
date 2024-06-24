@@ -7,38 +7,53 @@ import BackSvg from "../svg/back";
 import BaseButton from "../ui/base-button";
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import useApi from "../../hooks/use-api";
-import { polkadot_network } from "../../config/constant";
-import CallPolkadot from "../../utils/call-polkadot";
 import BaseCtx from "../../hooks/use-base-content";
-
+import { BigNumber } from "ethers";
+import Task from "./task";
+import { useAccount } from 'wagmi'
 
 import styles from './index.module.scss';
-import * as C from "../../utils";
+import CallContract from "../../utils/call-contract";
+import { CASE_NETWORK, HTTP_SERVER, IPFS_HTTPS } from "../../config/constant";
+
+type Task = {
+  logo: string,
+  address: string | undefined,
+  verify: string,
+  platform: string,
+  description: string,
+  link: string,
+  ad_index: string
+}
 
 const PublishBody: FC = () => {
 
   const [progress, setProgress] = useState<0 | 30 | 60 | 100>(0)
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [img, setImg] = useState('')
   const [imgKey, setImgKey] = useState('')
-  const [currentBlock, setCurrentBlock] = useState(0)
-  const [endBlock, setEndBlock] = useState(0)
   const [target, setTarget] = useState('')
   const [title, setTitle] = useState('')
   const [cpi, setCpi] = useState(0)
   const [amount, setAmount] = useState(0)
-  const [tag, setTag] = useState('')
-  const [ageMax, setAgeMax] = useState(0)
-  const [ageMin, setAgeMin] = useState(0)
+  const [tag, setTag] = useState(0)
+  const [adIpfs, setAdIpfs] = useState('')
+  const [imgIpfs, setImgIpfs] = useState('')
+
+  const [logo, setLogo] = useState('')
+  const [logoName, setLogoName] = useState('')
+  const [verify, setVerify] = useState('')
+  const [link, setLink] = useState('')
+  const [platform, setPlatform] = useState('')
+  const [description, setDescription] = useState('')
+  const [adIdx, setAdIdx] = useState('')
 
 
   const { setShowTip, setTipType, setTipText, setLoading } = useContext(BaseCtx)
 
-
   const router = useRouter()
-  const { api } = useApi(polkadot_network)
-  const _api = useMemo(() => api, [api])
+
+  const { address } = useAccount()
 
   const handleUpLoadImg = (url: string, key: string) => {
     if (!url) {
@@ -48,27 +63,16 @@ const PublishBody: FC = () => {
     setLoading!(true)
     axios({
       method: 'post',
-      url: '/api/upload',
+      url: HTTP_SERVER + 'admeta/uploadIpfs',
       data: {
         url,
         key,
       },
     }).then((e) => {
-      if (e.data.name === 'ok') {
-        setProgress(30)
-        setStep(2)
-        getFile(key)
-        setLoading!(false)
-      }
-    })
-  }
-
-  const getFile = (key: string) => {
-    axios({
-      method: 'get',
-      url: `/api/getIPFS?key=${key}`
-    }).then((e) => {
-      setImg(e.data.url)
+      setProgress(30)
+      setStep(2)
+      setImgIpfs(IPFS_HTTPS + e.data)
+      setLoading!(false)
     })
   }
 
@@ -101,53 +105,75 @@ const PublishBody: FC = () => {
   }
 
   useEffect(() => {
-    if (!_api) {
-      return;
-    }
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
-    }
+    if (step === 2) {
+      const c = new CallContract()
+      c.init().then(() => {
+        c.adLength().then((v) => {
+          setTarget(`${CASE_NETWORK}?announcer=${address}&ad_index=${v.toString()}`)
+        })
 
-    const pk = new CallPolkadot(sender, _api!)
-    pk.getCurrentBlock().then((v) => {
-      setCurrentBlock(v)
-    })
+      })
 
-  }, [_api])
-
-  const handerProposeAd = () => {
-    const sender = localStorage.getItem('_select_account')
-    if (!sender) {
-      return
     }
+  }, [address, step])
+
+  const handleProposeAd = async () => {
     setLoading!(true)
-    const pk = new CallPolkadot(sender, _api!)
-    let ad: C.AdInfo = {
-      metadata: img,
-      target: target,
-      title: title,
-      cpi: cpi,
-      amount: amount,
-      endBlock: endBlock,
-      preference: {
-        age: {
-          max: ageMax,
-          min: ageMin
-        },
-        tags: [tag]
-      }
+    const c = new CallContract()
+    try {
+      await c.init()
+    } catch (err: any) {
+      handleShowTip(err.message, 'Error')
     }
 
-    pk.porposeAd(ad).then(() => {
+    const inventory = BigNumber.from(amount)
+    const reward = BigNumber.from(cpi)
+    const category = BigNumber.from(tag)
+    await c.createAd({ inventory, reward, category, title, metadata: imgIpfs, target })
+    c.contract?.once('CreateAd', (index, address) => {
+      console.log(index, address, 'complete publish', index.toString())
       setLoading!(false)
       handleShowTip('Propose ad ok', 'Success')
-      router.back()
-    })
+      setStep(4)
+      setAdIdx(index.toString())
 
+    })
   }
 
-  const handleSaveAdInfo = () => {
+  const handleSubmitTask = async () => {
+    if (!address) {
+      handleShowTip('Address cannot be empty!', 'Error')
+      return
+    }
+    if (!logo) {
+      handleShowTip('Logo cannot be empty!', 'Error')
+      return
+    }
+    if (!platform) {
+      handleShowTip('Platform cannot be empty!', 'Error')
+      return
+    }
+    if (!description) {
+      handleShowTip('Description cannot be empty!', 'Error')
+      return
+    }
+
+    const obj: Task = {
+      address,
+      logo,
+      platform,
+      verify,
+      description,
+      link,
+      ad_index: adIdx
+    }
+
+    axios.post(`${HTTP_SERVER}admeta/overwriteUserPlatformCase`, obj).then(() => {
+      router.back()
+    })
+  }
+
+  const handleSaveAdInfo = async () => {
     if (!target) {
       handleShowTip('Url cannot be empty!', 'Error')
       return
@@ -158,22 +184,6 @@ const PublishBody: FC = () => {
     }
     if (!amount) {
       handleShowTip('Amount cannot be empty!', 'Error')
-      return
-    }
-    if (!ageMax) {
-      handleShowTip('Age max cannot be empty!', 'Error')
-      return
-    }
-    if (!ageMin) {
-      handleShowTip('Age min cannot be empty!', 'Error')
-      return
-    }
-    if (!tag) {
-      handleShowTip('Tag cannot be empty!', 'Error')
-      return
-    }
-    if (!endBlock) {
-      handleShowTip('Takedown cannot be empty!', 'Error')
       return
     }
     if (!title) {
@@ -206,6 +216,13 @@ const PublishBody: FC = () => {
       }
     }
 
+    if (step === 4) {
+      return {
+        nav: 'Ad Task',
+        btn: 'Submit'
+      }
+    }
+
     return {
       nav: 'Upload',
       btn: 'Upload and continue'
@@ -222,6 +239,9 @@ const PublishBody: FC = () => {
     }
     if (step === 3) {
       setStep(2)
+    }
+    if (step === 4) {
+      setStep(3)
     }
   }
 
@@ -254,33 +274,27 @@ const PublishBody: FC = () => {
         {
           step === 2
           &&
-          <Info
-            currentBlock={currentBlock}
-            handleGetEndBlock={(v) => {
-              setEndBlock(v)
-            }}
-            handleGetAgeMax={(v) => [
-              setAgeMax(v)
-            ]}
-            handleGetAgeMin={(v) => {
-              setAgeMin(v)
-            }}
-            handleGetAmount={(v) => {
-              setAmount(v)
-            }}
-            handleGetCpi={(v) => {
-              setCpi(v)
-            }}
-            handleGetTag={(v) => {
-              setTag(v)
-            }}
-            handleGetTarget={(v) => {
-              setTarget(v)
-            }}
-            handleGetTitle={(v) => {
-              setTitle(v)
-            }}
-          />
+          <>
+            <div className='text-white text-[#777e90] mb-8 font-bold'>YOUR TARGET: {target}</div>
+            <Info
+              handleGetAmount={(v) => {
+                setAmount(v)
+              }}
+              handleGetCpi={(v) => {
+                setCpi(v)
+              }}
+              handleGetTag={(v) => {
+                setTag(v)
+              }}
+              handleGetTarget={(v) => {
+                setTarget(v)
+              }}
+              handleGetTitle={(v) => {
+                setTitle(v)
+              }}
+            />
+          </>
+
         }
         {/* step three publish ad */}
         {
@@ -291,6 +305,19 @@ const PublishBody: FC = () => {
             title={title}
           />
         }
+        {/* step four config ad rewards */}
+        {
+          step === 4
+          &&
+          <Task
+            handleSetDescription={setDescription}
+            handleSetLogo={setLogo}
+            handleSetPlatform={setPlatform}
+            handleSetVerify={setVerify}
+            handleSetLink={setLink}
+          />
+        }
+
         <div className={styles.bottomBtn}>
           <BaseButton
             btnClick={() => {
@@ -311,7 +338,11 @@ const PublishBody: FC = () => {
                   break;
 
                 case 3:
-                  handerProposeAd()
+                  handleProposeAd()
+                  break;
+
+                case 4:
+                  handleSubmitTask()
                   break;
 
                 default:

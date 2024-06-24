@@ -81,7 +81,6 @@ const ConnectWallet: FC<Prop> = ({ addressList }) => {
             return
           }
           setLoading!(true)
-          C.selectWallet(selectAddress)
           checkUser(selectAddress)
         }}
       />
